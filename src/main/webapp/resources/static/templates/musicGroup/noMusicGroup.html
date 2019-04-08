@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Glazbena grupa'"></title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="container">
+            <div class="container-fluid" id="musicGroup">
+
+                <h1 class="mt-4">Glazbeni sastav - bend</h1>
+                <div id="createGroup">
+                    <br></br>
+                    <br>
+                    <h2 class="mt-4">Nemaš glazbeni sastav?</h2>
+                    <h3>Kreiraj svoj glazbeni sastav ili ga pronađi u tražilici! :)</h3>
+                    <br></br>
+
+                    <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj svoj bend" id="createBandBtn">Kreiraj bend</button>
+                    <br></br>
+                    <br></br>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

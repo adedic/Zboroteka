@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head></head>
+<body>
+<th:block th:fragment="footer">
+    <footer class="footer">
+        <div class="container-fluid">
+            <p class="text-center" style="margin-top: 30vh;">
+                <th:block>by <span class="text-info" th:text="'Zboroteka'"></span>
+                </th:block>
+                &copy;
+                <th:block th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></th:block>
+            </p>
+        </div>
+    </footer>
+</th:block>
+</body>
+</html>

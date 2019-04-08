@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<th:block th:include="fragments/css :: css"></th:block>
+ 
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+		<!--<div id="spinner"></div>-->
+		
+		<div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <!-- Page Content -->
+	    <div class="page-content-wrapper">
+			<div th:replace="fragments/header :: header"></div>
+			<!-- Content container -->
+			<div layout:fragment="content"></div>
+		
+			<div th:replace="fragments/footer :: footer"></div>
+		</div>
+		
+	</div>
+    <!-- /#wrapper -->
+
+	<!-- Additional scripts -->
+	<div th:replace="fragments/scripts :: additionalScripts"></div>
+
+</body>
+</html>

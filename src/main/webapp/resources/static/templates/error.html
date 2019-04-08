@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title th:text="'Naslov'"></title>
+
+	<th:block th:replace="fragments/css :: css"></th:block>
+</head>
+<body>
+<div class="container text-center" style="margin-top:10vh; margin-bottom:50vh;">
+	<div class="row">
+
+		<div class="col-md-12">
+			<div class="error-template">
+				<h1 th:text="#{msg.error.heading}"></h1>
+				<img th:src="@{/resources/static/img/logo.png}" />
+				<h3 th:if="${status} == '403'"
+					th:text="#{msg.error.forbidden.heading}"></h3>
+				<h3 th:if="${status} == '404'"
+					th:text="#{msg.error.notFound.heading}"></h3>
+				<h3 th:if="${status} == '500'"
+					th:text="#{msg.error.server.heading}"></h3>
+				<div class="error-details">
+					<span th:text="#{msg.error.info}"></span>
+					<p th:if="${status} == '403'"
+					   th:text="#{msg.error.forbidden.details}"></p>
+					<p th:if="${status} == '404'"
+					   th:text="#{msg.error.notFound.details}"></p>
+					<p th:if="${status} == '500'"
+					   th:text="${#dates.format(timestamp, 'dd.MM.YYYY.')}"></p>
+					<p th:if="${status} == '500'"
+					   th:text="#{msg.error.server.details}"></p>
+				</div>
+
+				<hr />
+				<div class="error-actions">
+					<a th:href="@{/}" class="btn btn-outline-primary btn-lg"><span
+							class="fa fa-home"></span> <span th:text="#{msg.error.action.home}"></span></a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/scripts  :: additionalScripts"></div>
+</body>
+</html>

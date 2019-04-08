@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head></head>
+<body>
+
+<th:block th:fragment="css">
+
+	<!-- FAVICON -->
+    <!-- 
+    <link rel="shortcut icon"
+          th:href="@{/resources/static/img/favicon.ico}" type="image/x-icon">
+    <link rel="icon" th:href="@{/resources/static/img/favicon.ico}"
+          type="image/x-icon">
+     -->
+          
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/static/css/style.css}" />
+    
+    
+     <!-- Bootstrap core CSS -->
+    <link  th:href="@{/resources/static/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link  th:href="@{/resources/static/css/simple-sidebar.css}" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.8.1/css/all.css}" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    
+    <!--Date picker range ako bude trebalo-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</th:block>
+</body>
+</html>

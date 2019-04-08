@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+</head>
+
+<body>
+
+    <th:block th:fragment="header">
+
+        <!-- Page Content -->
+        <div class="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="col-md-2">
+                    <button class="btn btn-info" id="menu-toggle" data-toggle="tooltip" data-placement="top">
+                        <i class="fas fa-caret-left" id="menu-icon" style="font-size: 1em"></i>
+                    </button>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Prikaži izbornik">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="col-md-5">
+                    <input class="form-control" aria-label="Large" type="text" placeholder="Pronađi pjesmu" name="name" id="name" />
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Profil <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Korisnički račun
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Postavke</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Odjava</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+    </th:block>
+</body>
+
+</html>

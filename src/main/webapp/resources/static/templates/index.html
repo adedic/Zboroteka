@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Zboroteka</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right " id="sidebar-wrapper">
+            <div class="sidebar-heading"><span class="text-info">Zboroteka </span></div>
+            <div class="list-group list-group-flush">
+
+                <a href="#" class="list-group-item list-group-item-action bg-light list-group-item-info" id="musicGroupLink">Glazbeni sastav</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="songsLink">Pjesme</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="setsLink">Setovi</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="mySongsLink">Moje pjesme</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div class="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="col-md-2">
+                    <button class="btn btn-info" id="menu-toggle" data-toggle="tooltip" data-placement="top">
+                        <i class="fas fa-caret-left" id="menu-icon" style="font-size: 1em"></i>
+                    </button>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Prikaži izbornik">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="col-md-5">
+                    <input class="form-control" aria-label="Large" type="text" placeholder="Pronađi pjesmu" name="name" id="name" />
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Profil <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Korisnički račun
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Postavke</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Odjava</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!--- GLAVNI SADRŽAJ -->
+
+            <div class="container">
+                <div class="container-fluid" id="musicGroup">
+
+                    <h1 class="mt-4">Glazbeni sastav - bend</h1>
+                    <div id="createGroup">
+                        <br></br>
+                        <br>
+                        <h2 class="mt-4">Nemaš glazbeni sastav?</h2>
+                        <h3>Kreiraj svoj glazbeni sastav ili ga pronađi u tražilici! :)</h3>
+                        <br></br>
+
+                        <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj svoj bend" id="createBandBtn">Kreiraj bend</button>
+                        <br></br>
+                        <br></br>
+                    </div>
+
+                    <div id="groupInfo" class=" w-75">
+                        <div class="row">
+                            <h1 class="h2 col-md-10">
+                                <span><small>Sve informacije o glazbenom sastavu </small><b class="text-success"> Davidias </b>
+
+                                    <a href="#" data-toggle="modal" class="text-warning" data-target="#editGroupModal" > 
+                                        <i class="far fa-edit"  style="font-size: 1.5rem; position:relative; bottom:3px;" aria-hidden="true"
+                                        data-toggle="tooltip" data-placement="top" title="Izmjeni informacije o grupi"></i>
+                                    </span>
+
+                                    </a>
+                            </h1>
+
+                        </div>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Osnovne informacije</h4> Vrsta glazbenog sastava:
+                                <br>
+                                <h4><span class="badge badge-success">ZBOR</span></h4>
+
+                                <br>Osnovan: 12.12.2002.
+                                <br>
+                                <span>Voditelj:  Ivan Sušac</span>
+                                <br>
+                                <br>
+                                <br> Opis:
+                                <blockquote class="blockquote">
+                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante i mate i jure.</p>
+                                </blockquote>
+
+                                <br>
+                                <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Pozovi članove" id="addMembersBtn">Dodaj članove</button>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>Članovi (18)</h4>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Mala Luca
+                                        <span class="badge badge-primary badge-pill">od 22.11.2016.</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Kata Marić
+                                        <span class="badge badge-primary badge-pill">od 04.08.2016.</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi Leo
+                                        <span class="badge badge-primary badge-pill">od 22.11.2016.</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi Leo
+                                        <span class="badge badge-primary badge-pill">1</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi Leo
+                                        <span class="badge badge-primary badge-pill">1</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi Leo
+                                        <span class="badge badge-primary badge-pill">1</span>
+                                    </li>
+                                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                        <a href="#">Dodaj člana <span>PLUS</span></a>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <br></br>
+                <br></br>
+                <div class="container-fluid" id="songs">
+                    <h1 class="mt-4">Pjesme benda</h1>
+                    <div id="createSong">
+                        <br></br>
+                        <br>
+                        <h2 class="mt-4">Nema nijedne pjesme benda?</h2>
+                        <h3>Dodaj prvu pjesmu! :)</h3>
+                        <br></br>
+                        <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </div>
+
+                <div class="container-fluid" id="sets">
+                    <h1 class="mt-4">Setovi pjesama</h1>
+                    <div id="createSet">
+                        <br></br>
+                        <br>
+                        <h2 class="mt-4">Nema nijednog seta?</h2>
+                        <h3>Kreiraj prvi set pjesama! :)</h3>
+                        <br></br>
+                        <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj i spremi set pjesama" id="createSetBtn">Kreiraj set</button>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </div>
+
+                <div class="container-fluid" id="mySongs">
+                    <h1 class="mt-4">Moja zbirka pjesama</h1>
+                    <div id="createSet">
+                        <br></br>
+                        <br>
+                        <h2 class="mt-4">Nema nijedne pjesme?</h2>
+                        <h3>Dodaj svoju prvu pjesmu! :)</h3>
+                        <br></br>
+                        <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj svoju prvu pjesmu" id="createMySongBtn">Dodaj pjesmu</button>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </div>
+
+                <!--KREIRANJE BENDA AKCIJA-->
+
+                <div class="container-fluid" id="createBandFormDiv">
+                    <form id="createBandForm" action="" method="post">
+
+                        <div class="card w-75 border-primary">
+                            <div class="card-header bg-info">
+                                <h2 class="card-title">Kreiranje glazbenog sastava</h2>
+                            </div>
+                            <div class="card-body">
+
+                                </br>
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <h4 class="card-subtitle mb-2 text-muted">Osnovni podaci</h4>
+                                    <br>
+                                    <label for="groupName">Naziv:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi naziv glazbene grupe" id="groupName" placeholder="Ime" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="groupType">Vrsta glazbenog sastava:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi vrstu glazbene grupe" id="groupType" placeholder="Zbor, vokalni sastav, bend..." />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-12 col-md-10">
+                                    <label for="groupDescription">Opis:</label>
+                                    <textarea class="form-control" required data-error="Unesi opis glazbene grupe" id="groupDescription" placeholder="Čime se bavi, kakvu glazbu izvodi...">
+                                    </textarea>
+                                    <div class="form-control-feedback"></div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="groupDate">Datum osnutka:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi datum osnutka glazbene grupe" id="groupDate" placeholder="Datum osnutka" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <button class="btn btn-lg btn-outline-info float-right" id="saveMusicGroupBtn" data-toggle="tooltip" data-placement="top" title="Spremi osnovne podatke o bendu">Spremi</button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- DODAJ PJESMU AKCIJA -->
+
+                <div class="container-fluid" id="createSongFormDiv">
+                    <form id="createSongForm" action="" method="post">
+
+                        <div class="card w-75 border-primary">
+                            <div class="card-header bg-info">
+                                <h2 class="card-title">Kreiranje pjesme</h2>
+                            </div>
+                            <div class="card-body">
+
+                                </br>
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <h4 class="card-subtitle mb-2 text-muted">Osnovni podaci</h4>
+                                    <br>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="songName">Naziv:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi naziv pjesme" autofocus="autofocus" id="songName" placeholder="Naziv pjesme" />
+                                    <div class="form-control-feedback"></div>
+
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="songAuthor">Autor:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi autora pjesme" id="songAuthor" placeholder="Autor ili više njih" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="songKey">Tonalitet:</label>
+                                    <input type="text" class="form-control" required data-error="Odaberi tonalitet pjesme" id="songKey" placeholder="Odaberi tonalitet pjesme" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="songGenre">Žanr:</label>
+                                    <input type="text" class="form-control" required data-error="Odaberi žanr pjesme" id="songGenre" placeholder="Odaberi žanr pjesme" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                                    <label for="songUsage">Upotreba:</label>
+                                    <input type="text" class="form-control" required data-error="Unesi upotrebu pjesme" id="songUsage" placeholder="Unesi način upotrebe pjesme" />
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <div class="form-group col-xs-12 col-sm-12 col-md-10">
+                                    <label for="songDescription">Opis:</label>
+                                    <textarea class="form-control" required data-error="Unesi opis pjesme" id="songDescription" placeholder="Opis pjesme">
+                                    </textarea>
+                                    <div class="form-control-feedback"></div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Nastavi na unos teksta i akorda pjesme" id="insertSongBtn">Unos pjesme</button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <p class="text-center" style="margin-top: 50vh;">
+                        <th:block th:text="Zboroteka"></th:block>
+                        &copy;
+                        <th:block th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></th:block>
+                    </p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    
+    <script src="../js/common.js"></script>
+   
+
+</body>
+
+</html>

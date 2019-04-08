@@ -2,21 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
 </head>
 <body>
     <th:block th:fragment="sidebar">
 
         <!-- Sidebar -->
         <div class="bg-light border-right " id="sidebar-wrapper">
-            <div class="sidebar-heading"><span class="text-info">Zboroteka </span></div>
+            <div class="sidebar-heading"><span class="text-info" th:text="#{msg.nav.heading}"> </span></div>
             <div class="list-group list-group-flush">
 
-                <a href="#" class="list-group-item list-group-item-action bg-light list-group-item-info" id="musicGroupLink">Glazbeni sastav</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light" id="songsLink">Pjesme</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light" id="setsLink">Setovi</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light" id="mySongsLink">Moje pjesme</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light list-group-item-info" id="musicGroupLink" th:text="#{msg.nav.musicGroup}"></a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="songsLink" th:text="#{msg.nav.groupSongs}"></a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="setsLink" th:text="#{msg.nav.sets}"></a>
+                <a href="#" class="list-group-item list-group-item-action bg-light" id="mySongsLink" th:text="#{msg.nav.mySongs}"></a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->

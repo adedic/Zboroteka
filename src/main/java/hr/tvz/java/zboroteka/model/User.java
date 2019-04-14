@@ -30,7 +30,7 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@Column(name = "first_name", nullable = false)
@@ -69,7 +69,6 @@ public class User implements Serializable {
 
 	@Column(name = "sex")
 	private Integer sex;
-
 
 	public User() {
 		// default constructor

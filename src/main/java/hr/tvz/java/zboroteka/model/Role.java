@@ -22,7 +22,7 @@ public class Role implements GrantedAuthority, Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_role", nullable = false, length = 30)
+	@Column(name = "id", nullable = false, length = 30)
 	private Integer id;
 
 	@Column(name = "role_name", nullable = false, length = 40)

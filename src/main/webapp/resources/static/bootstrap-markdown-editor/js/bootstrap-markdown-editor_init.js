@@ -128,7 +128,8 @@
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnBold + '" class="md-btn btn btn-sm btn-outline-info" data-btn="bold"><i class="fas fa-bold"></i></button>';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnItalic + '" class="md-btn btn btn-sm btn-outline-info" data-btn="italic"><i class="fas fa-italic"></i></button>';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnKeepFormat + '" class="md-btn btn btn-sm btn-outline-info" data-btn="keepFormat"><i class="fas fa-music"></i></button>';
-                
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnChord + '" class="md-btn btn btn-sm btn-outline-info" data-btn="chordBracket"><i class="fas fa-guitar"></i></button>';
+                    
                 html += '</div>'; // .btn-group
 
                 html += '<div class="btn-group mr-2" role="group">';
@@ -303,7 +304,10 @@
 
                 } else if (btnType === 'keepFormat') {
                     snippetManager.insertSnippet(editor, '```\nTekst i akordi pjesme\n```');
-
+                    
+                } else if (btnType === 'chordBracket') {
+                    snippetManager.insertSnippet(editor, '[C#]');
+                    
                 } else if (btnType === 'image') {
                     if (selectedText === '') {
                         snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
@@ -415,7 +419,8 @@
             btnHeader3: 'Naslov 3',
             btnBold: 'Bold',
             btnItalic: 'Italic',
-            btnKeepFormat: "Tekst i akordi",
+            btnKeepFormat: 'Tekst i akordi',
+            btnChord: 'Akord',
             btnList: 'Lista',
             btnOrderedList: 'Numerirana lista',
             btnLink: 'Link',

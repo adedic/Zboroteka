@@ -32,4 +32,36 @@ public class Chord implements Serializable {
 	@Column(name = "long_name", nullable = false)
 	private String longName;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getNamingStyle() {
+		return namingStyle;
+	}
+
+	public void setNamingStyle(Integer namingStyle) {
+		this.namingStyle = namingStyle;
+	}
+
+	public String getLongName() {
+		return longName;
+	}
+
+	public void setLongName(String longName) {
+		this.longName = longName;
+	}
+
 }

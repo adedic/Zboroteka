@@ -1,37 +1,39 @@
 package hr.tvz.java.zboroteka.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.model.Song;
 
 @Component
 public class SongParser {
 
-	public static String testStr = "# Krivo je more\r\n" + "\r\n" + "Autor: **Divlje jagode**\r\n" + "\r\n"
-			+ "Tonalitet: **G**\r\n" + "\r\n" + "```\r\n" + "1. KITICA\r\n" + "    \r\n" + "    [G]           [Am] \r\n"
-			+ "    \r\n" + "    Ti, ti si ga upoznala\r\n" + "    [C]           [G] \r\n" + "      \r\n"
-			+ "    jedne ljetnje veceri\r\n" + "    \r\n" + "    [G]         [Am]\r\n" + "    \r\n"
-			+ "    On, on te poljubio\r\n" + "```";
+	public void parseSongTextAndChords(Song song) {
+		String rawText = song.getRawSongText();
 
-	public Song parseSongFormToSong() {
-		Song song = new Song();
-
-		String[] lines = testStr.split("\\r?\\n");
+		String[] lines = rawText.split("\\r?\\n");
 		String songName = parseHeading1(lines);
-		String textAndChords = parseTextAndChords(testStr);
-		String[] chords = parseChords(textAndChords);
-		String text = parseText(textAndChords, chords);
+		String textAndChords = parseTextAndChords(rawText);
+		String[] chords = parseChordsStr(textAndChords);
+		String text = textAndChords;
+		if (chords.length != 0) {
+			text = parseText(textAndChords, chords);
+			song.setChords(parseChords(chords));
+			for (String c : chords)
+				System.out.println("AKORDI PJESME " + c);
+		}
 
-		song.setName(songName);
+		song.setSongText(text);
+		// song.setName(songName);
 		// System.out.println("NAZIV PJESME " + songName);
 		// System.out.println("TEKST I AKORDI PJESME " + textAndChords);
 		// System.out.println("TEKST PJESME " + text);
 		// for (String c : chords)
-		// System.out.println("AKORDI PJESME " + c);
-		System.out.println("BEZ AKORDA tekst " + text);
-
-		return song;
+		// System.out.println("BEZ AKORDA tekst " + text);
 	}
 
 	private String parseText(String textAndChords, String[] chords) {
@@ -49,8 +51,19 @@ public class SongParser {
 		return text.toString();
 	}
 
-	private String[] parseChords(String textAndChords) {
+	private String[] parseChordsStr(String textAndChords) {
 		return StringUtils.substringsBetween(textAndChords, "[", "]");
+	}
+
+	private List<Chord> parseChords(String[] chords) {
+		List<Chord> chordList = new ArrayList<>();
+
+		for (String chordStr : chords) {
+			Chord chord = new Chord();
+			chord.setName(chordStr);
+			chordList.add(chord);
+		}
+		return chordList;
 	}
 
 	private String parseTextAndChords(String text) {

@@ -19,11 +19,15 @@ public class WebConfig implements WebMvcConfigurer {
 
 	private static final String INDEX = "redirect:/index";
 	private static final String MUSIC_GROUP_VIEW_NAME = "musicGroup";
+	private static final String SONGS_VIEW_NAME = "songs";
+	private static final String SETS_VIEW_NAME = "sets";
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName(INDEX);
 		registry.addViewController("/musicGroup").setViewName(MUSIC_GROUP_VIEW_NAME);
+		registry.addViewController("/songs").setViewName(SONGS_VIEW_NAME);
+		registry.addViewController("/sets").setViewName(SETS_VIEW_NAME);
 	}
 
 	@Override

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Pjesme'"></title>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <div class="container">
+ 			<div class="container-fluid" id="mySongs">
+	            <h1 class="mt-4">Moja zbirka pjesama</h1>
+	            <div id="createSet">
+	                <br></br>
+	                <br>
+	                <h2 class="mt-4">Nema nijedne pjesme?</h2>
+	                <h3>Dodaj svoju prvu pjesmu! :)</h3>
+	                <br></br>
+	                <button class="btn btn-lg btn-outline-success" data-toggle="tooltip" data-placement="top" title="Kreiraj svoju prvu pjesmu" id="createMySongBtn">Dodaj pjesmu</button>
+	                <br></br>
+	                <br></br>
+	            </div>
+        	</div>
+
+		</div>
+	</div>
+                
+</body>
+</html>

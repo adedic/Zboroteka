@@ -34,6 +34,7 @@ public class Song implements Serializable {
 	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
 
+	//TODO promijeniti tip podatka u bazi na veci tekst od 255
 	@Column(name = "raw_song_text", nullable = false)
 	private String rawSongText;
 

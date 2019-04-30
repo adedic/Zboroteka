@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Unos pjesme'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+</head>
+
+<body>
+    <div layout:fragment="content">
+    
+        <div class="container">
+            <h1>Kreiranje pjesme</h1><br>
+            
+            <form action="" th:object="${createSongForm}" id="createSongForm" class="needs-validation" novalidate>
+
+                <div class="card w-50 border-info" id="mainSongInfo">
+                    <div class="card-header bg-info">
+                        <h4 class="card-title">Unos osnovnih podataka</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group col-xs-12 col-sm-8 col-md-8">
+                            <label for="songName">Naziv:</label>
+                            <input type="text" class="form-control" th:field="*{name}" required="required" data-error="Unesi naziv pjesme" id="songName" placeholder="Naziv pjesme" />
+                            <div class="form-control-feedback"></div>
+
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-8 col-md-8">
+                            <label for="songAuthor">Autor:</label>
+                            <input type="text" class="form-control" th:field="*{author}" data-error="Unesi autora pjesme" id="songAuthor" placeholder="Autor ili više njih" />
+                            <div class="form-control-feedback"></div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                            <label for="songKey">Tonalitet:</label>
+                            <input type="number" class="form-control" th:field="*{key}" required="required" data-error="Odaberi tonalitet pjesme" id="songKey" placeholder="Odaberi tonalitet" />
+                            <div class="form-control-feedback"></div>
+                        </div>
+                        
+                        <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                            <label for="songName">Mjera:</label>
+                            <input type="text" class="form-control" th:field="*{measure}" data-error="Unesi mjeru pjesme" id="songMeasure" placeholder="Mjera pjesme" />
+                            <div class="form-control-feedback"></div>
+
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-8 col-md-5">
+                            <label for="songGenre">Žanr:</label>
+                            <input type="number" class="form-control" th:field="*{genre}" data-error="Odaberi žanr pjesme" id="songGenre" placeholder="Odaberi žanr" />
+                            <div class="form-control-feedback"></div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-8 col-md-8">
+                            <label for="songUsage">Upotreba:</label>
+                            <input type="text" class="form-control" th:field="*{usage}" data-error="Unesi upotrebu pjesme" id="songUsage" placeholder="Unesi način upotrebe pjesme" />
+                            <div class="form-control-feedback"></div>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-sm-12 col-md-10">
+                            <label for="songDescription">Opis:</label>
+                            <textarea class="form-control" data-error="Unesi opis pjesme" th:field="*{description}" id="songDescription" placeholder="Opis pjesme">
+                            </textarea>
+                            <div class="form-control-feedback"></div>
+                        </div>
+
+                        <br>
+                        <br>
+                        <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Nastavi na unos teksta i akorda pjesme" id="showSongEditorFormBtn">Nastavi na unos pjesme</button>
+
+                    </div>
+
+                </div>
+				<div id="formSongText" style="display:none" >
+				
+                	<textarea id="songEditor" name="rawSongText" th:value="${rawSongText}"># Krivo je more
+
+Autor: **Divlje jagode**
+
+Tonalitet: **G**
+
+```
+1. KITICA
+    
+    [G]           [Am] 
+    
+    Ti, ti si ga upoznala
+    
+    [C]           [G] 
+      
+    jedne ljetnje veceri
+    
+    [G]         [Am]
+    
+    On, on te poljubio
+```
+                	</textarea>
+                
+	                <br>
+	                <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Natrag na unos osnovnih podataka" id="backToMainSongData"><i class="fas fa-arrow-left"></i></button>
+	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Spremi pjesmu" id="saveSongBtn">Spremi pjesmu</button>
+            	
+				</div>
+            </form>
+            
+        </div>
+        
+        
+    
+	<!-- Additional scripts -->
+	<div th:replace="fragments/scripts :: markdownScripts"></div>
+    </div>
+	
+	
+	
+
+</body>
+
+</html>

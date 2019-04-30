@@ -14,6 +14,7 @@ public class MainController {
 
 	@GetMapping("musicGroup")
 	public ModelAndView showNoGroup() {
+		// ako ne postoji grupa
 		return new ModelAndView("musicGroup/noMusicGroup");
 	}
 

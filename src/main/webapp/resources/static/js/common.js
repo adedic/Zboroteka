@@ -2,6 +2,7 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip({
         trigger: "hover"
     });
+
 })
 
 var titlePrikazi = "Prikaži izbornk";
@@ -18,10 +19,10 @@ $("#menu-toggle").click(function(e) {
     if (titleMenu == titleSakrij) {
         $("#menu-toggle").attr("data-original-title", titlePrikazi);
     } else if (titleMenu == titlePrikazi) {
-
         $("#menu-toggle").attr("data-original-title", titleSakrij);
     }
 
+    
     if ($("#menu-icon").hasClass("fa-caret-left")) {
         $("#menu-icon").removeClass("fa-caret-left");
 

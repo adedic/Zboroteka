@@ -1,7 +1,8 @@
-
+   
 (function ($) {
 
     "use strict";
+ 
 
     function uploadFiles (url, files, editor, snippetManager, loading) {
         if (! files.length) {
@@ -217,7 +218,7 @@
             editor.setTheme('ace/theme/' + defaults.theme);
             editor.getSession().setMode('ace/mode/markdown');
             editor.getSession().setUseSoftTabs(defaults.softTabs);
-
+           
             // Sync ace with the textarea
             editor.getSession().on('change', function() {
                 plugin.val(editor.getSession().getValue());

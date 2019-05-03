@@ -26,10 +26,10 @@ public class Chord implements Serializable {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "naming_style", nullable = false)
+	@Column(name = "naming_style")
 	private Integer namingStyle;
 
-	@Column(name = "long_name", nullable = false)
+	@Column(name = "long_name")
 	private String longName;
 
 	public Long getId() {

@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -27,18 +28,20 @@ public class Song implements Serializable {
 	private static final long serialVersionUID = 393192385042172713L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
 
-	//TODO promijeniti tip podatka u bazi na veci tekst od 255
+	// TODO promijeniti tip podatka u bazi na veci tekst od 255
 	@Column(name = "raw_song_text", nullable = false)
+	@Lob
 	private String rawSongText;
 
 	@Column(name = "song_text", nullable = false)
+	@Lob
 	private String songText;
 
 	@Column(name = "name")
@@ -86,8 +89,8 @@ public class Song implements Serializable {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)//song can be only with text, no chords
-	@JoinTable(name = "chord", joinColumns = {
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // song can be only with text, no chords
+	@JoinTable(name = "song_chord", joinColumns = {
 			@JoinColumn(name = "song_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "chord_id", referencedColumnName = "id", nullable = true) })
 	private List<Chord> chords;

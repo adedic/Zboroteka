@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.mappers.SongMapper;
+import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.repository.SongRepository;
 import hr.tvz.java.zboroteka.service.impl.SongService;
 
@@ -15,11 +16,9 @@ public class ISongService implements SongService {
 	private SongRepository songRepository;
 
 	@Override
-	public Integer saveSong(SongForm songForm) {
+	public Song saveSong(SongForm songForm) {
 
-		songRepository.save(SongMapper.mapSongFormToSong(songForm));
-
-		return 1; // succes
+		return songRepository.save(SongMapper.mapSongFormToSong(songForm));
 	}
 
 }

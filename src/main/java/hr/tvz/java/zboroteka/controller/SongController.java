@@ -37,16 +37,16 @@ public class SongController {
 		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
 		model.addAttribute("songKeys", Arrays.asList(SongKey.values()));
 
-		// todo postaviti na formu ID trenutnog usera iz Session session
-		// todo postaviti na formu ID benda tog usera - poziv u service bend
 		return "song/newSong";
 	}
 
 	@PostMapping("/createSong")
 	public String createNewSong(@Valid @ModelAttribute("createSongForm") SongForm songForm,
-			RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+			RedirectAttributes redirectAttributes, BindingResult bindingResult, Model model) {
 		System.out.println("raw text " + songForm.getRawSongText());
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
+			model.addAttribute("songKeys", Arrays.asList(SongKey.values()));
 			// TODO popuniti sifarnike u modelu
 			return NEW_SONG_VIEW_NAME;
 		}

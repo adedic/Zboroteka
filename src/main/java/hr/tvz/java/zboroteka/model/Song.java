@@ -76,10 +76,10 @@ public class Song implements Serializable {
 
 	// song can exist without set
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "song_set", joinColumns = {
+	@JoinTable(name = "song_song_set", joinColumns = {
 			@JoinColumn(name = "song_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "set_id", referencedColumnName = "id", nullable = true) })
-	private Set set;
+	private SongSet songSet;
 
 	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "band_id", referencedColumnName = "id", nullable = true) // song can exist without band
@@ -183,12 +183,12 @@ public class Song implements Serializable {
 		this.description = description;
 	}
 
-	public Set getSet() {
-		return set;
+	public SongSet getSet() {
+		return songSet;
 	}
 
-	public void setSet(Set set) {
-		this.set = set;
+	public void setSet(SongSet set) {
+		this.songSet = set;
 	}
 
 	public Integer getCreatorId() {

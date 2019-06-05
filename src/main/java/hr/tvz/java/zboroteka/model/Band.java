@@ -31,18 +31,17 @@ public class Band implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(name = "creation_date", nullable = false)
-	private Date creationDate;
-
 	@Column(name = "name", nullable = false)
 	private String name;
+
+	@Column(name = "creation_date", nullable = false)
+	private Date creationDate;
 
 	@Column(name = "description", nullable = false)
 	private String description;
 
-	// TODO napraviti listu predefiniranih vrsta i dadati kao tablicu baze
 	@Column(name = "group_type", nullable = false)
-	private String groupType;
+	private Integer groupType;
 
 	private Integer numOfMembers;
 
@@ -86,11 +85,7 @@ public class Band implements Serializable {
 		this.description = description;
 	}
 
-	public String getGroupType() {
-		return groupType;
-	}
-
-	public void setGroupType(String groupType) {
+	public void setGroupType(Integer groupType) {
 		this.groupType = groupType;
 	}
 

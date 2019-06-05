@@ -17,8 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "set")
-public class Set implements Serializable {
+@Table(name = "song_set")
+public class SongSet implements Serializable {
 	/**
 	 * 
 	 */
@@ -45,7 +45,7 @@ public class Set implements Serializable {
 	@JoinColumn(name = "band_id", referencedColumnName = "id")
 	private Band band;
 
-	@OneToMany(mappedBy = "set", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "songSet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Song> songs;
 
 	private Integer numOfSongs;

@@ -1,7 +1,7 @@
 package hr.tvz.java.zboroteka.model;
 
 import java.io.Serializable;
-
+/*ZA TRANSPONIRANJE*/
 public class ChordDetails implements Serializable {
 
 	// https://en.wikipedia.org/wiki/Chord_names_and_symbols_(popular_music)

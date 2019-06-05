@@ -59,8 +59,8 @@ public class Song implements Serializable {
 	private String measure;
 
 	// enum SongKey
-	@Column(name = "key")
-	private Integer key;
+	@Column(name = "song_key")
+	private Integer songKey;
 
 	@Column(name = "genre") // enum SongGenre
 	private Integer genre;
@@ -144,11 +144,11 @@ public class Song implements Serializable {
 	}
 
 	public Integer getKey() {
-		return key;
+		return songKey;
 	}
 
 	public void setKey(Integer key) {
-		this.key = key;
+		this.songKey = key;
 	}
 
 	public Integer getGenre() {

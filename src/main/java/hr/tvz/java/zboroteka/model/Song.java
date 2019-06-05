@@ -30,7 +30,7 @@ public class Song implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
@@ -95,14 +95,6 @@ public class Song implements Serializable {
 					@JoinColumn(name = "chord_id", referencedColumnName = "id", nullable = true) })
 	private List<Chord> chords;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -143,14 +135,6 @@ public class Song implements Serializable {
 		this.measure = measure;
 	}
 
-	public Integer getKey() {
-		return songKey;
-	}
-
-	public void setKey(Integer key) {
-		this.songKey = key;
-	}
-
 	public Integer getGenre() {
 		return genre;
 	}
@@ -183,11 +167,11 @@ public class Song implements Serializable {
 		this.description = description;
 	}
 
-	public SongSet getSet() {
+	public SongSet getSongSet() {
 		return songSet;
 	}
 
-	public void setSet(SongSet set) {
+	public void setSongSet(SongSet set) {
 		this.songSet = set;
 	}
 
@@ -205,6 +189,22 @@ public class Song implements Serializable {
 
 	public void setChords(List<Chord> chords) {
 		this.chords = chords;
+	}
+
+	public Integer getSongKey() {
+		return songKey;
+	}
+
+	public void setSongKey(Integer songKey) {
+		this.songKey = songKey;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getBandId() {

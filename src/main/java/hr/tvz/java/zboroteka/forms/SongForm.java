@@ -9,7 +9,7 @@ public class SongForm implements Serializable {
 	 */
 	private static final long serialVersionUID = -7054243497044038859L;
 
-	private Long id;
+	private Integer id;
 
 	private String creationDate;
 
@@ -29,17 +29,13 @@ public class SongForm implements Serializable {
 
 	private String description;
 
-	private Integer setId;
-
 	private Integer bandId;
 
-	private Integer creatorId;
-
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -115,28 +111,12 @@ public class SongForm implements Serializable {
 		this.description = description;
 	}
 
-	public Integer getSetId() {
-		return setId;
-	}
-
-	public void setSetId(Integer setId) {
-		this.setId = setId;
-	}
-
 	public Integer getBandId() {
 		return bandId;
 	}
 
 	public void setBandId(Integer bandId) {
 		this.bandId = bandId;
-	}
-
-	public Integer getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(Integer creatorId) {
-		this.creatorId = creatorId;
 	}
 
 }

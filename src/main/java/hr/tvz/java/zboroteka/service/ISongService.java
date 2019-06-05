@@ -15,10 +15,13 @@ public class ISongService implements SongService {
 	@Autowired
 	private SongRepository songRepository;
 
+	@Autowired
+	SongMapper songMapper;
+
 	@Override
 	public Song saveSong(SongForm songForm) {
 
-		return songRepository.save(SongMapper.mapSongFormToSong(songForm));
+		return songRepository.save(songMapper.mapSongFormToSong(songForm));
 	}
 
 }

@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,7 +25,7 @@ public class SongSet implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
@@ -37,24 +36,24 @@ public class SongSet implements Serializable {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User creator;
+	private Integer creatorId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	// @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "band_id", referencedColumnName = "id")
-	private Band band;
+	private Integer bandId;
 
 	@OneToMany(mappedBy = "songSet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Song> songs;
 
 	private Integer numOfSongs;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -82,12 +81,12 @@ public class SongSet implements Serializable {
 		this.name = name;
 	}
 
-	public User getCreator() {
-		return creator;
+	public Integer getCreatorId() {
+		return creatorId;
 	}
 
-	public void setCreator(User creator) {
-		this.creator = creator;
+	public void setCreatorId(Integer creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public Integer getNumOfSongs() {
@@ -106,12 +105,12 @@ public class SongSet implements Serializable {
 		this.songs = songs;
 	}
 
-	public Band getBand() {
-		return band;
+	public Integer getBandId() {
+		return bandId;
 	}
 
-	public void setBand(Band band) {
-		this.band = band;
+	public void setBandId(Integer bandId) {
+		this.bandId = bandId;
 	}
 
 }

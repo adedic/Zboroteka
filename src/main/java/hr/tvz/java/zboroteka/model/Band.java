@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,7 +28,7 @@ public class Band implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -43,11 +42,9 @@ public class Band implements Serializable {
 	@Column(name = "group_type", nullable = false)
 	private Integer groupType;
 
-	private Integer numOfMembers;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
-	private User creator;
+	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private Integer creatorId;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "band_song", joinColumns = {
@@ -61,12 +58,16 @@ public class Band implements Serializable {
 					@JoinColumn(name = "band_id", referencedColumnName = "id") })
 	private List<User> members;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getGroupType() {
+		return groupType;
 	}
 
 	public Date getCreationDate() {
@@ -97,20 +98,12 @@ public class Band implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getNumOfMembers() {
-		return numOfMembers;
+	public Integer getCreatorId() {
+		return creatorId;
 	}
 
-	public void setNumOfMembers(Integer numOfMembers) {
-		this.numOfMembers = numOfMembers;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
+	public void setCreatorId(Integer creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public List<Song> getBandSongs() {

@@ -52,10 +52,10 @@ public class Band implements Serializable {
 					@JoinColumn(name = "band_id", referencedColumnName = "id") })
 	private List<Song> bandSongs;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "band_member", joinColumns = {
-			@JoinColumn(name = "member_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "band_id", referencedColumnName = "id") })
+			@JoinColumn(name = "band_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "member_id") })
 	private List<User> members;
 
 	public Integer getId() {

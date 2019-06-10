@@ -307,7 +307,16 @@
                     snippetManager.insertSnippet(editor, '```\nTekst i akordi pjesme\n```');
                     
                 } else if (btnType === 'chordBracket') {
-                    snippetManager.insertSnippet(editor, '[C#]');
+                	
+                    var selectedText = editor.session.getTextRange(editor.getSelectionRange());
+
+                    if (selectedText === '') {
+                        snippetManager.insertSnippet(editor, '[${1:text}]');
+                    } else {
+                        snippetManager.insertSnippet(editor, '[' + selectedText + ']');
+                    }
+                    
+                   // snippetManager.insertSnippet(editor, '[C#]');
                     
                 } else if (btnType === 'image') {
                     if (selectedText === '') {

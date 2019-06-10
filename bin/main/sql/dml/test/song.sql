@@ -172,4 +172,4 @@ REFREN:
                        
     bile dvore moje pokore.
 
-, 1, 1, 'Za druženja', 'Oliver Dragojević', 'Neki opis2', 1);
+', 'Cesarica', '4/4', 7, 1, 'Za druženja', 'Oliver Dragojević', 'Neki opis2', 1);

@@ -1,0 +1,24 @@
+package hr.tvz.java.zboroteka.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import hr.tvz.java.zboroteka.model.Chord;
+import hr.tvz.java.zboroteka.repository.ChordRepository;
+import hr.tvz.java.zboroteka.service.impl.ChordService;
+
+@Service
+public class IChordService implements ChordService {
+
+	@Autowired
+	private ChordRepository chordRepository;
+
+	@Override
+	public Optional<Chord> getChordByName(String name) {
+
+		System.err.println(name);
+		return chordRepository.findOneByName(name);
+	}
+}

@@ -32,6 +32,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
+	// https://mvnrepository.com/artifact/commons-lang/commons-lang
+	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+
+	
 	compileOnly 'org.codehaus.sonar.plugins:sonar-surefire-plugin:3.3.2'
 	compileOnly 'org.codehaus.sonar:sonar-plugin-api:5.1'
 	compileOnly 'org.projectlombok:lombok'

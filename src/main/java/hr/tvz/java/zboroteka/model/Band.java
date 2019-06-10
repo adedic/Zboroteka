@@ -48,8 +48,8 @@ public class Band implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "band_song", joinColumns = {
-			@JoinColumn(name = "song_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "band_id", referencedColumnName = "id") })
+			@JoinColumn(name = "band_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "song_id", referencedColumnName = "id") })
 	private List<Song> bandSongs;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

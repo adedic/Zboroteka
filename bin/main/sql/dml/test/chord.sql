@@ -1,7 +1,3 @@
-/*CREATE TABLE chord(
-   id   INTEGER  NOT NULL PRIMARY KEY 
-  ,name VARCHAR(9) NOT NULL
-);*/
 
 INSERT INTO chord(id,name) VALUES (0,'Ab');
 INSERT INTO chord(id,name) VALUES (1,'Ab11');

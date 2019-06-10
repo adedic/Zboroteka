@@ -7,13 +7,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -35,13 +33,10 @@ public class Song implements Serializable {
 	@Column(name = "creation_date", nullable = false)
 	private Date creationDate;
 
-	// TODO promijeniti tip podatka u bazi na veci tekst od 255
-	@Column(name = "raw_song_text", nullable = false)
-	@Lob
+	@Column(name = "raw_song_text", nullable = false, columnDefinition = "text")
 	private String rawSongText;
 
-	@Column(name = "song_text", nullable = false)
-	@Lob
+	@Column(name = "song_text", nullable = false, columnDefinition = "text")
 	private String songText;
 
 	@Column(name = "name")
@@ -58,7 +53,7 @@ public class Song implements Serializable {
 	@Column(name = "measure")
 	private String measure;
 
-	// enum SongKey
+	// table SongKey
 	@Column(name = "song_key")
 	private Integer songKey;
 
@@ -89,10 +84,10 @@ public class Song implements Serializable {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // song can be only with text, no chords
+	@ManyToMany(cascade = CascadeType.ALL) // song can be only with text, no chords
 	@JoinTable(name = "song_chord", joinColumns = {
-			@JoinColumn(name = "song_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
-					@JoinColumn(name = "chord_id", referencedColumnName = "id", nullable = true) })
+			@JoinColumn(name = "song_id", nullable = true) }, inverseJoinColumns = {
+					@JoinColumn(name = "chord_id", insertable = false, updatable = false, nullable = true) })
 	private List<Chord> chords;
 
 	public Date getCreationDate() {

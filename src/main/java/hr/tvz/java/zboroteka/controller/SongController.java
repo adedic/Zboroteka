@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
-import hr.tvz.java.zboroteka.model.enums.SongKey;
+import hr.tvz.java.zboroteka.service.ISongKeyService;
 import hr.tvz.java.zboroteka.service.ISongService;
 
 @Controller
@@ -31,11 +31,18 @@ public class SongController {
 	@Autowired
 	ISongService iSongService;
 
+	@Autowired
+	ISongKeyService iSongKeyService;
+
+	private void initSongScreen(Model model) {
+		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
+		model.addAttribute("songKeys", iSongKeyService.getAllKeys());
+	}
+
 	@GetMapping("/newSong")
 	public String showNewSong(Model model) {
 		model.addAttribute("createSongForm", new SongForm());
-		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
-		model.addAttribute("songKeys", Arrays.asList(SongKey.values()));
+		initSongScreen(model);
 
 		return "song/newSong";
 	}
@@ -45,9 +52,7 @@ public class SongController {
 			RedirectAttributes redirectAttributes, BindingResult bindingResult, Model model) {
 		System.out.println("raw text " + songForm.getRawSongText());
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
-			model.addAttribute("songKeys", Arrays.asList(SongKey.values()));
-			// TODO popuniti sifarnike u modelu
+			initSongScreen(model);
 			return NEW_SONG_VIEW_NAME;
 		}
 		// TODO validacija forme backend
@@ -57,7 +62,7 @@ public class SongController {
 		redirectAttributes.addFlashAttribute("createSongSuccess", "Uspješno dodavanje nove pjesme!");
 
 		// redirect na details page
-		//return SONG_DETAILS_VIEW_NAME + song.getId();
+		// return SONG_DETAILS_VIEW_NAME + song.getId();
 		return NEW_SONG_VIEW_NAME;
 	}
 

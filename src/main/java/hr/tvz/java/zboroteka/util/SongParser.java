@@ -2,38 +2,44 @@ package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.model.Song;
+import hr.tvz.java.zboroteka.service.IChordService;
 
 @Component
 public class SongParser {
+
+	@Autowired
+	public final IChordService iChordService;
+
+	SongParser(IChordService iChordService) {
+		this.iChordService = iChordService;
+	}
 
 	public void parseSongTextAndChords(Song song) {
 		String rawText = song.getRawSongText();
 
 		String[] lines = rawText.split("\\r?\\n");
-		String songName = parseHeading1(lines);
+		// song.setName(parseHeading1(lines));
 		String textAndChords = parseTextAndChords(rawText);
 		String[] chords = parseChordsStr(textAndChords);
-		String text = textAndChords;
-		if (chords.length != 0) {
-			text = parseText(textAndChords, chords);
-			song.setChords(parseChords(chords));
-			for (String c : chords)
-				System.out.println("AKORDI PJESME " + c);
-		}
 
-		song.setSongText(text);
-		// song.setName(songName);
-		// System.out.println("NAZIV PJESME " + songName);
-		// System.out.println("TEKST I AKORDI PJESME " + textAndChords);
-		// System.out.println("TEKST PJESME " + text);
-		// for (String c : chords)
-		// System.out.println("BEZ AKORDA tekst " + text);
+		System.out.println("raw tekst " + song.getRawSongText());
+
+		String text = textAndChords;
+		if (chords != null && chords.length != 0) {
+			text = parseText(textAndChords, chords);
+
+			song.setSongText(text);
+			System.out.println(" tekst " + song.getSongText());
+			song.setChords(parseChords(chords));
+		}
 	}
 
 	private String parseText(String textAndChords, String[] chords) {
@@ -59,9 +65,11 @@ public class SongParser {
 		List<Chord> chordList = new ArrayList<>();
 
 		for (String chordStr : chords) {
-			Chord chord = new Chord();
-			chord.setName(chordStr);
-			chordList.add(chord);
+			System.err.println("parsirani tekst akord " + chordStr);
+			Optional<Chord> chord = iChordService.getChordByName(chordStr);
+			if (chord.isPresent()) {
+				chordList.add(chord.get());
+			}
 		}
 		return chordList;
 	}

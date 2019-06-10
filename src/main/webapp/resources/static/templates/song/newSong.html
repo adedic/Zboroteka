@@ -36,13 +36,16 @@
 
                         <div class="form-group col-xs-12 col-sm-8 col-md-5">
                             <label for="songKey">Tonalitet:</label>
-                            <input type="number" class="form-control" th:field="*{key}" required="required" data-error="Odaberi tonalitet pjesme" id="songKey" placeholder="Odaberi tonalitet" />
-                            <div class="form-control-feedback"></div>
-                        </div>
-                        
+						    <select class="form-control" id="key" th:field="*{key}">
+						    <option value="0" disabled="disabled">Odaberi tonalitet...</option>
+						    <option th:each="key : ${songKeys}" th:value="${key.id}" th:text="${key.name + ' (' + key.otherName + ')'}"></option>
+						    </select>
+						    <div class="form-control-feedback"></div>
+						</div>
+						                        
                         <div class="form-group col-xs-12 col-sm-8 col-md-5">
                             <label for="songName">Mjera:</label>
-                            <input type="text" class="form-control" th:field="*{measure}" data-error="Unesi mjeru pjesme" id="songMeasure" placeholder="Mjera pjesme" />
+                            <input type="text" class="form-control" th:field="*{measure}" data-error="Unesi mjeru pjesme" id="songMeasure" placeholder="4/4, 2/4, 3/4..." />
                             <div class="form-control-feedback"></div>
 
                         </div>

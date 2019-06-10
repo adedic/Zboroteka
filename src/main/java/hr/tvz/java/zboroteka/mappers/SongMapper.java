@@ -24,7 +24,7 @@ public class SongMapper {
 	}
 
 	@Autowired
-	public static final SongParser SONG_PARSER = new SongParser();
+	SongParser songParser;
 
 	@Autowired
 	SongSetService setService;
@@ -34,12 +34,6 @@ public class SongMapper {
 
 	@Autowired
 	HttpSession session;
-
-	public static String testStr = "# Krivo je more\r\n" + "\r\n" + "Autor: **Divlje jagode**\r\n" + "\r\n"
-			+ "Tonalitet: **G**\r\n" + "\r\n" + "```\r\n" + "1. KITICA\r\n" + "    \r\n" + "    [G]           [Am] \r\n"
-			+ "    \r\n" + "    Ti, ti si ga upoznala\r\n" + "    [C]           [G] \r\n" + "      \r\n"
-			+ "    jedne ljetnje veceri\r\n" + "    \r\n" + "    [G]         [Am]\r\n" + "    \r\n"
-			+ "    On, on te poljubio\r\n" + "```";
 
 	public Song mapSongFormToSong(SongForm songForm) {
 		Song song = new Song();
@@ -72,7 +66,11 @@ public class SongMapper {
 
 		song.setRawSongText(songForm.getRawSongText());
 
-		SONG_PARSER.parseSongTextAndChords(song);
+		songParser.parseSongTextAndChords(song);
+
+		System.out.println(" tekst " + song.getSongText());
+
+		System.out.println(" raw song tekst " + song.getRawSongText());
 
 		song.setCreationDate(new Date());
 

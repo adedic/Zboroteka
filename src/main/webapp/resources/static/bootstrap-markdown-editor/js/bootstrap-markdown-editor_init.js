@@ -128,11 +128,15 @@
                 html += '<div class="btn-group mr-2" role="group">';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnBold + '" class="md-btn btn btn-sm btn-outline-info" data-btn="bold"><i class="fas fa-bold"></i></button>';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnItalic + '" class="md-btn btn btn-sm btn-outline-info" data-btn="italic"><i class="fas fa-italic"></i></button>';
+
+               html += '</div>'; // .btn-group
+               
+               html += '<div class="btn-group mr-2" role="group">';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnKeepFormat + '" class="md-btn btn btn-sm btn-outline-info" data-btn="keepFormat"><i class="fas fa-music"></i></button>';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnChord + '" class="md-btn btn btn-sm btn-outline-info" data-btn="chordBracket"><i class="fas fa-guitar"></i></button>';
                     
                 html += '</div>'; // .btn-group
-
+/*
                 html += '<div class="btn-group mr-2" role="group">';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnList + '" class="md-btn btn btn-sm btn-outline-info" data-btn="ul"><i class="fas fa-list"></i></button>';
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnOrderedList + '" class="md-btn btn btn-sm btn-outline-info" data-btn="ol"><i class="fas fa-list-ol"></i></button>';
@@ -146,6 +150,7 @@
                     }
                 html += '</div>'; // .btn-group
 
+                 */
                 if (options.fullscreen === true) {
                     html += '<div class="btn-group pull-right">';
                         html += '<button type="button" class="md-btn btn btn-sm btn-outline-secondary" data-btn="fullscreen"><i class="fas fa-compress"></i> ' + options.label.btnFullscreen + '</button>';
@@ -311,12 +316,11 @@
                     var selectedText = editor.session.getTextRange(editor.getSelectionRange());
 
                     if (selectedText === '') {
-                        snippetManager.insertSnippet(editor, '[${1:text}]');
+                        snippetManager.insertSnippet(editor, '[${1:C#}]');
                     } else {
                         snippetManager.insertSnippet(editor, '[' + selectedText + ']');
                     }
                     
-                   // snippetManager.insertSnippet(editor, '[C#]');
                     
                 } else if (btnType === 'image') {
                     if (selectedText === '') {
@@ -343,6 +347,18 @@
                     mdPreview.html('<pre font-size:16px">' + defaults.label.loading + '...</pre>');
 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {
+                        
+                        var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
+                        var matches_chords = content.match(regexp);
+                        
+                        for(var i = 0; i < matches_chords.size; i++)
+                        	content.match(regexp).fontcolor("green");
+                        
+                        console.log(matches_chords);
+                        
+                        //TODO MAKNUTI [ iz akorda i teksta
+                        
+
                         mdPreview.html(content);
                     });
 
@@ -356,7 +372,7 @@
                     }
 
                 } else if (btnType === 'fullscreen') {
-
+s
                     if (fullscreen === true) {
                         fullscreen = false;
 

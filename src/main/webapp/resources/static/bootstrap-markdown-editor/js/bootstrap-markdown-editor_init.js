@@ -350,11 +350,32 @@
                         
                         var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
                         var matches_chords = content.match(regexp);
+                        content.replace(matches_chords[0], '<strong>'+ matches_chords[0]+'</strong>');
+
+                        console.log(content);
+                        for(var j = 0; j < matches_chords.length; j++) {
+	                        for(var i = 0; i < content.length; i++) {
+	                            //console.log(content[i]);
+	                            if( content[i] == '[') {
+		                            var chord = '';
+	                            	while(content[i] != ']') {
+	                            		chord += content[i];
+	                            		i++;
+	                            	}
+                            		chord += content[i];
+	                            	console.log(chord);
+	                            	
+	                            	//NE RADI JER JE CONTENT READ ONLY
+	                            	//content[i-chord.length] += '<strong>';
+	                            	//content[i] +='</strong>'
+	                            	
+	                            }
+	                        	//content.match(regexp).fontcolor("green");
+	                        }
+                        }
                         
-                        for(var i = 0; i < matches_chords.size; i++)
-                        	content.match(regexp).fontcolor("green");
                         
-                        console.log(matches_chords);
+                        console.log(content);
                         
                         //TODO MAKNUTI [ iz akorda i teksta
                         
@@ -372,7 +393,7 @@
                     }
 
                 } else if (btnType === 'fullscreen') {
-s
+
                     if (fullscreen === true) {
                         fullscreen = false;
 

@@ -16,6 +16,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "song")
 public class Song implements Serializable {
@@ -50,6 +59,7 @@ public class Song implements Serializable {
 	 * 2 + 3)/8; 5/8; 8/8 kao (3 + 2 + 3)/8 ili (3 + 3 + 2)/8; 9/8 kao 2 + 2 + 2 +
 	 * 3/8. 2/16, 3/16, 5/16, 3/4
 	 */
+
 	@Column(name = "measure")
 	private String measure;
 
@@ -89,125 +99,5 @@ public class Song implements Serializable {
 			@JoinColumn(name = "song_id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "chord_id", insertable = false, updatable = false, nullable = true) })
 	private List<Chord> chords;
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getRawSongText() {
-		return rawSongText;
-	}
-
-	public void setRawSongText(String rawSongText) {
-		this.rawSongText = rawSongText;
-	}
-
-	public String getSongText() {
-		return songText;
-	}
-
-	public void setSongText(String songText) {
-		this.songText = songText;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getMeasure() {
-		return measure;
-	}
-
-	public void setMeasure(String measure) {
-		this.measure = measure;
-	}
-
-	public Integer getGenre() {
-		return genre;
-	}
-
-	public void setGenre(Integer genre) {
-		this.genre = genre;
-	}
-
-	public String getUsage() {
-		return usage;
-	}
-
-	public void setUsage(String usage) {
-		this.usage = usage;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public SongSet getSongSet() {
-		return songSet;
-	}
-
-	public void setSongSet(SongSet set) {
-		this.songSet = set;
-	}
-
-	public Integer getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(Integer creatorId) {
-		this.creatorId = creatorId;
-	}
-
-	public List<Chord> getChords() {
-		return chords;
-	}
-
-	public void setChords(List<Chord> chords) {
-		this.chords = chords;
-	}
-
-	public Integer getSongKey() {
-		return songKey;
-	}
-
-	public void setSongKey(Integer songKey) {
-		this.songKey = songKey;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getBandId() {
-		return bandId;
-	}
-
-	public void setBandId(Integer bandId) {
-		this.bandId = bandId;
-	}
 
 }

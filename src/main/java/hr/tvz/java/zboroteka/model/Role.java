@@ -11,6 +11,15 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "role")
 public class Role implements GrantedAuthority, Serializable {
@@ -28,35 +37,13 @@ public class Role implements GrantedAuthority, Serializable {
 	@Column(name = "role_name", nullable = false, length = 40)
 	private String roleName;
 
-	public Role() {
-		// default constructor
-	}
-
 	public Role(String roleName) {
 		this.roleName = roleName;
 	}
 
-	// --- get / set methods --------------------------------------------------
-
 	@Override
 	public String getAuthority() {
-		return getRoleName();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getRoleName() {
 		return roleName;
-	}
-
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
 	}
 
 }

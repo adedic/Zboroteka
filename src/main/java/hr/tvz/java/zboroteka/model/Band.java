@@ -16,6 +16,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "band")
 public class Band implements Serializable {
@@ -53,73 +62,8 @@ public class Band implements Serializable {
 	private List<Song> bandSongs;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "band_member", joinColumns = {
-			@JoinColumn(name = "band_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "member_id") })
+	@JoinTable(name = "band_member", joinColumns = { @JoinColumn(name = "band_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "member_id") })
 	private List<User> members;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getGroupType() {
-		return groupType;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setGroupType(Integer groupType) {
-		this.groupType = groupType;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(Integer creatorId) {
-		this.creatorId = creatorId;
-	}
-
-	public List<Song> getBandSongs() {
-		return bandSongs;
-	}
-
-	public void setBandSongs(List<Song> bandSongs) {
-		this.bandSongs = bandSongs;
-	}
-
-	public List<User> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<User> members) {
-		this.members = members;
-	}
 
 }

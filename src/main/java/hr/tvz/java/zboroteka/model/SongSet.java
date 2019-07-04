@@ -15,6 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "song_set")
 public class SongSet implements Serializable {
@@ -48,69 +57,5 @@ public class SongSet implements Serializable {
 	private List<Song> songs;
 
 	private Integer numOfSongs;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getPlayDate() {
-		return playDate;
-	}
-
-	public void setPlayDate(Date playDate) {
-		this.playDate = playDate;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(Integer creatorId) {
-		this.creatorId = creatorId;
-	}
-
-	public Integer getNumOfSongs() {
-		return numOfSongs;
-	}
-
-	public void setNumOfSongs(Integer numOfSongs) {
-		this.numOfSongs = numOfSongs;
-	}
-
-	public List<Song> getSongs() {
-		return songs;
-	}
-
-	public void setSongs(List<Song> songs) {
-		this.songs = songs;
-	}
-
-	public Integer getBandId() {
-		return bandId;
-	}
-
-	public void setBandId(Integer bandId) {
-		this.bandId = bandId;
-	}
 
 }

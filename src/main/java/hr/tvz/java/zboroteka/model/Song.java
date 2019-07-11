@@ -64,7 +64,7 @@ public class Song implements Serializable {
 	private String measure;
 
 	// table SongKey
-	@Column(name = "song_key")
+	@JoinColumn(name = "song_key_id", referencedColumnName = "id")
 	private Integer songKey;
 
 	@Column(name = "genre") // enum SongGenre

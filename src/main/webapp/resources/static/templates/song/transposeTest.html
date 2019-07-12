@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- Example Page -->
+Chord:        <input id="chord" type="text" value="C#" style="width:70px"> 
+transposed by <input id="amount" type="number" value="0" style="width:30px"> 
+=             <input id="new-chord" type="text" style="width:70px">
+              <button onclick="document.getElementById('new-chord').value = transposeChord(document.getElementById('chord').value,parseInt(document.getElementById('amount').value))">Calculate</button>
+
+</body>
+</html>

@@ -151,6 +151,15 @@
                 html += '</div>'; // .btn-group
 
                  */
+                
+                /*TRANSPOSE TIPKE + I -*/
+                html += '<div class="btn-group mr-2" role="group">';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeUp + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeUp"><i class="fas fa-plus"></i></button>';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
+	            html += '</div>'; // .btn-group
+                
+                
+                
                 if (options.fullscreen === true) {
                     html += '<div class="btn-group pull-right">';
                         html += '<button type="button" class="md-btn btn btn-sm btn-outline-secondary" data-btn="fullscreen"><i class="fas fa-compress"></i> ' + options.label.btnFullscreen + '</button>';
@@ -166,6 +175,8 @@
 
             html += '</div>'; // .btn-toolbar
         html += '</div>'; // .md-toolbar
+        
+        
 
         html += '<div class="md-editor">' + $('<div>').text(content).html() + '</div>';
         html += '<div class="md-preview" style="display:none"></div>';
@@ -215,6 +226,8 @@
             mdPreview.css({
                 height: defaults.height
             });
+            
+            var textarea = $('#songEditor');
 
             // Initialize Ace
             var editor = ace.edit(mdEditor[0]),
@@ -227,6 +240,8 @@
             // Sync ace with the textarea
             editor.getSession().on('change', function() {
                 plugin.val(editor.getSession().getValue());
+
+                textarea.val(editor.getSession().getValue());
             });
 
             editor.setHighlightActiveLine(false);
@@ -321,8 +336,35 @@
                         snippetManager.insertSnippet(editor, '[' + selectedText + ']');
                     }
                     
+                }  else if (btnType === 'transposeUp') {
+                    console.log("TRANSPOSE +1");
                     
-                } else if (btnType === 'image') {
+                    //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
+                    //ODREDI INDEX TRENUTNOG TONALITETA
+                    var trenutniTonalitet = parseInt($("#key").val());
+
+                    //NAPRAVITI AJAX POZIV KOJI IDE NA BACKEND, parsira listu s akordima i radi transpose, a onda vraća cijeli tekst s transponiranim akordima? na gumb transpose
+                    
+                    //DOHVATI SVE AKORDE PJESME
+                    var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
+                    var matches_chords =  editor.getSession().getValue().match(regexp);
+                    console.log("SVI AKORDI PJESME :"+ matches_chords);
+                    
+                    //TRANSPOSE VRIJEDNOST = TRENUTNI INDEX TONALTIETA +1 (npr iz G u G#)
+                    var transposeAmount = trenutniTonalitet + 1;
+
+                    console.log("transposeAmount: "+ transposeAmount);
+                    //ZA SVAKI AKORD POZOVI TRANSPOSE
+                
+                    //transposeChords(matches_chords, transposeAmount);
+                    
+                    //azurirati trenutni tontalitet na formi
+                    $("#key").val(trenutniTonalitet+1);
+                } else if (btnType === 'transposeDown') {
+                    console.log("TRANSPOSE -1");
+                    
+                }
+                else if (btnType === 'image') {
                     if (selectedText === '') {
                         snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
                     } else {
@@ -344,16 +386,18 @@
                 } else if (btnType === 'preview') {
                     preview = true;
 
-                    mdPreview.html('<pre font-size:16px">' + defaults.label.loading + '...</pre>');
-
+                    mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {
                         
-                        var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
-                        var matches_chords = content.match(regexp);
-                        content.replace(matches_chords[0], '<strong>'+ matches_chords[0]+'</strong>');
+                       var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
+                       var matches_chords = content.match(regexp);
+                       
 
-                        console.log(content);
-                        for(var j = 0; j < matches_chords.length; j++) {
+                       //editor.session.replace(textarea.val(), 'TEST');   
+                       
+                       //content.replace(matches_chords[0], '<strong>'+ matches_chords[0]+'</strong>');
+
+                       /* for(var j = 0; j < matches_chords.length; j++) {
 	                        for(var i = 0; i < content.length; i++) {
 	                            //console.log(content[i]);
 	                            if( content[i] == '[') {
@@ -373,13 +417,13 @@
 	                        	//content.match(regexp).fontcolor("green");
 	                        }
                         }
-                        
+                        */
                         
                         console.log(content);
                         
-                        //TODO MAKNUTI [ iz akorda i teksta
-                        
 
+                        
+                       
                         mdPreview.html(content);
                     });
 
@@ -467,6 +511,8 @@
             btnBold: 'Bold',
             btnItalic: 'Italic',
             btnKeepFormat: 'Tekst i akordi',
+            transposeUp: 'Transpose +1',
+            transposeDown: 'Transpose -1',
             btnChord: 'Akord',
             btnList: 'Lista',
             btnOrderedList: 'Numerirana lista',

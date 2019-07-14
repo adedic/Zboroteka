@@ -26,12 +26,12 @@ public class BandMapper {
 
 		// TODO ZASAD HARDKODIRANO JER NIJE IMPLENETIRANA PRIJAVA
 		Integer userId = 1;
-		// = (Integer) session.getAttribute("userId");
+		// (Integer) session.getAttribute("userId");
 		band.setCreatorId(userId);
-		
+
 		band.setMembers(bandForm.getMembers());
 		band.setBandSongs(bandForm.getBandSongs());
-		
+
 		return band;
 	}
 }

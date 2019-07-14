@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -64,8 +66,9 @@ public class Song implements Serializable {
 	private String measure;
 
 	// table SongKey
-	@JoinColumn(name = "song_key_id", referencedColumnName = "id")
-	private Integer songKey;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "song_key", referencedColumnName = "id")
+	private SongKey songKey;
 
 	@Column(name = "genre") // enum SongGenre
 	private Integer genre;
@@ -90,7 +93,7 @@ public class Song implements Serializable {
 	@JoinColumn(name = "band_id", referencedColumnName = "id", nullable = true) // song can exist without band
 	private Integer bandId;
 
-	// @ManyToOne(fetch = FetchType.EAGER)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 

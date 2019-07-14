@@ -29,9 +29,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "band")
 public class Band implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7913178233955358139L;
 
 	@Id
@@ -51,7 +48,6 @@ public class Band implements Serializable {
 	@Column(name = "group_type", nullable = false)
 	private Integer groupType;
 
-	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 

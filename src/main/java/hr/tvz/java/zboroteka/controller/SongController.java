@@ -88,11 +88,11 @@ public class SongController {
 		JsonResponse tJsonResponse = new JsonResponse();
 
 		// Napravi transpose
-		// songParser.transposeChordsInSongText(rawSongText, transposeAmount);
+		songParser.transposeChordsInSongText(rawSongText, transposeAmount);
 
 		tJsonResponse.setStatus("ok");
 		Integer newKey = currentKey + transposeAmount;
-		rawSongText += "asdasdas";
+
 		HashMap<String, Object> hmap = new HashMap<>();
 		hmap.put("newKey", newKey);
 		hmap.put("rawSongText", rawSongText);
@@ -105,19 +105,20 @@ public class SongController {
 	}
 
 	@PostMapping(value = "setHeadingAuthorKeyToEditor", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object setHeadingAuthorKeyToEditor(Model model, @ModelAttribute SongForm songForm,
-			@RequestParam(value = "rawSongText", required = false) String rawSongText) {
+	public Object setHeadingAuthorKeyToEditor(Model model, @ModelAttribute SongForm songForm) {
 
 		JsonResponse tJsonResponse = new JsonResponse();
 		HashMap<String, Object> hmap = new HashMap<>();
 		hmap.put("heading", songForm.getName());
 		hmap.put("author", songForm.getAuthor());
+		/*
+		 * Optional<SongKey> songKey = iSongKeyService.findOne(songForm.getKey()); if
+		 * (songKey.isPresent()) { String key = songKey.get().getName(); }
+		 */
+		// TODO postaviti naziv iz baze
 		hmap.put("key", songForm.getKey());
-		tJsonResponse.setStatus("ok");
-		// Napravi transpose
-		// songParser.setHeadingAuthorKey(songForm);
 
-		// postavi promijenjeni rawSongText u rezultat
+		tJsonResponse.setStatus("ok");
 		tJsonResponse.setResult(hmap);
 
 		return ResponseEntity.ok(tJsonResponse);

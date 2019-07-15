@@ -10,22 +10,8 @@ $("#showSongEditorFormBtn").click(function(e) {
 			alertLevel : 'danger'
 		});
 	} else {
-		//TODO ajax poziv koji na editor postavlja heading, autora i tonalitet
-		/*$.ajax({
-			type : "POST",
-			url : "setHeadingAuthorKeyToEditor",
-			data : $('#createSongForm').serialize() + "&rawSongText=" + $('#songEditor').val(),
-			suppressErrors : true
-		}).done(function(data) {
-			debugger;
-			if(data.status == "ok") {
-				//result je rawSongText u formatu:
-				
-				//TODO POSTAVITI U EDITOR
-                //editor.session.replace(textarea.val(), data.result); 
-				
-			} 
-		});*/
+		//poziv skivenog gumba za inicijalno popunjavanje naslova, autora, tonaliteta i placeholdera za tekst i akorde
+		$("#btnInitEditorVal").click();
 		
 		$("#mainSongInfo").hide();
 		$("#formSongText").show();
@@ -34,9 +20,12 @@ $("#showSongEditorFormBtn").click(function(e) {
 
 $("#backToMainSongData").click(function(e) {
 	e.preventDefault();
-
+	
 	$("#formSongText").hide();
 	$("#mainSongInfo").show();
+
+	//poziv skriveni gumb za isprazniti editor
+	$("#btnClearContent").click();
 });
 
 $("#saveSongBtn").click(function(e) {

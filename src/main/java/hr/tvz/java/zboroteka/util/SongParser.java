@@ -1,7 +1,6 @@
 package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Chord;
-import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.service.IChordService;
@@ -143,55 +140,6 @@ public class SongParser {
 
 	private String parseTextAndChords(String text) {
 		return StringUtils.substringBetween(text, "```", "```");
-	}
-
-	private String parseHeading1(String[] lines) {
-		StringBuilder heading1 = new StringBuilder();
-		for (int i = 0; i < lines.length; i++) {
-			String currentLine = lines[i];
-
-			for (int j = 0; j < currentLine.length(); j++) {
-				char currentChar = currentLine.charAt(j);
-
-				// Process char
-				if (currentChar == '#') {
-					currentLine = currentLine.replace("#", "").trim();
-
-					heading1.append(currentLine);
-					break;
-				}
-			}
-		}
-
-		return heading1.toString();
-
-	}
-
-	public String setHeadingAuthorKey(SongForm songForm) {
-
-		StringBuilder sb = new StringBuilder();
-
-		String heading = "	# " + songForm.getName() + "\n\n";
-
-		sb.append(heading);
-
-		if (songForm.getAuthor() != null && songForm.getAuthor() != "") {
-			String author = "	Autor: **" + songForm.getAuthor() + "** \n\n";
-			sb.append(author);
-		}
-
-		/*
-		 * Optional<SongKey> songKey = iSongKeyService.findOne(songForm.getKey()); if
-		 * (songKey.isPresent()) { String key = "				 Tonalitet: **" +
-		 * songKey.get().getName() + "**"; sb.append(key); }
-		 */
-
-		// SAMO PRIVREMENO TODO
-		String key = "	Tonalitet: **G**";
-		sb.append(key);
-
-		return sb.toString();
-
 	}
 
 }

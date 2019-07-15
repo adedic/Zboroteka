@@ -169,6 +169,14 @@
                 html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeUp + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeUp"><i class="fas fa-plus"></i></button>';
                 html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
 	            html += '</div>'; // .btn-group
+	            
+	            /*INIT BUTTON - HIDDEN*/
+	            //TODO POSTAVITI HIDDEN
+	            html += '<div class="btn-group mr-2" role="group">';
+                html += '<button type="button" id="btnInitEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="initEditorVal"></button>';
+                html += '<button type="button" id="btnClearContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="clearContent"></button>';
+	            html += '</div>'; // .btn-group
+	         
                 
                 
                 
@@ -369,29 +377,36 @@
                         snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
                     }
 
-                } else if (btnType === 'edit') {
-                    preview = false;
-
+                } else if (btnType === 'initEditorVal') {
+                	
+                	//TODO SVAKI PUT ISPRAZNITI PA PUNITI
                     $.ajax({
             			type : "POST",
             			url : "setHeadingAuthorKeyToEditor",
-            			data : $('#createSongForm').serialize() + "&rawSongText=" + $('#songEditor').val(),
+            			data : $('#createSongForm').serialize(),
             			suppressErrors : true
             		}).done(function(data) {
             			debugger;
             			if(data.status == "ok") {
-            				//dodati nakon class="ace_layer ace_text-layer"
-            				//var htmlHeading = '<div class="ace_line" style="height:17px"><span class="ace_markup ace_heading ace_1">#</span><span class="ace_heading">&nbsp' + data.result.heading + '</span></div>';
+            				//PUNJENJE EDITORA PODACIMA UNESENIM NA FORMI PJESME
+            				if(data.result.heading != null)
+            					insertHeading(editor, '#', data.result.heading);
             				
-            				//$(".ace_text-layer").after(htmlHeading);
-            				//editor.getSession().setValue(data.result.heading);
-            				insertHeading(editor, '#', data.result.heading);
+            				if(data.result.author != null && data.result.author != "")
+            					snippetManager.insertSnippet(editor, 'Autor: '+ data.result.author);
+            				if(data.result.key != null)
+                            	snippetManager.insertSnippet(editor, 'Tonalitet: '+ data.result.key);
             				
-            				insertHeading(editor, '##', data.result.author);
-            				
-            				insertHeading(editor, '###', data.result.key);
+            				//placeholder za tekst i akorde
+                            snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\n\nTekst i akordi pjesme \n\n```\n\n');
             			} 
         	        });
+                	
+                } else if(btnType === 'clearContent') {
+                	
+                	editor.setValue("");
+                } else if (btnType === 'edit') {
+                    preview = false;
                     
                     mdPreview.hide();
                     mdEditor.show();

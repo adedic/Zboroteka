@@ -10,8 +10,23 @@ $("#showSongEditorFormBtn").click(function(e) {
 			alertLevel : 'danger'
 		});
 	} else {
+		//TODO ajax poziv koji na editor postavlja heading, autora i tonalitet
+		/*$.ajax({
+			type : "POST",
+			url : "setHeadingAuthorKeyToEditor",
+			data : $('#createSongForm').serialize() + "&rawSongText=" + $('#songEditor').val(),
+			suppressErrors : true
+		}).done(function(data) {
+			debugger;
+			if(data.status == "ok") {
+				//result je rawSongText u formatu:
+				
+				//TODO POSTAVITI U EDITOR
+                //editor.session.replace(textarea.val(), data.result); 
+				
+			} 
+		});*/
 		
-		//TODO ajax poziv koji na editor postavlja heading i tonalitet
 		$("#mainSongInfo").hide();
 		$("#formSongText").show();
 	}

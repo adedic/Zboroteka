@@ -1,3 +1,4 @@
+//algoritam za transpose JS
 function transposeChord(chord, amount) {
     var scale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     var normalizeMap = {"Cb":"B", "Db":"C#", "Eb":"D#", "Fb":"E", "Gb":"F#", "Ab":"G#", "Bb":"A#",  "E#":"F", "B#":"C"}
@@ -66,7 +67,7 @@ function transposeChord(chord, amount) {
 
 
 var songUtil = (function() {
-	var transposeChords = function(transposeValue) {
+	var transposeChords = function(transposeValue, editorSession) {
 		//transposeValue je UP (+1) ili DOWN (-1)
 		commonModul.removeAllAlerts();
 		
@@ -75,25 +76,22 @@ var songUtil = (function() {
         
         //TRANSPOSE VRIJEDNOST = TRENUTNI INDEX TONALTIETA +1/-1 (npr iz G u G#)
         var	transposeAmount = currentKey + transposeValue;
-       
-        
         
 	    //transponiraj akorde pjesme
 	        $.ajax({
 	            type: "POST",
 	            url: "transposeChords",
-	            data: $('#songEditor').val() + "&transposeAmount=" + transposeAmount + "&currentKey=" + currentKey,
+	            data:  "rawSongText=" + editorSession.getValue() + "&transposeAmount=" + transposeAmount + "&currentKey=" + currentKey,
 	            suppressErrors: true
 	        }).done(function(data) {
 	            debugger;
 
 	            if(data.status == "ok") {
                     //azurirati trenutni tontalitet na formi
-	                ("#key").val(data.result.newKey);
+	                $("#key").val(data.result.newKey);
                     //azurirati rawSongText na formi
-	                $('#songEditor').val(data.result.rawSongText);
-	                
-	                return rawSongText;
+	                //OVO POSTAVLJA VRIJEDNOST
+	                editorSession.setValue(data.result.rawSongText);
 	            }
 	        });
 	};

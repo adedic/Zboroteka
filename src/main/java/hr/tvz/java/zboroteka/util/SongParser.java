@@ -1,6 +1,7 @@
 package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Chord;
+import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.service.IChordService;
@@ -28,13 +31,14 @@ public class SongParser {
 		this.iSongKeyService = iSongKeyService;
 	}
 
-	
-	//TODO dodati postavljanje naslova i tonaliteta u rawSongText na gumb NASTAVI UNOS PJESME
-	
+	// TODO dodati postavljanje naslova i tonaliteta u rawSongText na gumb NASTAVI
+	// UNOS PJESME
+
 	public void transposeChordsInSongText(String rawSongText, Integer transposeAmount) {
 
+		String textAndChords = parseTextAndChords(rawSongText);
 		// parsiraj samo akorde iz raw teksta
-		String[] chords = parseChordsStr(rawSongText);
+		String[] chords = parseChordsStr(textAndChords);
 
 		// prođi kroz listu parsiranih akorda
 		for (int i = 0; i < chords.length; i++) {
@@ -160,6 +164,33 @@ public class SongParser {
 		}
 
 		return heading1.toString();
+
+	}
+
+	public String setHeadingAuthorKey(SongForm songForm) {
+
+		StringBuilder sb = new StringBuilder();
+
+		String heading = "	# " + songForm.getName() + "\n\n";
+
+		sb.append(heading);
+
+		if (songForm.getAuthor() != null && songForm.getAuthor() != "") {
+			String author = "	Autor: **" + songForm.getAuthor() + "** \n\n";
+			sb.append(author);
+		}
+
+		/*
+		 * Optional<SongKey> songKey = iSongKeyService.findOne(songForm.getKey()); if
+		 * (songKey.isPresent()) { String key = "				 Tonalitet: **" +
+		 * songKey.get().getName() + "**"; sb.append(key); }
+		 */
+
+		// SAMO PRIVREMENO TODO
+		String key = "	Tonalitet: **G**";
+		sb.append(key);
+
+		return sb.toString();
 
 	}
 

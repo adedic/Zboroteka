@@ -35,7 +35,12 @@ dependencies {
 	compileOnly 'org.codehaus.sonar.plugins:sonar-surefire-plugin:3.3.2'
 	compileOnly 'org.codehaus.sonar:sonar-plugin-api:5.1'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
+	
+	//TODO ZA TEST STAVLJENO H2
+	//runtimeOnly 'org.postgresql:postgresql'
+	
+	runtime('com.h2database:h2')
+	
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

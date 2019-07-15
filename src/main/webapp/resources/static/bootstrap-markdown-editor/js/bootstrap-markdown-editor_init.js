@@ -111,6 +111,18 @@
             editor.navigateLineEnd();
         }
     }
+    
+    function insertHeading (editor, string, text) {
+
+        if (editor.getCursorPosition().column === 0) {
+            editor.navigateLineStart();
+            editor.insert(string + ' ' + text + '\n\n');
+        } else {
+            editor.navigateLineStart();
+            editor.insert(string + ' ' + text + '\n\n');
+            editor.navigateLineEnd();
+        }
+    }
 
     function editorHtml (content, options) {
         var html = '';
@@ -226,8 +238,6 @@
             mdPreview.css({
                 height: defaults.height
             });
-            
-            var textarea = $('#songEditor');
 
             // Initialize Ace
             var editor = ace.edit(mdEditor[0]),
@@ -237,11 +247,10 @@
             editor.getSession().setMode('ace/mode/markdown');
             editor.getSession().setUseSoftTabs(defaults.softTabs);
            
+            
             // Sync ace with the textarea
             editor.getSession().on('change', function() {
                 plugin.val(editor.getSession().getValue());
-
-                textarea.val(editor.getSession().getValue());
             });
 
             editor.setHighlightActiveLine(false);
@@ -338,6 +347,8 @@
                     
                 }  else if (btnType === 'transposeUp') {
                     console.log("TRANSPOSE +1");
+
+                    songUtil.transposeChords(1, editor.getSession());
                     
                     /*
                      
@@ -346,18 +357,10 @@
                     var matches_chords =  editor.getSession().getValue().match(regexp);
                     console.log("SVI AKORDI PJESME :"+ matches_chords);
                     */
-                    
-                    String rawSongText = songUtil.transposeChords(1);
-                    
-                    //TODO provjeriti radi li
-                    //azuriranje editora
-                    editor.session.replace(textarea.val(), rawSongText); 
-                    
                 } else if (btnType === 'transposeDown') {
                     console.log("TRANSPOSE -1");
 
-                    String rawSongText = songUtil.transposeChords(-1);
-                    
+                    songUtil.transposeChords(-1, editor.getSession());
                 }
                 else if (btnType === 'image') {
                     if (selectedText === '') {
@@ -369,6 +372,27 @@
                 } else if (btnType === 'edit') {
                     preview = false;
 
+                    $.ajax({
+            			type : "POST",
+            			url : "setHeadingAuthorKeyToEditor",
+            			data : $('#createSongForm').serialize() + "&rawSongText=" + $('#songEditor').val(),
+            			suppressErrors : true
+            		}).done(function(data) {
+            			debugger;
+            			if(data.status == "ok") {
+            				//dodati nakon class="ace_layer ace_text-layer"
+            				//var htmlHeading = '<div class="ace_line" style="height:17px"><span class="ace_markup ace_heading ace_1">#</span><span class="ace_heading">&nbsp' + data.result.heading + '</span></div>';
+            				
+            				//$(".ace_text-layer").after(htmlHeading);
+            				//editor.getSession().setValue(data.result.heading);
+            				insertHeading(editor, '#', data.result.heading);
+            				
+            				insertHeading(editor, '##', data.result.author);
+            				
+            				insertHeading(editor, '###', data.result.key);
+            			} 
+        	        });
+                    
                     mdPreview.hide();
                     mdEditor.show();
                     container.find('.btn-edit').addClass('active');
@@ -381,44 +405,10 @@
                 } else if (btnType === 'preview') {
                     preview = true;
 
-                    mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
+                    mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {
                         
-                       var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
-                       var matches_chords = content.match(regexp);
-                       
-
-                       //editor.session.replace(textarea.val(), 'TEST');   
-                       
-                       //content.replace(matches_chords[0], '<strong>'+ matches_chords[0]+'</strong>');
-
-                       /* for(var j = 0; j < matches_chords.length; j++) {
-	                        for(var i = 0; i < content.length; i++) {
-	                            //console.log(content[i]);
-	                            if( content[i] == '[') {
-		                            var chord = '';
-	                            	while(content[i] != ']') {
-	                            		chord += content[i];
-	                            		i++;
-	                            	}
-                            		chord += content[i];
-	                            	console.log(chord);
-	                            	
-	                            	//NE RADI JER JE CONTENT READ ONLY
-	                            	//content[i-chord.length] += '<strong>';
-	                            	//content[i] +='</strong>'
-	                            	
-	                            }
-	                        	//content.match(regexp).fontcolor("green");
-	                        }
-                        }
-                        */
-                        
                         console.log(content);
-                        
-
-                        
-                       
                         mdPreview.html(content);
                     });
 

@@ -1,10 +1,13 @@
 package hr.tvz.java.zboroteka.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,13 +15,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.tvz.java.zboroteka.forms.SongForm;
+import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
 import hr.tvz.java.zboroteka.service.ISongService;
+import hr.tvz.java.zboroteka.util.SongParser;
 
 @Controller
 @RequestMapping("/song")
@@ -27,6 +33,9 @@ public class SongController {
 	private static final String NEW_SONG_VIEW_NAME = "redirect:/song/newSong/";
 
 	private static final String SONG_DETAILS_VIEW_NAME = "redirect:/song/details/";
+
+	@Autowired
+	public SongParser songParser;
 
 	@Autowired
 	ISongService iSongService;
@@ -48,22 +57,51 @@ public class SongController {
 	}
 
 	@PostMapping("/createSong")
-	public String createNewSong(@Valid @ModelAttribute("createSongForm") SongForm songForm,
+	public Object createNewSong(@Valid @ModelAttribute("createSongForm") SongForm songForm,
 			RedirectAttributes redirectAttributes, BindingResult bindingResult, Model model) {
-		System.out.println("raw text " + songForm.getRawSongText());
 		if (bindingResult.hasErrors()) {
 			initSongScreen(model);
 			return NEW_SONG_VIEW_NAME;
 		}
+
 		// TODO validacija forme backend
 		Song song = iSongService.saveSong(songForm);
 
-		// todo prikazati poruku o uspjesnom spremanju
-		redirectAttributes.addFlashAttribute("createSongSuccess", "Uspješno dodavanje nove pjesme!");
-
 		// redirect na details page
 		// return SONG_DETAILS_VIEW_NAME + song.getId();
-		return NEW_SONG_VIEW_NAME;
+
+		// return NEW_SONG_VIEW_NAME;
+
+		JsonResponse tJsonResponse = new JsonResponse();
+		tJsonResponse.setStatus("ok");
+		tJsonResponse.setResult(song.getId());
+
+		return ResponseEntity.ok(tJsonResponse);
+	}
+
+	@PostMapping(value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object transposeChords(Model model, @ModelAttribute SongForm songForm,
+			@RequestParam(value = "rawSongText", required = false) String rawSongText,
+			@RequestParam(value = "transposeAmount", required = false) Integer transposeAmount,
+			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
+
+		JsonResponse tJsonResponse = new JsonResponse();
+
+		// Napravi transpose
+		songParser.transposeChordsInSongText(rawSongText, transposeAmount);
+
+		tJsonResponse.setStatus("ok");
+		Integer newKey = currentKey + transposeAmount;
+
+		HashMap<String, Object> hmap = new HashMap<>();
+		hmap.put("newKey", newKey);
+		hmap.put("rawSongText", rawSongText);
+
+		// postavi promijenjeni rawSongText u rezultat
+		// i novi tonalitet nakon transposea
+		tJsonResponse.setResult(hmap);
+
+		return ResponseEntity.ok(tJsonResponse);
 	}
 
 	@GetMapping("/songs")

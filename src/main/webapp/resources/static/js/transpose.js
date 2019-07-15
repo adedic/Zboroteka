@@ -63,3 +63,44 @@ function transposeChord(chord, amount) {
         return scale[ i < 0 ? i + scale.length : i ];
     })
 }
+
+
+var songUtil = (function() {
+	var transposeChords = function(transposeValue) {
+		//transposeValue je UP (+1) ili DOWN (-1)
+		commonModul.removeAllAlerts();
+		
+		//DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
+        var currentKey = parseInt($("#key").val());
+        
+        //TRANSPOSE VRIJEDNOST = TRENUTNI INDEX TONALTIETA +1/-1 (npr iz G u G#)
+        var	transposeAmount = currentKey + transposeValue;
+       
+        
+        
+	    //transponiraj akorde pjesme
+	        $.ajax({
+	            type: "POST",
+	            url: "transposeChords",
+	            data: $('#songEditor').val() + "&transposeAmount=" + transposeAmount + "&currentKey=" + currentKey,
+	            suppressErrors: true
+	        }).done(function(data) {
+	            debugger;
+
+	            if(data.status == "ok") {
+                    //azurirati trenutni tontalitet na formi
+	                ("#key").val(data.result.newKey);
+                    //azurirati rawSongText na formi
+	                $('#songEditor').val(data.result.rawSongText);
+	                
+	                return rawSongText;
+	            }
+	        });
+	};
+
+	// Public API
+	return {
+		//transponira akorde
+		transposeChords : transposeChords,
+	}
+})();

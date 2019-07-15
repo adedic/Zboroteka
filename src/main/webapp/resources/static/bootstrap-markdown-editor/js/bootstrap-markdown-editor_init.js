@@ -339,29 +339,24 @@
                 }  else if (btnType === 'transposeUp') {
                     console.log("TRANSPOSE +1");
                     
-                    //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
-                    //ODREDI INDEX TRENUTNOG TONALITETA
-                    var trenutniTonalitet = parseInt($("#key").val());
-
-                    //NAPRAVITI AJAX POZIV KOJI IDE NA BACKEND, parsira listu s akordima i radi transpose, a onda vraća cijeli tekst s transponiranim akordima? na gumb transpose
-                    
+                    /*
+                     
                     //DOHVATI SVE AKORDE PJESME
                     var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
                     var matches_chords =  editor.getSession().getValue().match(regexp);
                     console.log("SVI AKORDI PJESME :"+ matches_chords);
+                    */
                     
-                    //TRANSPOSE VRIJEDNOST = TRENUTNI INDEX TONALTIETA +1 (npr iz G u G#)
-                    var transposeAmount = trenutniTonalitet + 1;
-
-                    console.log("transposeAmount: "+ transposeAmount);
-                    //ZA SVAKI AKORD POZOVI TRANSPOSE
-                
-                    //transposeChords(matches_chords, transposeAmount);
+                    String rawSongText = songUtil.transposeChords(1);
                     
-                    //azurirati trenutni tontalitet na formi
-                    $("#key").val(trenutniTonalitet+1);
+                    //TODO provjeriti radi li
+                    //azuriranje editora
+                    editor.session.replace(textarea.val(), rawSongText); 
+                    
                 } else if (btnType === 'transposeDown') {
                     console.log("TRANSPOSE -1");
+
+                    String rawSongText = songUtil.transposeChords(-1);
                     
                 }
                 else if (btnType === 'image') {

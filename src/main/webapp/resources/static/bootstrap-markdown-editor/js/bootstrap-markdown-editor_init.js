@@ -170,8 +170,7 @@
                 html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
 	            html += '</div>'; // .btn-group
 	            
-	            /*INIT BUTTON - HIDDEN*/
-	            //TODO POSTAVITI HIDDEN
+	            /*INIT i clear BUTTON - HIDDEN*/
 	            html += '<div class="btn-group mr-2" role="group">';
                 html += '<button type="button" id="btnInitEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="initEditorVal"></button>';
                 html += '<button type="button" id="btnClearContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="clearContent"></button>';
@@ -379,7 +378,6 @@
 
                 } else if (btnType === 'initEditorVal') {
                 	
-                	//TODO SVAKI PUT ISPRAZNITI PA PUNITI
                     $.ajax({
             			type : "POST",
             			url : "setHeadingAuthorKeyToEditor",

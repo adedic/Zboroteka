@@ -2,6 +2,7 @@ package hr.tvz.java.zboroteka.controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.Song;
+import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
 import hr.tvz.java.zboroteka.service.ISongService;
@@ -111,12 +113,9 @@ public class SongController {
 		HashMap<String, Object> hmap = new HashMap<>();
 		hmap.put("heading", songForm.getName());
 		hmap.put("author", songForm.getAuthor());
-		/*
-		 * Optional<SongKey> songKey = iSongKeyService.findOne(songForm.getKey()); if
-		 * (songKey.isPresent()) { String key = songKey.get().getName(); }
-		 */
-		// TODO postaviti naziv iz baze
-		hmap.put("key", songForm.getKey());
+
+		Optional<SongKey> songKey = iSongKeyService.findOne(songForm.getKey());
+		hmap.put("key", songKey.isPresent() ? songKey.get().getName() : "");
 
 		tJsonResponse.setStatus("ok");
 		tJsonResponse.setResult(hmap);

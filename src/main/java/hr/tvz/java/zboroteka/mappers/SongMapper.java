@@ -59,7 +59,7 @@ public class SongMapper {
 		song.setAuthor(songForm.getAuthor());
 		song.setDescription(songForm.getDescription());
 		song.setGenre(songForm.getGenre());
-		song.setSongKey(songForm.getKey());
+		// song.setSongKey(songForm.getKey());
 		song.setMeasure(songForm.getMeasure());
 		song.setName(songForm.getName());
 		song.setUsage(songForm.getUsage());

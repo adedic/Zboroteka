@@ -74,21 +74,30 @@ var songUtil = (function() {
 		//DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
         var currentKey = parseInt($("#key").val());
         
+        console.log("currentKey:	" + currentKey);
+        
         //TRANSPOSE VRIJEDNOST = TRENUTNI INDEX TONALTIETA +1/-1 (npr iz G u G#)
-        var	transposeAmount = currentKey + transposeValue;
+        //var	transposeAmount = currentKey + transposeValue;
+
+        console.log("transposeValue:	" + transposeValue);
+        
+
+        //console.log("transposeAmount:	" + transposeAmount);
         
 	    //transponiraj akorde pjesme
 	        $.ajax({
 	            type: "POST",
 	            url: "transposeChords",
-	            data:  "rawSongText=" + editorSession.getValue() + "&transposeAmount=" + transposeAmount + "&currentKey=" + currentKey,
+	            data:  "rawSongText=" + editorSession.getValue() + "&transposeAmount=" + transposeValue + "&currentKey=" + currentKey,
 	            suppressErrors: true
 	        }).done(function(data) {
 	            debugger;
 
 	            if(data.status == "ok") {
+
+	                console.log("data.result.newKey:	" + data.result.newKey);
                     //azurirati trenutni tontalitet na formi
-	                $("#key").val(data.result.newKey);
+	                $("#key").val(data.result.newKey).change();
                     //azurirati rawSongText na formi
 	                //OVO POSTAVLJA VRIJEDNOST
 	                editorSession.setValue(data.result.rawSongText);

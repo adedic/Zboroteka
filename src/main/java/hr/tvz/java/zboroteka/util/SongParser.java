@@ -42,19 +42,20 @@ public class SongParser {
 
 			String transposedChord = transposeChord(chords[i], transposeAmount);
 
+			System.out.println("trenutni akord: " + chords[i]);
+			System.out.println("transposedChord akord: " + transposedChord);
+
 			// postaviti u rawSongText transponirani akord
 			StringUtils.replace(rawSongText, chords[i], transposedChord);
 		}
 	}
 
 	private String transposeChord(String chord, Integer transposeAmount) {
-
-		return chord.replace("/[CDEFGAB](b|#)?/g", findMatchInScale(chord, transposeAmount));
+		return findMatchInScale(chord, transposeAmount);
 
 	}
 
 	private String findMatchInScale(String chord, Integer transposeAmount) {
-
 		List<SongKey> keys = iSongKeyService.getAllKeys();
 		int scaleLen = keys.size();
 
@@ -63,20 +64,25 @@ public class SongParser {
 		boolean isStandardName = true;
 		for (SongKey key : keys) {
 			if (key.getName().equals(chord)) {
+				System.out.println("match akord1: " + key.getName());
 				matchIndex = key.getId();
 				isStandardName = true;
 			} else if (key.getOtherName().equals(chord)) {
+				System.out.println("match akord: " + key.getOtherName());
 				matchIndex = key.getId();
 				isStandardName = false;
 			}
 		}
 
-		int i = (matchIndex + transposeAmount) % scaleLen;
+		int i = (matchIndex + transposeAmount-1) % scaleLen;
 
 		SongKey resultKey;
 		if (i < 0) {
-			resultKey = keys.get(i + scaleLen);
+
+			System.out.println(" manje od 0 : " + keys.get(i + scaleLen));
+			resultKey = keys.get(i+ scaleLen);
 		} else {
+			System.out.println(" vece od 0 : " + keys.get(i));
 			resultKey = keys.get(i);
 
 		}
@@ -94,14 +100,14 @@ public class SongParser {
 		String textAndChords = parseTextAndChords(rawText);
 		String[] chords = parseChordsStr(textAndChords);
 
-		System.out.println("raw tekst " + song.getRawSongText());
+		// System.out.println("raw tekst " + song.getRawSongText());
 
 		String text = textAndChords;
 		if (chords != null && chords.length != 0) {
 			text = parseText(textAndChords, chords);
 
 			song.setSongText(text);
-			System.out.println(" tekst " + song.getSongText());
+			// System.out.println(" tekst " + song.getSongText());
 			song.setChords(parseChords(chords));
 		}
 	}

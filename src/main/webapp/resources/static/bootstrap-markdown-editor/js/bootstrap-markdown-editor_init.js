@@ -396,7 +396,7 @@
                             	snippetManager.insertSnippet(editor, '\nTonalitet: '+ data.result.key);
             				
             				//placeholder za tekst i akorde
-                            snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\n\nTekst i akordi pjesme \n\n```\n\n');
+                            snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\t\t[A]\n\nTekst i akordi pjesme \n\n```\n\n');
             			} 
         	        });
                 	

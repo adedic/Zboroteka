@@ -393,7 +393,7 @@
             				if(data.result.author != null && data.result.author != "")
             					snippetManager.insertSnippet(editor, 'Autor: '+ data.result.author);
             				if(data.result.key != null)
-                            	snippetManager.insertSnippet(editor, 'Tonalitet: '+ data.result.key);
+                            	snippetManager.insertSnippet(editor, '\nTonalitet: '+ data.result.key);
             				
             				//placeholder za tekst i akorde
                             snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\n\nTekst i akordi pjesme \n\n```\n\n');

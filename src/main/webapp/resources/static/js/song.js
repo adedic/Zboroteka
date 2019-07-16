@@ -11,6 +11,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 		});
 	} else {
 		//poziv skivenog gumba za inicijalno popunjavanje naslova, autora, tonaliteta i placeholdera za tekst i akorde
+		//TODO AKORDE NE POPUNJAVATI AKO SU VEC POPUNJENI?
 		$("#btnInitEditorVal").click();
 		
 		$("#mainSongInfo").hide();
@@ -24,6 +25,7 @@ $("#backToMainSongData").click(function(e) {
 	$("#formSongText").hide();
 	$("#mainSongInfo").show();
 
+	//TODO AKO NISU UNESENI AKORDI?
 	//poziv skriveni gumb za isprazniti editor
 	$("#btnClearContent").click();
 });

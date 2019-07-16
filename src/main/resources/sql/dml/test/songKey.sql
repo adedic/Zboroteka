@@ -1,6 +1,6 @@
 
 
-INSERT INTO "song_key" (id, name, other_name) VALUES (1, 'C', 'B#');
+INSERT INTO "song_key" (id, name, other_name) VALUES (1, 'C', 'H#');
 INSERT INTO "song_key" (id, name, other_name) VALUES (2, 'C#', 'Db');
 INSERT INTO "song_key" (id, name, other_name) VALUES (3, 'D', '');
 INSERT INTO "song_key" (id, name, other_name) VALUES (4, 'D#', 'Eb');
@@ -9,9 +9,9 @@ INSERT INTO "song_key" (id, name, other_name) VALUES (6, 'F', 'E#');
 INSERT INTO "song_key" (id, name, other_name) VALUES (7, 'F#', 'Gb');
 INSERT INTO "song_key" (id, name, other_name) VALUES (8, 'G', '');
 INSERT INTO "song_key" (id, name, other_name) VALUES (9, 'G#', 'Ab');
-INSERT INTO "song_key" (id, name, other_name) VALUES (10, 'A', 'Bbb');
-INSERT INTO "song_key" (id, name, other_name) VALUES (11, 'A#', 'Bb');
-INSERT INTO "song_key" (id, name, other_name) VALUES (12, 'B', 'Cb');
+INSERT INTO "song_key" (id, name, other_name) VALUES (10, 'A', 'Hb');
+INSERT INTO "song_key" (id, name, other_name) VALUES (11, 'A#', 'B');
+INSERT INTO "song_key" (id, name, other_name) VALUES (12, 'H', 'Cb');
 
 
 

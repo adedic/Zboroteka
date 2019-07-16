@@ -84,20 +84,20 @@ public class SongController {
 	@PostMapping(value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object transposeChords(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
-			@RequestParam(value = "transposeAmount", required = false) Integer transposeAmount,
+			@RequestParam(value = "transposeValue", required = false) Integer transposeValue,
 			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
 
 		JsonResponse tJsonResponse = new JsonResponse();
 
-		// Napravi transpose
-		songParser.transposeChordsInSongText(rawSongText, transposeAmount);
+		// Napravi transpose i vrati tekst s transponiranim akordima
+		String newText = songParser.transposeChordsInSongText(rawSongText, transposeValue);
 
 		tJsonResponse.setStatus("ok");
-		Integer newKey = currentKey + transposeAmount;
+		Integer newKey = currentKey + transposeValue;
 
 		HashMap<String, Object> hmap = new HashMap<>();
 		hmap.put("newKey", newKey);
-		hmap.put("rawSongText", rawSongText);
+		hmap.put("rawSongText", newText);
 
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea

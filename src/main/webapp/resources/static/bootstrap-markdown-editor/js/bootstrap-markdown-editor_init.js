@@ -123,6 +123,51 @@
             editor.navigateLineEnd();
         }
     }
+    
+    function transposeChords(editor, transposeValue) {
+	    var newText = editor.getSession().getValue();
+	    
+	    var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
+	    var matches_chords = editor.getSession().getValue().match(regexp);
+	    console.log("SVI AKORDI PJESME :"+ matches_chords);
+	    var chords = [];
+	    for(var j = 0; j < matches_chords.length; j++) {
+	        for(var i = 0; i < newText.length; i++) {
+	            if( newText[i] == '[') {
+	                var chord = '';
+	            	while(newText[i] != ']') {
+	            		chord += newText[i];
+	            		i++;
+	            	}
+	        		chord += newText[i];
+	            	//console.log(chord);
+	            	var chordStr = chord.substring(1, chord.length-1);
+	            	chords.push(chordStr);
+	            }
+	        }
+	    }
+	
+	    let chordSet = Array.from(new Set(chords));
+	    for(var i = 0; i < chordSet.length; i++) {
+	    	
+	    	var transposedChord = songUtil.transposeChord(chordSet[i] , transposeValue);
+	    	console.log("transposedChord " +  transposedChord);
+
+	        //newText = newText.replace('['+chordSet[i]+']' , '['+transposedChord+']');
+	        
+	    	newText = newText.replace(new RegExp(chordSet[i] , 'g'), transposedChord);
+	    			
+	    	//TODO i slova koja nisu akordi se zamijene
+	    }
+		console.log("newText " + newText);
+		//azuriranje rawSongText na formi
+	    
+	    //isprazni postojeci tekst na formi
+	    editor.getSession().setValue("");
+	    
+	    //OVO POSTAVLJA VRIJEDNOST na editor 
+	    editor.getSession().setValue(newText);
+	}
 
     function editorHtml (content, options) {
         var html = '';
@@ -354,20 +399,17 @@
                     
                 }  else if (btnType === 'transposeUp') {
                     console.log("TRANSPOSE +1");
-
-                    songUtil.transposeChords(1, editor.getSession());
                     
-                    /*
-                     
-                    //DOHVATI SVE AKORDE PJESME
-                    var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
-                    var matches_chords =  editor.getSession().getValue().match(regexp);
-                    console.log("SVI AKORDI PJESME :"+ matches_chords);
-                    */
+        	        var transposeValue = 1;
+        	        transposeChords(editor, transposeValue);
+                  
                 } else if (btnType === 'transposeDown') {
                     console.log("TRANSPOSE -1");
+//NE RADI DOBRO
+        	        var transposeValue = -1;
+        	        transposeChords(editor, transposeValue);
 
-                    songUtil.transposeChords(-1, editor.getSession());
+                    //songUtil.transposeChords(-1, editor);
                 }
                 else if (btnType === 'image') {
                     if (selectedText === '') {
@@ -393,7 +435,7 @@
             				if(data.result.author != null && data.result.author != "")
             					snippetManager.insertSnippet(editor, 'Autor: '+ data.result.author);
             				if(data.result.key != null)
-                            	snippetManager.insertSnippet(editor, '\nTonalitet: '+ data.result.key);
+                            	snippetManager.insertSnippet(editor, '\n\nTonalitet: '+ data.result.key);
             				
             				//placeholder za tekst i akorde
                             snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\t\t[A]\n\nTekst i akordi pjesme \n\n```\n\n');

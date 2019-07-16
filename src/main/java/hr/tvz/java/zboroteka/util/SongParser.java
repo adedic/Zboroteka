@@ -1,6 +1,8 @@
 package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,23 +33,26 @@ public class SongParser {
 	// TODO dodati postavljanje naslova i tonaliteta u rawSongText na gumb NASTAVI
 	// UNOS PJESME
 
-	public void transposeChordsInSongText(String rawSongText, Integer transposeAmount) {
-
+	public String transposeChordsInSongText(String rawSongText, Integer transposeAmount) {
+		String newText = rawSongText;
 		String textAndChords = parseTextAndChords(rawSongText);
 		// parsiraj samo akorde iz raw teksta
 		String[] chords = parseChordsStr(textAndChords);
-
+		// maknuti duplikati
+		String[] chordsSet = new HashSet<String>(Arrays.asList(chords)).toArray(new String[0]);
 		// prođi kroz listu parsiranih akorda
-		for (int i = 0; i < chords.length; i++) {
+		for (int i = 0; i < chordsSet.length; i++) {
 
-			String transposedChord = transposeChord(chords[i], transposeAmount);
+			String transposedChord = transposeChord(chordsSet[i], transposeAmount);
 
-			System.out.println("trenutni akord: " + chords[i]);
+			System.out.println("trenutni akord: " + chordsSet[i]);
 			System.out.println("transposedChord akord: " + transposedChord);
 
 			// postaviti u rawSongText transponirani akord
-			StringUtils.replace(rawSongText, chords[i], transposedChord);
+			newText = newText.replace(chordsSet[i], transposedChord);
 		}
+		return newText;
+
 	}
 
 	private String transposeChord(String chord, Integer transposeAmount) {
@@ -74,13 +79,13 @@ public class SongParser {
 			}
 		}
 
-		int i = (matchIndex + transposeAmount-1) % scaleLen;
+		int i = (matchIndex + transposeAmount - 1) % scaleLen;
 
 		SongKey resultKey;
 		if (i < 0) {
 
 			System.out.println(" manje od 0 : " + keys.get(i + scaleLen));
-			resultKey = keys.get(i+ scaleLen);
+			resultKey = keys.get(i + scaleLen);
 		} else {
 			System.out.println(" vece od 0 : " + keys.get(i));
 			resultKey = keys.get(i);

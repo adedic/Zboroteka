@@ -141,107 +141,101 @@
     function transposeChords(editor, transposeValue) {
 	    var newText = editor.getSession().getValue();
 	    
+	    //pronalazi sve akorde, [tekst unutar zagrada]
 	    var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
 	    var matches_chords = editor.getSession().getValue().match(regexp);
 
-	    var testChords =  [];
+	    var chords =  [];
 	    if(matches_chords != null)
-	    	testChords.push(...matches_chords);
+	    	chords.push(...matches_chords);
 	    
-
+	    //razlika u pomaku indeksa
+		var diff = 0;
+		
     	var re = /\[(.*?)\]/gi;
 		var str = editor.getSession().getValue();
 		
+		//Pronalazi indekse akorda u tekstu i puni polje objekata u koje sprema indeks pronadenog akorda, naziv i duljinu cijelog teksta akorda
 	    var testChordsMap = [];
-	    for(var i = 0; i < testChords.length; i++) {
+	    for(var i = 0; i < chords.length; i++) {
 	    	
 			var match = re.exec(str);	
 			console.log("match found at " + match.index);
-			console.log("testChords[i] " + testChords[i]);
-			console.log("testChords[i].length " + testChords[i].length);
-			
-			   //var newText = replaceAt(match.index+1, 'tesz');
-			  //var newText = replaceIndex(str, match.index+1, 'test');
 			if(match != null) {
 				
 				var chord = {
+		    				"id" : i,
 			    			"index" : match.index,
-			    			"id": i, 
-			    			"name": testChords[i],
-			    			"len": testChords[i].length
+			    			"name": chords[i],
+			    			"len": chords[i].length
 			    			}
-			    testChordsMap.push(chord);
+			  	testChordsMap.push(chord);
 			 }
 	    }
 	    
 	    console.log("\n\n\n");
 	    
+	    
 	    for(var i = 0; i < testChordsMap.length; i++) {
-	    	console.log("id"+ testChordsMap[i].id);
 	    	console.log("index" + testChordsMap[i].index);
 	    	console.log("name" + testChordsMap[i].name);
 	    	console.log("lenstr " + testChordsMap[i].name.length);
 	    	
 	    
+	    	//Akord iz teksta koji se treba transponirati, maknute zagrade
+	    	var chordToTrans = testChordsMap[i].name;
+	    	chordToTrans = chordToTrans.replace('[','');
+	    	chordToTrans = chordToTrans.replace(']','');
 	    	
-	    	var chordToTrans = testChordsMap[i].name.substr(1);
-	    	chordToTrans = testChordsMap[i].name.substr(1);
+	    	//Transponirani akord
 	    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
-	    	transposedChord = transposedChord.replace('[','');
-	    	transposedChord = transposedChord.replace(']','');
-	    	console.log("transposedChord " + transposedChord);
-	    	//transposedChord = transposedChord.substr(1);//remove first char [
-	    	//transposedChord = transposedChord.slice(0, -1); //remove last char ]
+	    	console.log("trazeni indeks za tekst before " +  testChordsMap[i].index);
 	    	
-	    	var textBefore = newText.substr(0,  testChordsMap[i].index+1);
-	    	var textAfter = newText.substr(testChordsMap[i].index + transposedChord.length+1);
+	    	//Tekst od pocetka do indeksa na kojem je pronađen akord 
+	    	var textBefore = newText.substr(0,  testChordsMap[i].index-1);
+	    	
+	    	//Tekst od indeksa na kojem je pronađen akord, taj indeks uvecan duljinu pronadenog akorda = ostatak teksta
+	    	var textAfter = newText.substr(testChordsMap[i].index + testChordsMap[i].name.length);
 
 	    	console.log("textBefore " + textBefore);
 	    	console.log("textAfter " + textAfter);
+	    	newText = textBefore + " " + '[' + transposedChord + ']'+ textAfter;
 	    	
-	    	newText = textBefore +  transposedChord  + textAfter;
 	    	
-	    	console.log("new tekst trenutno " + newText);
 	    	
+	    	
+	    	
+	    	
+	    	
+	    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
+	    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
+    		
+    		var startLen = testChordsMap[i].name.length;
+    		//chordToTrans.len = 4
+    		var transLen = transposedChord.length + 2; //+2 je zbog zagrada 
+    		//transposedChord+zagrade.len = 3
+    		diff += startLen - transLen;
+    		
+    		console.log("razlika pocetnog i transpon " + diff);
+    		//azuriraj matchIndeks sljedeceg akorda u tekstu s obzirom na promjene prethodnog
+    		//dok ima akorda
+    		if(i+1 <= testChordsMap.length - 1) {
+	    		var matchNextIndex = testChordsMap[i+1].index - diff;
+	    		testChordsMap[i+1].index = matchNextIndex;
+	    		console.log("azurirani indeks sljedeceg " + testChordsMap[i+1].index);
+    		}	    
+    		debugger;
+    		
+    		
+
 	    }
-	
-	   // console.log("SVI AKORDI PJESME test :"+ testChords);
-	    
-	    //napraviti replace da ne radi u cijelom tekstu nego samo u sljedecim akordima
-	    //inace zamjeni vec transponirani F u F#, umjesto samo trenutni F u F#
-	    //ako je indeks akorda za zamjenu manji od indeksa trenutnog akorda??
-	    
-	   /* var chordBeforeAfterMap = {};
-	    
-
-	    let chordSet = Array.from(new Set(testChords));
-
-	    
-	    for(var i = 0; i < testChords.length; i++) {
 	    	
-	    	var transposedChord = songUtil.transposeChord(testChords[i] , transposeValue);
-
-		    var transposedChordMap = [];
-	    	testChordsMap.push({i, transposedChord});
-
-	    	console.log("akord prije " +  testChords[i]);
-	    	console.log("aklord poslije +1 " +  transposedChord);
-	    	
-
-	        //newText = newText.replace('['+chordSet[i]+']' , '['+transposedChord+']');
-	    	//newText = newText.replace(new RegExp(chordSet[i] , 'g'), transposedChord);
-	    	newText = newText.replace(new RegExp('[' + testChords[i] + ']' , 'g'), transposedChord);
-	    	//newText = newText.replace(testChords[i], transposedChord);
-	    }
-	    */
-		console.log("newText " + newText);
-		//azuriranje rawSongText na formi
-	    
-	    //isprazni postojeci tekst na formi
+    	//isprazni postojeci tekst na formi
 	    editor.getSession().setValue("");
 	    
 	    //OVO POSTAVLJA VRIJEDNOST na editor 
 	    editor.getSession().setValue(newText);
+    	console.log("new tekst trenutno " + editor.getSession().getValue());
 	}
 
     function editorHtml (content, options) {

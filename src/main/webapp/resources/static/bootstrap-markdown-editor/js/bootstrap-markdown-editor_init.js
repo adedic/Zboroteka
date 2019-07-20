@@ -124,41 +124,116 @@
         }
     }
     
+    String.prototype.replaceAt=function(index, char) {
+        var a = this.split("");
+        a[index] = char;
+        return a.join("");
+    }
+    
+    function replaceIndex(string, at, repl) {
+	   return string.replace(/\S/g, function(match, i) {
+	        if( i === at ) return repl;
+
+	        return match;
+	    });
+	}
+    
     function transposeChords(editor, transposeValue) {
 	    var newText = editor.getSession().getValue();
 	    
 	    var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
 	    var matches_chords = editor.getSession().getValue().match(regexp);
-	    console.log("SVI AKORDI PJESME :"+ matches_chords);
-	    var chords = [];
-	    for(var j = 0; j < matches_chords.length; j++) {
-	        for(var i = 0; i < newText.length; i++) {
-	            if( newText[i] == '[') {
-	                var chord = '';
-	            	while(newText[i] != ']') {
-	            		chord += newText[i];
-	            		i++;
-	            	}
-	        		chord += newText[i];
-	            	//console.log(chord);
-	            	var chordStr = chord.substring(1, chord.length-1);
-	            	chords.push(chordStr);
-	            }
-	        }
+
+	    var testChords =  [];
+	    if(matches_chords != null)
+	    	testChords.push(...matches_chords);
+	    
+
+    	var re = /\[(.*?)\]/gi;
+		var str = editor.getSession().getValue();
+		
+	    var testChordsMap = [];
+	    for(var i = 0; i < testChords.length; i++) {
+	    	
+			var match = re.exec(str);	
+			console.log("match found at " + match.index);
+			console.log("testChords[i] " + testChords[i]);
+			console.log("testChords[i].length " + testChords[i].length);
+			
+			   //var newText = replaceAt(match.index+1, 'tesz');
+			  //var newText = replaceIndex(str, match.index+1, 'test');
+			if(match != null) {
+				
+				var chord = {
+			    			"index" : match.index,
+			    			"id": i, 
+			    			"name": testChords[i],
+			    			"len": testChords[i].length
+			    			}
+			    testChordsMap.push(chord);
+			 }
+	    }
+	    
+	    console.log("\n\n\n");
+	    
+	    for(var i = 0; i < testChordsMap.length; i++) {
+	    	console.log("id"+ testChordsMap[i].id);
+	    	console.log("index" + testChordsMap[i].index);
+	    	console.log("name" + testChordsMap[i].name);
+	    	console.log("lenstr " + testChordsMap[i].name.length);
+	    	
+	    
+	    	
+	    	var chordToTrans = testChordsMap[i].name.substr(1);
+	    	chordToTrans = testChordsMap[i].name.substr(1);
+	    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
+	    	transposedChord = transposedChord.replace('[','');
+	    	transposedChord = transposedChord.replace(']','');
+	    	console.log("transposedChord " + transposedChord);
+	    	//transposedChord = transposedChord.substr(1);//remove first char [
+	    	//transposedChord = transposedChord.slice(0, -1); //remove last char ]
+	    	
+	    	var textBefore = newText.substr(0,  testChordsMap[i].index+1);
+	    	var textAfter = newText.substr(testChordsMap[i].index + transposedChord.length+1);
+
+	    	console.log("textBefore " + textBefore);
+	    	console.log("textAfter " + textAfter);
+	    	
+	    	newText = textBefore +  transposedChord  + textAfter;
+	    	
+	    	console.log("new tekst trenutno " + newText);
+	    	
 	    }
 	
-	    let chordSet = Array.from(new Set(chords));
-	    for(var i = 0; i < chordSet.length; i++) {
+	   // console.log("SVI AKORDI PJESME test :"+ testChords);
+	    
+	    //napraviti replace da ne radi u cijelom tekstu nego samo u sljedecim akordima
+	    //inace zamjeni vec transponirani F u F#, umjesto samo trenutni F u F#
+	    //ako je indeks akorda za zamjenu manji od indeksa trenutnog akorda??
+	    
+	   /* var chordBeforeAfterMap = {};
+	    
+
+	    let chordSet = Array.from(new Set(testChords));
+
+	    
+	    for(var i = 0; i < testChords.length; i++) {
 	    	
-	    	var transposedChord = songUtil.transposeChord(chordSet[i] , transposeValue);
-	    	console.log("transposedChord " +  transposedChord);
+	    	var transposedChord = songUtil.transposeChord(testChords[i] , transposeValue);
+
+		    var transposedChordMap = [];
+	    	testChordsMap.push({i, transposedChord});
+
+	    	console.log("akord prije " +  testChords[i]);
+	    	console.log("aklord poslije +1 " +  transposedChord);
+	    	
 
 	        //newText = newText.replace('['+chordSet[i]+']' , '['+transposedChord+']');
-	        
-	    	newText = newText.replace(new RegExp(chordSet[i] , 'g'), transposedChord);
-	    			
-	    	//TODO i slova koja nisu akordi se zamijene
+	    	//newText = newText.replace(new RegExp(chordSet[i] , 'g'), transposedChord);
+	    	newText = newText.replace(new RegExp('[' + testChords[i] + ']' , 'g'), transposedChord);
+	    	//newText = newText.replace(testChords[i], transposedChord);
 	    }
+	    */
 		console.log("newText " + newText);
 		//azuriranje rawSongText na formi
 	    

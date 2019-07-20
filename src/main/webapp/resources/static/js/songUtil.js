@@ -135,6 +135,7 @@ var songUtil = (function() {
 		        	return scale[12];
 		    
 	        }*/
+	        
 	        return scale[ i < 0 ? i + scale.length : i ];
 	    })
 	}

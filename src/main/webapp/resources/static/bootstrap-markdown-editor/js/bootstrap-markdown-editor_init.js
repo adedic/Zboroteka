@@ -164,6 +164,7 @@
 	    }
 
 	    updateEditorValue(newText, editor);
+	    $("#chordsText").val(editor).change();
 	}
 
     function editorHtml (content, options) {

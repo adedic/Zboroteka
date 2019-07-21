@@ -244,6 +244,7 @@ var songUtil = (function() {
             }
         }
     }
+    
 
     // Public API
     return {
@@ -254,6 +255,6 @@ var songUtil = (function() {
         updateNextChordIndex: updateNextChordIndex,
         createChordsWithMatchIndex: createChordsWithMatchIndex,
         updateKey: updateKey,
-        updateSongEditorValue: updateSongEditorValue,
+        updateSongEditorValue: updateSongEditorValue
     }
 })();

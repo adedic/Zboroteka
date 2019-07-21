@@ -366,6 +366,25 @@
                     }
                 });
             }
+            
+            //check if btn function is forbidden in text and chord section
+            function checkForbiddenBtn() {
+            	commonModul.removeAllAlerts();
+                var chordAndTextIndexFirst = editor.getSession().getValue().indexOf("```");
+            	var chordAndTextIndexLast = editor.getSession().getValue().lastIndexOf("```");
+            	var cursorIndex = editor.session.doc.positionToIndex(editor.selection.getCursor());
+            	
+
+                if(cursorIndex >= chordAndTextIndexFirst && cursorIndex <= chordAndTextIndexLast)  {
+                	commonModul.showAlert({
+        				elementId : 'showAlertBox',
+        				message : "Izvrši naredbu izvan oznaka za tekst i akorde: ```   ```!",
+        				alertLevel : 'danger'
+        			});
+                	return true;
+                }  
+                return false;
+            }
 
             // Toolbar events
             container.find('.md-btn').click(function () {
@@ -373,28 +392,36 @@
                     selectedText = editor.session.getTextRange(editor.getSelectionRange());
 
                 if (btnType === 'h1') {
-                    insertBeforeText(editor, '#');
+                	if(!checkForbiddenBtn())
+                		insertBeforeText(editor, '#');
 
                 } else if (btnType === 'h2') {
-                    insertBeforeText(editor, '##');
+                	if(!checkForbiddenBtn())
+                		insertBeforeText(editor, '##');
 
                 } else if (btnType === 'h3') {
-                    insertBeforeText(editor, '###');
+                	if(!checkForbiddenBtn())
+                		insertBeforeText(editor, '###');
 
                 } else if (btnType === 'ul') {
-                    insertBeforeText(editor, '*');
+                	if(!checkForbiddenBtn())
+                		insertBeforeText(editor, '*');
 
                 } else if (btnType === 'ol') {
-                    insertBeforeText(editor, '1.');
+                	if(!checkForbiddenBtn())
+                		insertBeforeText(editor, '1.');
 
                 } else if (btnType === 'bold') {
-                    editor.execCommand('bold');
+                	if(!checkForbiddenBtn())
+                		editor.execCommand('bold');
 
                 } else if (btnType === 'italic') {
-                    editor.execCommand('italic');
+                	if(!checkForbiddenBtn())
+                		editor.execCommand('italic');
 
                 } else if (btnType === 'link') {
-                    editor.execCommand('link');
+                	if(!checkForbiddenBtn())
+                		editor.execCommand('link');
 
                 } else if (btnType === 'keepFormat') {
         	    	commonModul.removeAllAlerts();
@@ -418,23 +445,37 @@
                 } else if (btnType === 'chordBracket') {
         	    	commonModul.removeAllAlerts();
                 	
-                	//TODO zabraniti unos ako nije unutar akorda i teksta
+        	    	var chordAndTextIndexFirst = editor.getSession().getValue().indexOf("```");
+        	    	var chordAndTextIndexLast = editor.getSession().getValue().lastIndexOf("```");
+        	    	var cursorIndex = editor.session.doc.positionToIndex(editor.selection.getCursor());
+        	    	
+
+                    if(cursorIndex < chordAndTextIndexFirst || cursorIndex > chordAndTextIndexLast)  {
+                    	commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Upiši akord unutar oznaka za tekst i akorde: ```   ```!",
+            				alertLevel : 'danger'
+            			});
+                    	return;
+                    }
+        	    	
                     var selectedText = editor.session.getTextRange(editor.getSelectionRange());
-                    //editor.getCursorPosition()
                     
                     if (selectedText === '') {
-                        snippetManager.insertSnippet(editor, '[${1:C#}]');
+                        snippetManager.insertSnippet(editor, '[${1:C#m}]');
                     } else {
                         snippetManager.insertSnippet(editor, '[' + selectedText + ']');
                     }
                     
                 }  else if (btnType === 'transposeUp') {
+        	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE +1");
                     
         	        var transposeValue = 1;
         	        transposeChords(editor, transposeValue);
                   
                 } else if (btnType === 'transposeDown') {
+        	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE -1");
                     
         	        var transposeValue = -1;
@@ -442,13 +483,15 @@
         	        
                 }
                 else if (btnType === 'image') {
-                    if (selectedText === '') {
-                        snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
-                    } else {
-                        snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
-                    }
+                	if(!checkForbiddenBtn()) {
+	                    if (selectedText === '') {
+	                        snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
+	                    } else {
+	                        snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
+	                    }
+                	}
 
-                } else if (btnType === 'setEditorVal') {
+                } else if (btnType === 'setEditorVal') {//hidden btn
                 	
                 	$.ajax({
             			type : "POST",
@@ -486,7 +529,6 @@
                     mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {
                         
-                        console.log(content);
                         mdPreview.html(content);
                     });
 

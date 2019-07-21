@@ -1,33 +1,36 @@
-$("#showSongEditorFormBtn").click(function(e) {
-	e.preventDefault();
-	// validate form osnovni podaci
-	// ako je validacija prosla
-	if (!$("#createSongForm")[0].checkValidity()) {
-		$("#createSongForm").addClass("¸was-validated");
-		commonModul.showAlert({
-			elementId : 'showAlertBox',
-			message : "Popunite tražene podatke kako biste mogli spremiti pjesmu!",
-			alertLevel : 'danger'
-		});
-	} else {
-		//poziv skivenog gumba za inicijalno popunjavanje naslova, autora, tonaliteta i placeholdera za tekst i akorde
-		if($("#chordsText").val() == "")
-			$("#btnInitEditorVal").click();
-		
-		$("#mainSongInfo").hide();
-		$("#formSongText").show();
-	}
-});
+$("#showSongEditorFormBtn")
+		.click(
+				function(e) {
+					e.preventDefault();
+					// validate form osnovni podaci
+					// ako je validacija prosla
+					if (!$("#createSongForm")[0].checkValidity()) {
+						$("#createSongForm").addClass("¸was-validated");
+						commonModul
+								.showAlert({
+									elementId : 'showAlertBox',
+									message : "Popunite tražene podatke kako biste mogli spremiti pjesmu!",
+									alertLevel : 'danger'
+								});
+					} else {
+						// poziv skivenog gumba za inicijalno popunjavanje
+						// naslova, autora, tonaliteta i placeholdera za tekst i
+						// akorde
+						$("#btnSetEditorVal").click();
+
+						$("#mainSongInfo").hide();
+						$("#formSongText").show();
+					}
+				});
 
 $("#backToMainSongData").click(function(e) {
 	e.preventDefault();
-	
+
 	$("#formSongText").hide();
 	$("#mainSongInfo").show();
 
-	//poziv skriveni gumb za isprazniti editor
-	if($("#chordsText").val() == "")
-		$("#btnClearContent").click();
+	// poziv skriveni gumb za azurirati sadrzaj editora u pocetnu formu
+	$("#btnUpdateFormContent").click();
 });
 
 $("#saveSongBtn").click(function(e) {
@@ -43,15 +46,15 @@ $("#saveSongBtn").click(function(e) {
 	}).done(function(data) {
 		debugger;
 		// provjeraStatusa.spremanjeDokumenataProvjera(data.status);
-		
-		if(data.status == "ok") {
+
+		if (data.status == "ok") {
 			commonModul.showAlert({
 				elementId : 'showAlertBox',
-				message : "Uspješno dodavanje nove pjesme!",   
+				message : "Uspješno dodavanje nove pjesme!",
 				alertLevel : 'success'
 			});
 		} else {
-			//TODO provjera statusa, validacija nepostojecih akorda
+			// TODO provjera statusa, validacija nepostojecih akorda
 			commonModul.showAlert({
 				elementId : 'showAlertBox',
 				message : "Nespješno dodavanje nove pjesme!",

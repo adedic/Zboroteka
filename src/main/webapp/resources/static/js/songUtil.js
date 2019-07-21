@@ -56,6 +56,69 @@ var songUtil = (function() {
 
 	        });*/
     };
+    
+    var updateKey = function(transposeValue, editor, newText) {
+    	//transposeValue je UP (+1) ili DOWN (-1)
+        commonModul.removeAllAlerts();
+
+        //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
+        var currentKey = parseInt($("#key").val());
+        if ($("#key").val() == null) {
+            if (transposeValue == 1) {
+                //ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
+                $("#key").val(1);
+            } else if (transposeValue == -1) {
+                //ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
+                $("#key").val(12);
+            }
+            //postavi vrijednost trenutnog tonaliteta koja se salje na backend
+            currentKey = parseInt($("#key").val());
+        }
+
+        //update key in form and in rawText
+	        $.ajax({
+	            type: "POST",
+	            url: "updateKey",
+	            data:  "rawSongText=" + newText + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
+	            suppressErrors: true
+	        }).done(function(data) {
+	            debugger;
+
+	            if(data.status == "ok") {
+
+                    //azurirati trenutni tontalitet na formi
+	                $("#key").val(data.result.newKey).change();
+
+	        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
+	                if(data.result.newKey == 13) {
+		                $("#key").val(1).change(); 
+		                console.log("postavi 1");
+	                } else if(data.result.newKey == -1) {
+	            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
+		                $("#key").val(data.result.newKey).change(12); 
+		                console.log("postavi 12");
+
+	                }
+
+	                console.log("data.result.rawSongText:	" + data.result.rawSongText);
+
+	                //azuriranje rawSongText na formi
+
+	                updateSongEditorValue(data.result.rawSongText, editor);
+	            }
+
+	        });
+    };
+    
+    var updateSongEditorValue = function (newText, editor) {
+    	//isprazni postojeci tekst na formi
+	    editor.getSession().setValue("");
+	    
+	    //OVO POSTAVLJA VRIJEDNOST na editor 
+	    editor.getSession().setValue(newText);
+	    
+	    $("#songEditor").val(newText).change();
+    }	
 
     //algoritam za transpose JS
     var transposeChord = function(chord, amount) {
@@ -189,6 +252,8 @@ var songUtil = (function() {
         transposeChord: transposeChord,
         replaceChordWithTransposed: replaceChordWithTransposed,
         updateNextChordIndex: updateNextChordIndex,
-        createChordsWithMatchIndex: createChordsWithMatchIndex
+        createChordsWithMatchIndex: createChordsWithMatchIndex,
+        updateKey: updateKey,
+        updateSongEditorValue: updateSongEditorValue,
     }
 })();

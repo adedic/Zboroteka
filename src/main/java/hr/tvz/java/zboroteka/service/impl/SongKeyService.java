@@ -10,4 +10,6 @@ public interface SongKeyService {
 	public List<SongKey> getAllKeys();
 
 	public Optional<SongKey> findOne(Integer id);
+
+	public Optional<SongKey> findOneByNameOrOtherName(String keyName);
 }

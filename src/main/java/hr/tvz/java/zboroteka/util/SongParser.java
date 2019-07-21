@@ -2,6 +2,7 @@ package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
@@ -30,8 +32,89 @@ public class SongParser {
 		this.iSongKeyService = iSongKeyService;
 	}
 
-	// TODO dodati postavljanje naslova i tonaliteta u rawSongText na gumb NASTAVI
-	// UNOS PJESME
+	public HashMap<String, Object> updateKeyInRawText(String rawSongText, Integer transposeValue, Integer currentKey) {
+
+		String textAndChords = parseTextAndChords(rawSongText);
+		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+
+		// new Key
+		Integer newKey = currentKey + transposeValue;
+
+		if (restBefore.contains("Tonalitet:")) {
+			String keyName = StringUtils.substringBetween(restBefore, "Tonalitet: ", "\n");
+			Optional<SongKey> songKey = iSongKeyService.findOne(newKey);
+			if (songKey.isPresent()) {
+				restBefore = restBefore.replace(keyName, songKey.get().getName());
+			}
+		}
+		String newText = restBefore + "```" + textAndChords + "```" + restAfter;
+
+		HashMap<String, Object> hmap = new HashMap<>();
+		hmap.put("newKey", newKey);
+		hmap.put("rawSongText", newText);
+
+		return hmap;
+
+	}
+
+	public String setHeadingAuthorKeyToEditor(SongForm songForm) {
+		String songChordsText = "";
+
+		// SONG TEXT AND CHORDS
+		// already exists
+		if (songForm.getRawSongText() != null && songForm.getRawSongText() != "") {
+			String textAndChords = parseTextAndChords(songForm.getRawSongText());
+			// EXISTING TEXT AND CHORDS
+			if (textAndChords != null)
+				songChordsText = "```" + textAndChords + "```";
+			System.out.println("songChordsText 1: " + songChordsText);
+		} else {
+			// INIT SETTINGS
+			songChordsText = "\n\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```\n\n";
+			System.out.println("songChordsText 2: " + songChordsText);
+		}
+		String textAndChords = parseTextAndChords(songForm.getRawSongText());
+		String restBefore = StringUtils.substringBefore(songForm.getRawSongText(), "```" + textAndChords);
+		String restAfter = StringUtils.substringAfter(songForm.getRawSongText(), textAndChords + "```");
+
+		// SONG NAME
+		if (restBefore.contains("#")) {
+			String currName = StringUtils.substringBetween(restBefore, "#", "\n");
+			restBefore = restBefore.replace(currName, songForm.getName());
+		} else
+			restBefore += "#" + songForm.getName();
+
+		// SONG AUTHOR
+		String author = "";
+		if (songForm.getAuthor() != null && songForm.getAuthor() != "") {
+			author = "\n\nAutor: " + songForm.getAuthor() + "\n";
+		}
+		if (restBefore.contains("Autor: ")) {
+			String currAuthor = StringUtils.substringBetween(restBefore, "Autor: ", "\n");
+			restBefore = restBefore.replace(currAuthor, songForm.getAuthor());
+		} else
+			restBefore += author;
+
+		// SONG KEY
+		String key = "";
+		Optional<SongKey> songKey = null;
+		if (songForm.getKey() != null) {
+			songKey = iSongKeyService.findOne(songForm.getKey());
+			if (songKey.isPresent())
+				key = "\n\nTonalitet: " + songKey.get().getName() + "\n";
+		}
+
+		if (restBefore.contains("Tonalitet: ")) {
+			String currKey = StringUtils.substringBetween(restBefore, "Tonalitet: ", "\n");
+			if (songKey.isPresent())
+				restBefore = restBefore.replace(currKey, songKey.get().getName());
+		} else
+			restBefore += key;
+
+		// ALL TEXT
+		return restBefore + songChordsText + restAfter;
+	}
 
 	public String transposeChordsInSongText(String rawSongText, Integer transposeAmount) {
 		String newText = rawSongText;
@@ -152,5 +235,4 @@ public class SongParser {
 	private String parseTextAndChords(String text) {
 		return StringUtils.substringBetween(text, "```", "```");
 	}
-
 }

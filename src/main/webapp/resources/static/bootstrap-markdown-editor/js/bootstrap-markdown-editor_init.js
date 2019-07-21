@@ -130,7 +130,6 @@
 	    
 	    //OVO POSTAVLJA VRIJEDNOST na editor 
 	    editor.getSession().setValue(newText);
-    	console.log("new tekst trenutno " + editor.getSession().getValue());
     }
     
 	    
@@ -143,6 +142,16 @@
 		//Pronalazi indekse akorda u tekstu i puni polje objekata u koje sprema indeks pronadenog akorda, naziv i duljinu cijelog teksta akorda
 	    var foundChords = [];
 	    songUtil.createChordsWithMatchIndex(editor.getSession().getValue(), foundChords);
+	    
+	    if(foundChords.length == 0) {
+	    	commonModul.removeAllAlerts();
+    		commonModul.showAlert({
+				elementId : 'showAlertBox',
+				message : "Unesi tekst i akorde za korištenje transpose opcije!",
+				alertLevel : 'danger'
+			});
+    		return;
+	    }
 	    
 	    
 	    for(var i = 0; i < foundChords.length; i++) {
@@ -163,8 +172,13 @@
 	    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
 	    }
 
-	    updateEditorValue(newText, editor);
-	    $("#chordsText").val(editor).change();
+	    //postavlja novi tekst u vrijednost editora
+	    //updateEditorValue(newText, editor);
+	    
+	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
+	   songUtil.updateKey(transposeValue, editor, newText);
+
+	    
 	}
 
     function editorHtml (content, options) {
@@ -213,10 +227,10 @@
                 html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
 	            html += '</div>'; // .btn-group
 	            
-	            /*INIT i clear BUTTON - HIDDEN*/
+	            /*INIT i update BUTTON - HIDDEN*/
 	            html += '<div class="btn-group mr-2" role="group">';
-                html += '<button type="button" id="btnInitEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="initEditorVal"></button>';
-                html += '<button type="button" id="btnClearContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="clearContent"></button>';
+                html += '<button type="button" id="btnSetEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="setEditorVal"></button>';
+                html += '<button type="button" id="btnUpdateFormContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="updateFormContent"></button>';
 	            html += '</div>'; // .btn-group
 	         
                 
@@ -383,12 +397,31 @@
                     editor.execCommand('link');
 
                 } else if (btnType === 'keepFormat') {
-                    snippetManager.insertSnippet(editor, '```\nTekst i akordi pjesme\n```');
-                    
+        	    	commonModul.removeAllAlerts();
+                	//provjers ako je ova oznaka vec dodana da je ne doda
+                	if(!editor.getSession().getValue().includes("```")) {
+                		
+                		//postavljanje na kraj editora
+                		var row = editor.session.getLength()-1;
+                		var column = editor.session.getLine(row).length;// or simply Infinity
+                		editor.gotoLine(row + 1, column);
+                		
+                		snippetManager.insertSnippet(editor, '\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```');
+                	}
+                	else {
+                		commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
+            				alertLevel : 'warning'
+            			});
+                	}
                 } else if (btnType === 'chordBracket') {
+        	    	commonModul.removeAllAlerts();
                 	
+                	//TODO zabraniti unos ako nije unutar akorda i teksta
                     var selectedText = editor.session.getTextRange(editor.getSelectionRange());
-
+                    //editor.getCursorPosition()
+                    
                     if (selectedText === '') {
                         snippetManager.insertSnippet(editor, '[${1:C#}]');
                     } else {
@@ -403,11 +436,10 @@
                   
                 } else if (btnType === 'transposeDown') {
                     console.log("TRANSPOSE -1");
-//NE RADI DOBRO
+                    
         	        var transposeValue = -1;
         	        transposeChords(editor, transposeValue);
-
-                    //songUtil.transposeChords(-1, editor);
+        	        
                 }
                 else if (btnType === 'image') {
                     if (selectedText === '') {
@@ -416,9 +448,9 @@
                         snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
                     }
 
-                } else if (btnType === 'initEditorVal') {
+                } else if (btnType === 'setEditorVal') {
                 	
-                    $.ajax({
+                	$.ajax({
             			type : "POST",
             			url : "setHeadingAuthorKeyToEditor",
             			data : $('#createSongForm').serialize(),
@@ -427,22 +459,15 @@
             			debugger;
             			if(data.status == "ok") {
             				//PUNJENJE EDITORA PODACIMA UNESENIM NA FORMI PJESME
-            				if(data.result.heading != null)
-            					insertHeading(editor, '#', data.result.heading);
+            				updateEditorValue(data.result, editor);
+            			}
             				
-            				if(data.result.author != null && data.result.author != "")
-            					snippetManager.insertSnippet(editor, 'Autor: '+ data.result.author);
-            				if(data.result.key != null)
-                            	snippetManager.insertSnippet(editor, '\n\nTonalitet: '+ data.result.key);
-            				
-            				//placeholder za tekst i akorde
-                            snippetManager.insertSnippet(editor, '\n\n```\n\n[C#]\t\t[A]\n\nTekst i akordi pjesme \n\n```\n\n');
-            			} 
         	        });
-                	
-                } else if(btnType === 'clearContent') {
-                	
-                	editor.setValue("");
+	                
+                } else if(btnType === 'updateFormContent') {
+
+            	    $("#songEditor").val(editor.getSession().getValue()).change();
+            	    
                 } else if (btnType === 'edit') {
                     preview = false;
                     

@@ -25,4 +25,8 @@ public class ISongKeyService implements SongKeyService {
 		return songKeyRepository.findById(id);
 
 	}
+
+	public Optional<SongKey> findOneByNameOrOtherName(String keyName) {
+		return songKeyRepository.findOneByNameOrOtherName(keyName, keyName);
+	}
 }

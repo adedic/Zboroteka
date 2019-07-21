@@ -182,22 +182,25 @@ public class SongParser {
 		}
 	}
 
-	public void parseSongTextAndChords(Song song) {
+	public List<String> parseSongTextAndChords(Song song) {
 		String rawText = song.getRawSongText();
-		// song.setName(parseHeading1(lines));
 		String textAndChords = parseTextAndChords(rawText);
 		String[] chords = parseChordsStr(textAndChords);
 
 		// System.out.println("raw tekst " + song.getRawSongText());
 
+		List<String> unrecognizedChords = new ArrayList<>();
+
 		String text = textAndChords;
 		if (chords != null && chords.length != 0) {
 			text = parseText(textAndChords, chords);
-
 			song.setSongText(text);
-			// System.out.println(" tekst " + song.getSongText());
-			song.setChords(parseChords(chords));
+
+			song.setChords(parseChords(chords, unrecognizedChords));
+
 		}
+
+		return unrecognizedChords;
 	}
 
 	private String parseText(String textAndChords, String[] chords) {
@@ -219,7 +222,7 @@ public class SongParser {
 		return StringUtils.substringsBetween(textAndChords, "[", "]");
 	}
 
-	private List<Chord> parseChords(String[] chords) {
+	public List<Chord> parseChords(String[] chords, List<String> unrecognizedChords) {
 		List<Chord> chordList = new ArrayList<>();
 
 		for (String chordStr : chords) {
@@ -227,6 +230,8 @@ public class SongParser {
 			Optional<Chord> chord = iChordService.getChordByName(chordStr);
 			if (chord.isPresent()) {
 				chordList.add(chord.get());
+			} else {
+				unrecognizedChords.add(chordStr);
 			}
 		}
 		return chordList;

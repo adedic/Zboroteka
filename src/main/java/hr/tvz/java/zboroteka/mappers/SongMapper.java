@@ -1,6 +1,7 @@
 package hr.tvz.java.zboroteka.mappers;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Component;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Band;
 import hr.tvz.java.zboroteka.model.Song;
+import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.model.SongSet;
 import hr.tvz.java.zboroteka.service.impl.BandService;
+import hr.tvz.java.zboroteka.service.impl.SongKeyService;
 import hr.tvz.java.zboroteka.service.impl.SongSetService;
 import hr.tvz.java.zboroteka.util.SongParser;
 
@@ -33,10 +36,12 @@ public class SongMapper {
 	BandService bandService;
 
 	@Autowired
+	SongKeyService songKeyService;
+
+	@Autowired
 	HttpSession session;
 
-	public Song mapSongFormToSong(SongForm songForm) {
-		Song song = new Song();
+	public List<String> mapSongFormToSong(Song song, SongForm songForm) {
 		// if exists
 		if (songForm.getId() != null) {
 
@@ -59,22 +64,22 @@ public class SongMapper {
 		song.setAuthor(songForm.getAuthor());
 		song.setDescription(songForm.getDescription());
 		song.setGenre(songForm.getGenre());
-		// song.setSongKey(songForm.getKey());
+		Optional<SongKey> songKey = songKeyService.findOne(songForm.getKey());
+		if (songKey.isPresent())
+			song.setSongKey(songKey.get());
 		song.setMeasure(songForm.getMeasure());
 		song.setName(songForm.getName());
 		song.setUsage(songForm.getUsage());
 
 		song.setRawSongText(songForm.getRawSongText());
-
-		songParser.parseSongTextAndChords(song);
-
-		System.out.println(" tekst " + song.getSongText());
-
-		System.out.println(" raw song tekst " + song.getRawSongText());
-
 		song.setCreationDate(new Date());
 
-		return song;
+		List<String> unrecognizedChords = songParser.parseSongTextAndChords(song);
+
+		System.out.println(" tekst " + song.getSongText());
+		System.out.println(" raw song tekst " + song.getRawSongText());
+
+		return unrecognizedChords;
 
 	}
 }

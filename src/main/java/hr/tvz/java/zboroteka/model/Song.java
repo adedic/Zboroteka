@@ -47,7 +47,7 @@ public class Song implements Serializable {
 	@Column(name = "raw_song_text", nullable = false, columnDefinition = "text")
 	private String rawSongText;
 
-	@Column(name = "song_text", nullable = false, columnDefinition = "text")
+	@Column(name = "song_text", columnDefinition = "text")
 	private String songText;
 
 	@Column(name = "name")
@@ -93,7 +93,7 @@ public class Song implements Serializable {
 	@JoinColumn(name = "band_id", referencedColumnName = "id", nullable = true) // song can exist without band
 	private Integer bandId;
 
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 

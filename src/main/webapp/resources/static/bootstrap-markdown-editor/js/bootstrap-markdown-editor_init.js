@@ -135,7 +135,7 @@
 	    
     function transposeChords(editor, transposeValue) {
 	    var newText = editor.getSession().getValue();
-		
+	    	
 	    //razlika u pomaku indeksa
 		var diff = 0;
 		
@@ -153,30 +153,62 @@
     		return;
 	    }
 	    
-	    
-	    for(var i = 0; i < foundChords.length; i++) {
-	    	
-	    	//Akord iz teksta koji se treba transponirati, maknute zagrade
-	    	var chordToTrans = foundChords[i].name;
-	    	chordToTrans = chordToTrans.replace('[','');
-	    	chordToTrans = chordToTrans.replace(']','');
-	    	
-	    	//Transponirani akord
-	    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
-	    	
-	    	//mijenja trenutni akord s transponiranim,a zadržava format ostalog teksta
-	    	newText = songUtil.replaceChordWithTransposed(foundChords[i], transposedChord, newText);
-	    	
-	    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
-	    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
-	    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
-	    }
+	    //PROVJERA POSTOJANJA AKORDA BACKEND - IZDVOJITI TODO pozove se updatekey
+	    var foundChordsStr = [];
+        for (var i = 0; i < foundChords.length; i++) {
+        	var chordToAdd = foundChords[i].name;
+        	chordToAdd = chordToAdd.replace('[','');
+        	chordToAdd = chordToAdd.replace(']','');
+        	foundChordsStr.push(chordToAdd);
+        }
+        
+	    //ajax poziv provjera akorda postoje li
+		$.ajax({
+			type : "POST",
+			url : "checkChordsExist",
+			data : "foundChords=" + foundChordsStr,
+			suppressErrors : true
+		}).done(function(data) {
+			debugger;
+			commonModul.removeAllAlerts();
+			if (data.status == "error") {
+				// provjera statusa, validacija nepostojecih akorda
+				commonModul.showAlert({
+					elementId : 'showAlertBox',
+					message : "Nespješno transponiranje pjesme! Uneseni su akordi koji ne postoje: " + data.result,
+					alertLevel : 'danger'
+				});
+			} else { //STATUS OK
+				//TRANSPONIRANJE I ZAMJENA AKORDA
+				for(var i = 0; i < foundChords.length; i++) {
+			    	
+			    	//Akord iz teksta koji se treba transponirati, maknute zagrade
+			    	var chordToTrans = foundChords[i].name;
+			    	chordToTrans = chordToTrans.replace('[','');
+			    	chordToTrans = chordToTrans.replace(']','');
+			    	
+			    	//Transponirani akord
+			    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
+			    	
+			    	//mijenja trenutni akord s transponiranim,a zadržava format ostalog teksta
+			    	newText = songUtil.replaceChordWithTransposed(foundChords[i], transposedChord, newText);
+			    	
+			    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
+			    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
+			    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
+			    }
 
-	    //postavlja novi tekst u vrijednost editora
-	    //updateEditorValue(newText, editor);
+			    //postavlja novi tekst u vrijednost editora
+			    //updateEditorValue(newText, editor);
+			    
+			    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
+			    songUtil.updateKey(transposeValue, editor, newText);
+			}
+		});
+		
 	    
-	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
-	   songUtil.updateKey(transposeValue, editor, newText);
+	    
+	    
 
 	    
 	}

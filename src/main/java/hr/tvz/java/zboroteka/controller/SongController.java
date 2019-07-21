@@ -1,7 +1,9 @@
 package hr.tvz.java.zboroteka.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -96,6 +98,26 @@ public class SongController {
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
 		jsonResponse.setResult(hmap);
+
+		return ResponseEntity.ok(jsonResponse);
+	}
+
+	@PostMapping(value = "checkChordsExist", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object checkChordsExist(Model model,
+			@RequestParam(value = "foundChords", required = false) String[] foundChords) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		List<String> unrecognizedChords = new ArrayList<>();
+		//TODO IZDVOJITI U VALIDATE CHORDS PA POZVATI UNUTAR PARSE
+		songParser.parseChords(foundChords, unrecognizedChords);
+		
+		
+		jsonResponse.setResult(unrecognizedChords);
+		
+		if (unrecognizedChords.isEmpty())
+			jsonResponse.setStatus("ok");
+		else
+			jsonResponse.setStatus("error");
 
 		return ResponseEntity.ok(jsonResponse);
 	}

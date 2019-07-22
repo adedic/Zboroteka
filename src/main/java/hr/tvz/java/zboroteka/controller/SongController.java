@@ -3,6 +3,7 @@ package hr.tvz.java.zboroteka.controller;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -128,7 +129,7 @@ public class SongController {
 
 		JsonResponse jsonResponse = new JsonResponse();
 
-		HashMap<String, Object> hmap = songParser.updateKeyInRawText(rawSongText, transposeValue, currentKey);
+		Map<String, Object> hmap = songParser.updateKeyInRawText(rawSongText, transposeValue, currentKey);
 
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,7 +37,7 @@ public class SongParser {
 		this.iSongKeyService = iSongKeyService;
 	}
 
-	public HashMap<String, Object> updateKeyInRawText(String rawSongText, Integer transposeValue, Integer currentKey) {
+	public Map<String, Object> updateKeyInRawText(String rawSongText, Integer transposeValue, Integer currentKey) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
@@ -54,7 +55,7 @@ public class SongParser {
 		}
 		String newText = restBefore + "```" + textAndChords + "```" + restAfter;
 
-		HashMap<String, Object> hmap = new HashMap<>();
+		Map<String, Object> hmap = new HashMap<>();
 		hmap.put("newKey", newKey);
 		hmap.put("rawSongText", newText);
 
@@ -62,7 +63,7 @@ public class SongParser {
 
 	}
 
-	//TODO PROVJERITI RADI LI DOBRO
+	// TODO PROVJERITI RADI LI DOBRO
 	public String setHeadingAuthorKeyToEditor(SongForm songForm) {
 		String songChordsText = "";
 

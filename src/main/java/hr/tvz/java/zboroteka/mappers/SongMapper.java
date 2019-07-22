@@ -1,7 +1,6 @@
 package hr.tvz.java.zboroteka.mappers;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -41,7 +40,7 @@ public class SongMapper {
 	@Autowired
 	HttpSession session;
 
-	public List<String> mapSongFormToSong(Song song, SongForm songForm) {
+	public void mapSongFormToSong(Song song, SongForm songForm) {
 		// if exists
 		if (songForm.getId() != null) {
 
@@ -74,12 +73,16 @@ public class SongMapper {
 		song.setRawSongText(songForm.getRawSongText());
 		song.setCreationDate(new Date());
 
-		List<String> unrecognizedChords = songParser.parseSongTextAndChords(song);
+	}
 
-		System.out.println(" tekst " + song.getSongText());
-		System.out.println(" raw song tekst " + song.getRawSongText());
+	public void mapRawSongTextToChordsStr(Song song) {
+		String[] chordsStr = songParser.parseChordsStrFromRawSongText(song.getRawSongText());
+		song.setChordsStr(chordsStr);
 
-		return unrecognizedChords;
+	}
+
+	public void mapRawSongTextToSong(Song song) {
+		songParser.parseSongTextAndChords(song);
 
 	}
 }

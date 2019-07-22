@@ -12,6 +12,7 @@ import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.repository.SongRepository;
 import hr.tvz.java.zboroteka.service.impl.SongService;
+import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Service
 public class ISongService implements SongService {
@@ -22,16 +23,27 @@ public class ISongService implements SongService {
 	@Autowired
 	SongMapper songMapper;
 
+	@Autowired
+	SongValidator songValidator;
+
 	@Override
 	public void saveSong(SongForm songForm, JsonResponse jsonResponse) {
 		Song song = new Song();
 
-		List<String> unrecognizedChords = songMapper.mapSongFormToSong(song, songForm);
+		// map basic song data to song
+		songMapper.mapSongFormToSong(song, songForm);
 
-		//validacija akorda
+		// map chordsStr from raw song text to song
+		songMapper.mapRawSongTextToChordsStr(song);
+
+		// chord validation
+		List<String> unrecognizedChords = songValidator.checkInvalidChords(song.getChordsStr());
 		HashMap<String, Object> hmap = new HashMap<>();
 
 		if (unrecognizedChords.isEmpty()) {
+
+			// map song text and song chords to song
+			songMapper.mapRawSongTextToSong(song);
 			songRepository.save(song);
 			jsonResponse.setStatus("ok");
 			hmap.put("songId", song.getId());
@@ -40,7 +52,6 @@ public class ISongService implements SongService {
 			jsonResponse.setStatus("error");
 			hmap.put("unrecognizedChords", unrecognizedChords);
 		}
-		
 
 		jsonResponse.setResult(hmap);
 

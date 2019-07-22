@@ -102,5 +102,7 @@ public class Song implements Serializable {
 			@JoinColumn(name = "song_id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "chord_id", insertable = false, updatable = false, nullable = true) })
 	private List<Chord> chords;
+	
+	private String[] chordsStr;
 
 }

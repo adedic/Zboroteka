@@ -17,6 +17,7 @@ import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.service.IChordService;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
+import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Component
 public class SongParser {
@@ -26,6 +27,9 @@ public class SongParser {
 
 	@Autowired
 	public final ISongKeyService iSongKeyService;
+
+	@Autowired
+	SongValidator songValidator;
 
 	SongParser(IChordService iChordService, ISongKeyService iSongKeyService) {
 		this.iChordService = iChordService;
@@ -68,11 +72,9 @@ public class SongParser {
 			// EXISTING TEXT AND CHORDS
 			if (textAndChords != null)
 				songChordsText = "```" + textAndChords + "```";
-			System.out.println("songChordsText 1: " + songChordsText);
 		} else {
 			// INIT SETTINGS
 			songChordsText = "\n\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```\n\n";
-			System.out.println("songChordsText 2: " + songChordsText);
 		}
 		String textAndChords = parseTextAndChords(songForm.getRawSongText());
 		String restBefore = StringUtils.substringBefore(songForm.getRawSongText(), "```" + textAndChords);
@@ -107,6 +109,7 @@ public class SongParser {
 
 		if (restBefore.contains("Tonalitet: ")) {
 			String currKey = StringUtils.substringBetween(restBefore, "Tonalitet: ", "\n");
+			songKey = iSongKeyService.findOne(songForm.getKey());
 			if (songKey.isPresent())
 				restBefore = restBefore.replace(currKey, songKey.get().getName());
 		} else
@@ -127,9 +130,6 @@ public class SongParser {
 		for (int i = 0; i < chordsSet.length; i++) {
 
 			String transposedChord = transposeChord(chordsSet[i], transposeAmount);
-
-			System.out.println("trenutni akord: " + chordsSet[i]);
-			System.out.println("transposedChord akord: " + transposedChord);
 
 			// postaviti u rawSongText transponirani akord
 			newText = newText.replace(chordsSet[i], transposedChord);
@@ -152,11 +152,9 @@ public class SongParser {
 		boolean isStandardName = true;
 		for (SongKey key : keys) {
 			if (key.getName().equals(chord)) {
-				System.out.println("match akord1: " + key.getName());
 				matchIndex = key.getId();
 				isStandardName = true;
 			} else if (key.getOtherName().equals(chord)) {
-				System.out.println("match akord: " + key.getOtherName());
 				matchIndex = key.getId();
 				isStandardName = false;
 			}
@@ -182,25 +180,17 @@ public class SongParser {
 		}
 	}
 
-	public List<String> parseSongTextAndChords(Song song) {
+	public void parseSongTextAndChords(Song song) {
 		String rawText = song.getRawSongText();
 		String textAndChords = parseTextAndChords(rawText);
 		String[] chords = parseChordsStr(textAndChords);
 
-		// System.out.println("raw tekst " + song.getRawSongText());
-
-		List<String> unrecognizedChords = new ArrayList<>();
-
-		String text = textAndChords;
 		if (chords != null && chords.length != 0) {
-			text = parseText(textAndChords, chords);
-			song.setSongText(text);
+			song.setSongText(parseText(textAndChords, chords));
 
-			song.setChords(parseChords(chords, unrecognizedChords));
-
+			song.setChords(parseChords(chords));
 		}
 
-		return unrecognizedChords;
 	}
 
 	private String parseText(String textAndChords, String[] chords) {
@@ -222,16 +212,13 @@ public class SongParser {
 		return StringUtils.substringsBetween(textAndChords, "[", "]");
 	}
 
-	public List<Chord> parseChords(String[] chords, List<String> unrecognizedChords) {
+	public List<Chord> parseChords(String[] chords) {
 		List<Chord> chordList = new ArrayList<>();
 
 		for (String chordStr : chords) {
-			System.err.println("parsirani tekst akord " + chordStr);
 			Optional<Chord> chord = iChordService.getChordByName(chordStr);
 			if (chord.isPresent()) {
 				chordList.add(chord.get());
-			} else {
-				unrecognizedChords.add(chordStr);
 			}
 		}
 		return chordList;
@@ -239,5 +226,11 @@ public class SongParser {
 
 	private String parseTextAndChords(String text) {
 		return StringUtils.substringBetween(text, "```", "```");
+	}
+
+	public String[] parseChordsStrFromRawSongText(String rawSongText) {
+		String textAndChords = parseTextAndChords(rawSongText);
+		return parseChordsStr(textAndChords);
+
 	}
 }

@@ -1,6 +1,5 @@
 package hr.tvz.java.zboroteka.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,7 @@ import hr.tvz.java.zboroteka.model.enums.SongGenre;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
 import hr.tvz.java.zboroteka.service.ISongService;
 import hr.tvz.java.zboroteka.util.SongParser;
+import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Controller
 @RequestMapping("/song")
@@ -43,6 +43,9 @@ public class SongController {
 
 	@Autowired
 	ISongKeyService iSongKeyService;
+
+	@Autowired
+	SongValidator songValidator;
 
 	private void initSongScreen(Model model) {
 		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
@@ -66,7 +69,6 @@ public class SongController {
 		}
 
 		JsonResponse jsonResponse = new JsonResponse();
-		// TODO validacija forme backend
 		iSongService.saveSong(songForm, jsonResponse);
 
 		// redirect na details page
@@ -107,13 +109,9 @@ public class SongController {
 			@RequestParam(value = "foundChords", required = false) String[] foundChords) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		List<String> unrecognizedChords = new ArrayList<>();
-		//TODO IZDVOJITI U VALIDATE CHORDS PA POZVATI UNUTAR PARSE
-		songParser.parseChords(foundChords, unrecognizedChords);
-		
-		
+		List<String> unrecognizedChords = songValidator.checkInvalidChords(foundChords);
 		jsonResponse.setResult(unrecognizedChords);
-		
+
 		if (unrecognizedChords.isEmpty())
 			jsonResponse.setStatus("ok");
 		else

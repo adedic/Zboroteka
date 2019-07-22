@@ -1,9 +1,7 @@
 package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Chord;
+import hr.tvz.java.zboroteka.model.ChordDetails;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.service.IChordService;
@@ -37,14 +36,11 @@ public class SongParser {
 		this.iSongKeyService = iSongKeyService;
 	}
 
-	public Map<String, Object> updateKeyInRawText(String rawSongText, Integer transposeValue, Integer currentKey) {
+	public Map<String, Object> updateKeyInRawText(String rawSongText, Integer newKey) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
-
-		// new Key
-		Integer newKey = currentKey + transposeValue;
 
 		if (restBefore.contains("Tonalitet:")) {
 			String keyName = StringUtils.substringBetween(restBefore, "Tonalitet: ", "\n");
@@ -57,7 +53,7 @@ public class SongParser {
 
 		Map<String, Object> hmap = new HashMap<>();
 		hmap.put("newKey", newKey);
-		hmap.put("rawSongText", newText);
+		hmap.put("newText", newText);
 
 		return hmap;
 
@@ -141,31 +137,72 @@ public class SongParser {
 		return songChordsText;
 	}
 
-	public String transposeChordsInSongText(String rawSongText, Integer transposeAmount) {
+	public String transposeChordsInSongText(List<ChordDetails> foundChords, String rawSongText,
+			Integer transposeValue) {
 		String newText = rawSongText;
-		String textAndChords = parseTextAndChords(rawSongText);
-		// parsiraj samo akorde iz raw teksta
-		String[] chords = parseChordsStr(textAndChords);
-		// maknuti duplikati
-		String[] chordsSet = new HashSet<String>(Arrays.asList(chords)).toArray(new String[0]);
+		Integer diff = 0;
+
 		// prođi kroz listu parsiranih akorda
-		for (int i = 0; i < chordsSet.length; i++) {
+		for (int i = 0; i < foundChords.size(); i++) {
+			String chordToTrans = foundChords.get(i).getName();
+			chordToTrans = chordToTrans.replaceAll("[", "");
+			chordToTrans = chordToTrans.replaceAll("]", "");
 
-			String transposedChord = transposeChord(chordsSet[i], transposeAmount);
+			// Transponirani akord
+			String transposedChord = transposeChord(chordToTrans, transposeValue);
 
-			// postaviti u rawSongText transponirani akord
-			newText = newText.replace(chordsSet[i], transposedChord);
+			newText = replaceChordWithTransposed(foundChords.get(i), transposedChord, newText);
+
+			// AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
+			// razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade =
+			// micanje indeksa sljedeceg akorda unazad
+			diff = updateNextChordIndex(transposedChord, foundChords, diff, i);
 		}
+
 		return newText;
 
 	}
 
-	private String transposeChord(String chord, Integer transposeAmount) {
-		return findMatchInScale(chord, transposeAmount);
+	private Integer updateNextChordIndex(String transposedChord, List<ChordDetails> foundChords, Integer diff, int i) {
+
+		ChordDetails currChord = foundChords.get(i);
+		ChordDetails nextChord = foundChords.get(i + 1);
+		Integer chordsArrLen = foundChords.size();
+
+		Integer startLen = currChord.getName().length();
+		Integer transLen = transposedChord.length() + 2; // +2 je zbog zagrada
+		diff += startLen - transLen;
+		
+		//azuriraj matchIndeks sljedeceg akorda u tekstu s obzirom na promjene prethodnog
+        //dok ima akorda
+        if (i + 1 <= chordsArrLen - 1) {
+            Integer matchNextIndex = nextChord.getIndex() - diff;
+            nextChord.setIndex(matchNextIndex);
+           System.out.println("azurirani indeks sljedeceg " + nextChord.getIndex());
+        }
+
+		return diff;
+	}
+
+	private String replaceChordWithTransposed(ChordDetails currChord, String transposedChord, String newText) {
+
+		// Tekst od pocetka do indeksa na kojem je pronađen akord
+		String textBefore = newText.substring(0, currChord.getIndex() - 1);
+
+		String textAfter = newText.substring(currChord.getIndex() + currChord.getName().length());
+		// TODO ILI samo getLen()
+
+		newText = textBefore + " " + "[" + transposedChord + "]" + textAfter;
+
+		return newText;
+	}
+
+	private String transposeChord(String chord, Integer transposeValue) {
+		return findMatchInScale(chord, transposeValue);
 
 	}
 
-	private String findMatchInScale(String chord, Integer transposeAmount) {
+	private String findMatchInScale(String chord, Integer transposeValue) {
 		List<SongKey> keys = iSongKeyService.getAllKeys();
 		int scaleLen = keys.size();
 
@@ -182,7 +219,7 @@ public class SongParser {
 			}
 		}
 
-		int i = (matchIndex + transposeAmount - 1) % scaleLen;
+		int i = (matchIndex + transposeValue - 1) % scaleLen;
 
 		SongKey resultKey;
 		if (i < 0) {

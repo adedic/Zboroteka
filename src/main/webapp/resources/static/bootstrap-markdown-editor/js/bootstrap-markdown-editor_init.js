@@ -111,18 +111,7 @@
             editor.navigateLineEnd();
         }
     }
-    
-    function insertHeading (editor, string, text) {
-
-        if (editor.getCursorPosition().column === 0) {
-            editor.navigateLineStart();
-            editor.insert(string + ' ' + text + '\n\n');
-        } else {
-            editor.navigateLineStart();
-            editor.insert(string + ' ' + text + '\n\n');
-            editor.navigateLineEnd();
-        }
-    }
+   
     
     function updateEditorValue(newText, editor) {
     	//isprazni postojeci tekst na formi
@@ -135,81 +124,57 @@
 	    
     function transposeChords(editor, transposeValue) {
 	    var newText = editor.getSession().getValue();
-	    	
-	    //razlika u pomaku indeksa
-		var diff = 0;
 		
 		//Pronalazi indekse akorda u tekstu i puni polje objekata u koje sprema indeks pronadenog akorda, naziv i duljinu cijelog teksta akorda
 	    var foundChords = [];
 	    songUtil.createChordsWithMatchIndex(editor.getSession().getValue(), foundChords);
 	    
-	    if(foundChords.length == 0) {
-	    	commonModul.removeAllAlerts();
-    		commonModul.showAlert({
-				elementId : 'showAlertBox',
-				message : "Unesi tekst i akorde za korištenje transpose opcije!",
-				alertLevel : 'danger'
-			});
-    		return;
-	    }
+	    //TODO provjeriti radi li
+	    if(songValidate.chordsNotFoundInEditor(foundChords)) 
+	    	return;
 	    
-	    //PROVJERA POSTOJANJA AKORDA BACKEND - IZDVOJITI TODO pozove se updatekey
+	    //PROVJERA POSTOJANJA AKORDA BACKEND - IZDVOJITI, TODO pozove se updatekey
 	    var foundChordsStr = [];
-        for (var i = 0; i < foundChords.length; i++) {
-        	var chordToAdd = foundChords[i].name;
+        for (var j = 0; j < foundChords.length; j++) {
+        	var chordToAdd = foundChords[j].name;
         	chordToAdd = chordToAdd.replace('[','');
         	chordToAdd = chordToAdd.replace(']','');
         	foundChordsStr.push(chordToAdd);
         }
-        
-	    //ajax poziv provjera akorda postoje li
-		$.ajax({
-			type : "POST",
-			url : "checkChordsExist",
-			data : "foundChords=" + foundChordsStr,
-			suppressErrors : true
-		}).done(function(data) {
-			debugger;
-			commonModul.removeAllAlerts();
-			if (data.status == "error") {
-				// provjera statusa, validacija nepostojecih akorda
-				commonModul.showAlert({
-					elementId : 'showAlertBox',
-					message : "Nespješno transponiranje pjesme! Uneseni su akordi koji ne postoje: " + data.result,
-					alertLevel : 'danger'
-				});
-			} else { //STATUS OK
-				//TRANSPONIRANJE I ZAMJENA AKORDA
-				for(var i = 0; i < foundChords.length; i++) {
-			    	
-			    	//Akord iz teksta koji se treba transponirati, maknute zagrade
-			    	var chordToTrans = foundChords[i].name;
-			    	chordToTrans = chordToTrans.replace('[','');
-			    	chordToTrans = chordToTrans.replace(']','');
-			    	
-			    	//Transponirani akord
-			    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
-			    	
-			    	//mijenja trenutni akord s transponiranim,a zadržava format ostalog teksta
-			    	newText = songUtil.replaceChordWithTransposed(foundChords[i], transposedChord, newText);
-			    	
-			    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
-			    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
-			    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
-			    }
-
-			    //postavlja novi tekst u vrijednost editora
-			    //updateEditorValue(newText, editor);
-			    
-			    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
-			    songUtil.updateKey(transposeValue, editor, newText);
-			}
-		});
+	    //TODO provjeriti radi li
+        if(songValidate.chordsInvalid(foundChordsStr)) {
+        	return;
+        }
+	    
 		
+		
+        //ako su validacije prosle
+        //TRANSPONIRANJE I ZAMJENA AKORDA
+        //TODO OVO JE PREBACENO NA BACKEND, ISPROBATI S AJAX POZIVOM
+        //newText = songUtil.transposeChords(transposeValue, editor, foundChords);
+        
+        //razlika u pomaku indeksa
+		var diff = 0;
+		for(var i = 0; i < foundChords.length; i++) {
+	    	
+	    	//Akord iz teksta koji se treba transponirati, maknute zagrade
+	    	var chordToTrans = foundChords[i].name;
+	    	chordToTrans = chordToTrans.replace('[','');
+	    	chordToTrans = chordToTrans.replace(']','');
+	    	
+	    	//Transponirani akord
+	    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
+	    	
+	    	//mijenja trenutni akord s transponiranim,a zadržava format ostalog teksta
+	    	newText = songUtil.replaceChordWithTransposed(foundChords[i], transposedChord, newText);
+	    	
+	    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
+	    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
+	    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
+	    }
 	    
-	    
-	    
-
+	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
+	    songUtil.updateKey(transposeValue, editor, newText);
 	    
 	}
 
@@ -503,15 +468,13 @@
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE +1");
                     
-        	        var transposeValue = 1;
-        	        transposeChords(editor, transposeValue);
+        	        transposeChords(editor, 1);
                   
                 } else if (btnType === 'transposeDown') {
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE -1");
                     
-        	        var transposeValue = -1;
-        	        transposeChords(editor, transposeValue);
+        	        transposeChords(editor, -1);
         	        
                 }
                 else if (btnType === 'image') {
@@ -530,8 +493,7 @@
             			url : "setHeadingAuthorKeyToEditor",
             			data : $('#createSongForm').serialize(),
             			suppressErrors : true
-            		}).done(function(data) {
-            			debugger;
+            		}).done(function(data) 
             			if(data.status == "ok") {
             				//PUNJENJE EDITORA PODACIMA UNESENIM NA FORMI PJESME
             				updateEditorValue(data.result, editor);

@@ -1,10 +1,14 @@
 var songUtil = (function() {
-    var transposeChords = function(transposeValue, editor, matches_chords) {
+	
+    var transposeChords = function(transposeValue, editor, foundChords) {
         //transposeValue je UP (+1) ili DOWN (-1)
         commonModul.removeAllAlerts();
 
+        //////////////////////////////////TODO provjeriti treba li ovo?
+        
         //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
         var currentKey = parseInt($("#key").val());
+        
         if ($("#key").val() == null) {
             if (transposeValue == 1) {
                 //ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
@@ -16,45 +20,29 @@ var songUtil = (function() {
             //postavi vrijednost trenutnog tonaliteta koja se salje na backend
             currentKey = parseInt($("#key").val());
         }
+        //////////////////////////
 
         //transponiraj akorde pjesme
-        /*
+        
 	        $.ajax({
 	            type: "POST",
 	            url: "transposeChords",
-	            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
+	            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey + "&jsonChords=" + foundChords,
 	            suppressErrors: true
 	        }).done(function(data) {
 	            debugger;
 
 	            if(data.status == "ok") {
-
-                    //azurirati trenutni tontalitet na formi
-	                $("#key").val(data.result.newKey).change();
-
-	        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-	                if(data.result.newKey == 13) {
-		                $("#key").val(1).change(); 
-		                console.log("postavi 1");
-	                } else if(data.result.newKey == -1) {
-	            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-		                $("#key").val(data.result.newKey).change(12); 
-		                console.log("postavi 12");
-
-	                }
-
-	                console.log("data.result.rawSongText:	" + data.result.rawSongText);
-
 	                //azuriranje rawSongText na formi
+	                updateSongEditorValue(data.result.newText, editor);
 
-	                //isprazni postojeci tekst na formi
-	                //editor.getSession().setValue("");
-
-	                //OVO POSTAVLJA VRIJEDNOST na editor 
-		            //editor.getSession().setValue(data.result.rawSongText);
+		            
+		            
+	        	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
+	        	    songUtil.updateKey(transposeValue, editor, newText);
 	            }
 
-	        });*/
+	        });
     };
     
     var updateKey = function(transposeValue, editor, newText) {
@@ -63,6 +51,7 @@ var songUtil = (function() {
 
         //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
         var currentKey = parseInt($("#key").val());
+        
         if ($("#key").val() == null) {
             if (transposeValue == 1) {
                 //ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
@@ -75,7 +64,7 @@ var songUtil = (function() {
             currentKey = parseInt($("#key").val());
         }
 
-        //update key in form and in rawText
+        //update key in form and in rawText TODO OVO MAKNUTI, JER SE POZIVA NA BACKENDU AZURIRANJE
 	        $.ajax({
 	            type: "POST",
 	            url: "updateKey",
@@ -100,11 +89,10 @@ var songUtil = (function() {
 
 	                }
 
-	                console.log("data.result.rawSongText:	" + data.result.rawSongText);
-
+	                console.log("data.result.newText:	" + data.result.newText);
 	                //azuriranje rawSongText na formi
-
-	                updateSongEditorValue(data.result.rawSongText, editor);
+	                //TODO OVO PREMJESTITI IZVAN A OSTALO OBRISATI JER JE NA BACKENDU?
+	                updateSongEditorValue(data.result.newText, editor);
 	            }
 
 	        });

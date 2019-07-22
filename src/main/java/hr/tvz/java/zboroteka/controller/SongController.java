@@ -1,5 +1,6 @@
 package hr.tvz.java.zboroteka.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hr.tvz.java.zboroteka.forms.SongForm;
+import hr.tvz.java.zboroteka.model.ChordDetails;
 import hr.tvz.java.zboroteka.model.JsonResponse;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
@@ -84,19 +88,22 @@ public class SongController {
 	public Object transposeChords(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
 			@RequestParam(value = "transposeValue", required = false) Integer transposeValue,
-			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
+			@RequestParam(value = "currentKey", required = false) Integer currentKey, String jsonChords)
+			throws IOException {
 
 		JsonResponse jsonResponse = new JsonResponse();
 
-		// Napravi transpose i vrati tekst s transponiranim akordima
-		String newText = songParser.transposeChordsInSongText(rawSongText, transposeValue);
+		ObjectMapper mapper = new ObjectMapper();
+		List<ChordDetails> foundChords = Arrays.asList(mapper.readValue(jsonChords, ChordDetails[].class));
 
-		jsonResponse.setStatus("ok");
+		// Napravi transpose i vrati tekst s transponiranim akordima
+		String newText = songParser.transposeChordsInSongText(foundChords, rawSongText, transposeValue);
+
 		Integer newKey = currentKey + transposeValue;
 
-		Map<String, Object> hmap = new HashMap<>();
-		hmap.put("newKey", newKey);
-		hmap.put("rawSongText", newText);
+		Map<String, Object> hmap = songParser.updateKeyInRawText(newText, newKey);
+
+		jsonResponse.setStatus("ok");
 
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
@@ -121,6 +128,7 @@ public class SongController {
 		return ResponseEntity.ok(jsonResponse);
 	}
 
+	//TODO maknuti i pozvati u metodi transposeChords nakon promjene teksta
 	@PostMapping(value = "updateKey", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object updateKey(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
@@ -129,7 +137,10 @@ public class SongController {
 
 		JsonResponse jsonResponse = new JsonResponse();
 
-		Map<String, Object> hmap = songParser.updateKeyInRawText(rawSongText, transposeValue, currentKey);
+		// new Key
+		Integer newKey = currentKey + transposeValue;
+
+		Map<String, Object> hmap = songParser.updateKeyInRawText(rawSongText, newKey);
 
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea

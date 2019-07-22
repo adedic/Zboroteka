@@ -94,7 +94,7 @@ public class SongController {
 		jsonResponse.setStatus("ok");
 		Integer newKey = currentKey + transposeValue;
 
-		HashMap<String, Object> hmap = new HashMap<>();
+		Map<String, Object> hmap = new HashMap<>();
 		hmap.put("newKey", newKey);
 		hmap.put("rawSongText", newText);
 

@@ -2,6 +2,8 @@ package hr.tvz.java.zboroteka.forms;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,11 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
+@Entity
 public class SongForm implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7054243497044038859L;
 
 	private Integer id;

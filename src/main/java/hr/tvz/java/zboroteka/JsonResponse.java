@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.model;
+package hr.tvz.java.zboroteka;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

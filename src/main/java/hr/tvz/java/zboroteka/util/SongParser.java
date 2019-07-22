@@ -62,43 +62,30 @@ public class SongParser {
 
 	}
 
+	//TODO PROVJERITI RADI LI DOBRO
 	public String setHeadingAuthorKeyToEditor(SongForm songForm) {
 		String songChordsText = "";
 
 		// SONG TEXT AND CHORDS
-		// already exists
-		if (songForm.getRawSongText() != null && songForm.getRawSongText() != "") {
-			String textAndChords = parseTextAndChords(songForm.getRawSongText());
-			// EXISTING TEXT AND CHORDS
-			if (textAndChords != null)
-				songChordsText = "```" + textAndChords + "```";
-		} else {
-			// INIT SETTINGS
-			songChordsText = "\n\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```\n\n";
-		}
+		songChordsText = setSongTextAndChords(songForm, songChordsText);
 		String textAndChords = parseTextAndChords(songForm.getRawSongText());
 		String restBefore = StringUtils.substringBefore(songForm.getRawSongText(), "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(songForm.getRawSongText(), textAndChords + "```");
 
 		// SONG NAME
-		if (restBefore.contains("#")) {
-			String currName = StringUtils.substringBetween(restBefore, "#", "\n");
-			restBefore = restBefore.replace(currName, songForm.getName());
-		} else
-			restBefore += "#" + songForm.getName();
+		restBefore = setSongName(songForm, restBefore);
 
 		// SONG AUTHOR
-		String author = "";
-		if (songForm.getAuthor() != null && songForm.getAuthor() != "") {
-			author = "\n\nAutor: " + songForm.getAuthor() + "\n";
-		}
-		if (restBefore.contains("Autor: ")) {
-			String currAuthor = StringUtils.substringBetween(restBefore, "Autor: ", "\n");
-			restBefore = restBefore.replace(currAuthor, songForm.getAuthor());
-		} else
-			restBefore += author;
+		restBefore = setSongAuthor(songForm, restBefore);
 
 		// SONG KEY
+		restBefore = setSongKey(songForm, restBefore);
+
+		// ALL TEXT
+		return restBefore + songChordsText + restAfter;
+	}
+
+	private String setSongKey(SongForm songForm, String restBefore) {
 		String key = "";
 		Optional<SongKey> songKey = null;
 		if (songForm.getKey() != null) {
@@ -114,9 +101,43 @@ public class SongParser {
 				restBefore = restBefore.replace(currKey, songKey.get().getName());
 		} else
 			restBefore += key;
+		return restBefore;
+	}
 
-		// ALL TEXT
-		return restBefore + songChordsText + restAfter;
+	private String setSongAuthor(SongForm songForm, String restBefore) {
+		String author = "";
+		if (songForm.getAuthor() != null && songForm.getAuthor() != "") {
+			author = "\n\nAutor: " + songForm.getAuthor() + "\n";
+		}
+		if (restBefore.contains("Autor: ")) {
+			String currAuthor = StringUtils.substringBetween(restBefore, "Autor: ", "\n");
+			restBefore = restBefore.replace(currAuthor, songForm.getAuthor());
+		} else
+			restBefore += author;
+		return restBefore;
+	}
+
+	private String setSongName(SongForm songForm, String restBefore) {
+		if (restBefore.contains("#")) {
+			String currName = StringUtils.substringBetween(restBefore, "#", "\n");
+			restBefore = restBefore.replace(currName, songForm.getName());
+		} else
+			restBefore += "#" + songForm.getName();
+		return restBefore;
+	}
+
+	private String setSongTextAndChords(SongForm songForm, String songChordsText) {
+		// already exists
+		if (songForm.getRawSongText() != null && songForm.getRawSongText() != "") {
+			String textAndChords = parseTextAndChords(songForm.getRawSongText());
+			// EXISTING TEXT AND CHORDS
+			if (textAndChords != null)
+				songChordsText = "```" + textAndChords + "```";
+		} else {
+			// INIT SETTINGS
+			songChordsText = "\n\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```\n\n";
+		}
+		return songChordsText;
 	}
 
 	public String transposeChordsInSongText(String rawSongText, Integer transposeAmount) {

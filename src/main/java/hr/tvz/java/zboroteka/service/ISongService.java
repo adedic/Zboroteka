@@ -35,23 +35,27 @@ public class ISongService implements SongService {
 
 		// map chordsStr from raw song text to song
 		songMapper.mapRawSongTextToChordsStr(song);
-
-		// chord validation
-		List<String> unrecognizedChords = songValidator.checkInvalidChords(song.getChordsStr());
+		
 		HashMap<String, Object> hmap = new HashMap<>();
+		
+		// chord validation
+		if (song.getChordsStr() != null && song.getChordsStr().length != 0) {
+			List<String> unrecognizedChords = songValidator.checkInvalidChords(song.getChordsStr());
 
-		if (unrecognizedChords.isEmpty()) {
+			if (unrecognizedChords.isEmpty()) {
 
-			// map song text and song chords to song
-			songMapper.mapRawSongTextToSong(song);
-			songRepository.save(song);
-			jsonResponse.setStatus("ok");
-			hmap.put("songId", song.getId());
+				// map song text and song chords to song
+				songMapper.mapRawSongTextToSong(song);
+				songRepository.save(song);
+				jsonResponse.setStatus("ok");
 
-		} else if (!unrecognizedChords.isEmpty()) {
-			jsonResponse.setStatus("error");
-			hmap.put("unrecognizedChords", unrecognizedChords);
+			} else if (!unrecognizedChords.isEmpty()) {
+				jsonResponse.setStatus("error");
+				hmap.put("unrecognizedChords", unrecognizedChords);
+			}
 		}
+		if (song.getId() != null)
+			hmap.put("songId", song.getId());
 
 		jsonResponse.setResult(hmap);
 

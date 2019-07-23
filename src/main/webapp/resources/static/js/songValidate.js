@@ -18,12 +18,25 @@ var songValidate = (function() {
 	
 
 	//checks if chords in editor textare invalid and unrecognized
-	var chordsInvalid = function(foundChordsStr) {
+	var chordsInvalid = function(foundChords) {
+
+	    console.log("foundChords2 " + foundChords);
+		var foundChordsStr = [];
+        for (var j = 0; j < foundChords.length; j++) {
+        	var chordToAdd = foundChords[j].name;
+        	chordToAdd = chordToAdd.replace('[','');
+        	chordToAdd = chordToAdd.replace(']','');
+        	foundChordsStr.push(chordToAdd);
+        }
+
+	    console.log("foundChordsStr " + foundChordsStr);
+	    
 		//ajax poziv provjera akorda postoje li
 		$.ajax({
 			type : "POST",
 			url : "checkChordsExist",
-			data : "foundChords=" + foundChordsStr,
+			async: false, 
+			data : "foundChordsStr=" + foundChordsStr,
 			suppressErrors : true
 		}).done(function(data) {
 			debugger;
@@ -35,14 +48,16 @@ var songValidate = (function() {
 					message : "Nespješno transponiranje pjesme! Uneseni su akordi koji ne postoje: " + data.result,
 					alertLevel : 'danger'
 				});
+				
 				return true;
 			} else if(data.status == "ok") { 
 				
 				commonModul.showAlert({
 					elementId : 'showAlertBox',
-					message : "Uspješno transponiranje pjesme!,
-					alertLevel : 'danger'
+					message : "Uspješno transponiranje pjesme!",
+					alertLevel : 'success'
 				});
+				
 				return false;
 			}
 		});
@@ -56,4 +71,3 @@ var songValidate = (function() {
         chordsInvalid: chordsInvalid
     }
 })();
-}

@@ -2,7 +2,6 @@ package hr.tvz.java.zboroteka.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
@@ -84,17 +82,14 @@ public class SongController {
 		return ResponseEntity.ok(jsonResponse);
 	}
 
-	@PostMapping(value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object transposeChords(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
 			@RequestParam(value = "transposeValue", required = false) Integer transposeValue,
-			@RequestParam(value = "currentKey", required = false) Integer currentKey, String jsonChords)
-			throws IOException {
+			@RequestParam(value = "currentKey", required = false) Integer currentKey) throws IOException {
 
 		JsonResponse jsonResponse = new JsonResponse();
-
-		ObjectMapper mapper = new ObjectMapper();
-		List<ChordDetails> foundChords = Arrays.asList(mapper.readValue(jsonChords, ChordDetails[].class));
+		List<ChordDetails> foundChords = songParser.createChordsWithMatchIndex(rawSongText);
 
 		// Napravi transpose i vrati tekst s transponiranim akordima
 		String newText = songParser.transposeChordsInSongText(foundChords, rawSongText, transposeValue);
@@ -114,10 +109,10 @@ public class SongController {
 
 	@PostMapping(value = "checkChordsExist", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object checkChordsExist(Model model,
-			@RequestParam(value = "foundChords", required = false) String[] foundChords) {
+			@RequestParam(value = "foundChordsStr", required = false) String[] foundChordsStr) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		List<String> unrecognizedChords = songValidator.checkInvalidChords(foundChords);
+		List<String> unrecognizedChords = songValidator.checkInvalidChords(foundChordsStr);
 		jsonResponse.setResult(unrecognizedChords);
 
 		if (unrecognizedChords.isEmpty())
@@ -128,7 +123,7 @@ public class SongController {
 		return ResponseEntity.ok(jsonResponse);
 	}
 
-	//TODO maknuti i pozvati u metodi transposeChords nakon promjene teksta
+	// TODO maknuti i pozvati u metodi transposeChords nakon promjene teksta
 	@PostMapping(value = "updateKey", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object updateKey(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,

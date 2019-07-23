@@ -14,7 +14,7 @@
 		<div class="col-md-12">
 			<div class="error-template">
 				<h1 th:text="#{msg.error.heading}"></h1>
-				<img th:src="@{/resources/static/img/logo.png}" />
+				<img style="width:50px" th:src="@{/resources/static/img/logo.png}" />
 				<h3 th:if="${status} == '403'"
 					th:text="#{msg.error.forbidden.heading}"></h3>
 				<h3 th:if="${status} == '404'"

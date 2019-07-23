@@ -3,8 +3,6 @@ package hr.tvz.java.zboroteka.forms;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.User;
 import lombok.AllArgsConstructor;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-@Entity
 public class BandForm implements Serializable {
 
 	/**

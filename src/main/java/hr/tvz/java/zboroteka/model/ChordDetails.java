@@ -1,6 +1,6 @@
 package hr.tvz.java.zboroteka.model;
 
-import javax.persistence.Entity;
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-@Entity
-public class ChordDetails {
+public class ChordDetails implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5881566506838955325L;
 	Integer id;
 	Integer index;
 	String name;
-	String len;
+	Integer len;
 
 }

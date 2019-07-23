@@ -27,7 +27,9 @@ var songUtil = (function() {
 	        $.ajax({
 	            type: "POST",
 	            url: "transposeChords",
-	            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey + "&jsonChords=" + foundChords,
+	            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
+	            async: false,    //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
+	            cache: false,    //This will force requested pages not to be cached by the browser  
 	            suppressErrors: true
 	        }).done(function(data) {
 	            debugger;
@@ -37,9 +39,22 @@ var songUtil = (function() {
 	                updateSongEditorValue(data.result.newText, editor);
 
 		            
-		            
+	                //azurirati trenutni tontalitet na formi
+	                $("#key").val(data.result.newKey).change();
+
+	        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
+	                if(data.result.newKey == 13) {
+		                $("#key").val(1).change(); 
+		                console.log("postavi 1");
+	                } else if(data.result.newKey == -1) {
+	            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
+		                $("#key").val(data.result.newKey).change(12); 
+		                console.log("postavi 12");
+
+	                }
+	                
 	        	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
-	        	    songUtil.updateKey(transposeValue, editor, newText);
+	        	    //songUtil.updateKey(transposeValue, editor, newText);
 	            }
 
 	        });
@@ -222,6 +237,8 @@ var songUtil = (function() {
 
             var match = regexp.exec(editorVal);
             if (match != null) {
+            	console.log("akord trenutno  " + chords[i]);
+            	console.log("match index " + match.index);
                 var chord = {
                     "id": i,
                     "index": match.index,

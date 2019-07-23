@@ -1,10 +1,16 @@
 package hr.tvz.java.zboroteka.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,13 +151,19 @@ public class SongParser {
 		// prođi kroz listu parsiranih akorda
 		for (int i = 0; i < foundChords.size(); i++) {
 			String chordToTrans = foundChords.get(i).getName();
-			chordToTrans = chordToTrans.replaceAll("[", "");
-			chordToTrans = chordToTrans.replaceAll("]", "");
+			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
+
+			System.out.println("chordToTrans " + chordToTrans);
+			// chordToTrans = chordToTrans.replaceAll("[\\[\\]]", "");
 
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
 
+			System.out.println("transposedChord " + transposedChord);
+
 			newText = replaceChordWithTransposed(foundChords.get(i), transposedChord, newText);
+
+			// System.out.println("newText " + newText);
 
 			// AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
 			// razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade =
@@ -166,20 +178,23 @@ public class SongParser {
 	private Integer updateNextChordIndex(String transposedChord, List<ChordDetails> foundChords, Integer diff, int i) {
 
 		ChordDetails currChord = foundChords.get(i);
-		ChordDetails nextChord = foundChords.get(i + 1);
+		System.out.println("currChord " + currChord);
 		Integer chordsArrLen = foundChords.size();
 
 		Integer startLen = currChord.getName().length();
 		Integer transLen = transposedChord.length() + 2; // +2 je zbog zagrada
 		diff += startLen - transLen;
-		
-		//azuriraj matchIndeks sljedeceg akorda u tekstu s obzirom na promjene prethodnog
-        //dok ima akorda
-        if (i + 1 <= chordsArrLen - 1) {
-            Integer matchNextIndex = nextChord.getIndex() - diff;
-            nextChord.setIndex(matchNextIndex);
-           System.out.println("azurirani indeks sljedeceg " + nextChord.getIndex());
-        }
+
+		// azuriraj matchIndeks sljedeceg akorda u tekstu s obzirom na promjene
+		// prethodnog
+		// dok ima akorda
+		if (i + 1 <= chordsArrLen - 1) {
+
+			ChordDetails nextChord = foundChords.get(i + 1);
+			Integer matchNextIndex = nextChord.getIndex() - diff;
+			nextChord.setIndex(matchNextIndex);
+			System.out.println("azurirani indeks sljedeceg " + nextChord.getIndex());
+		}
 
 		return diff;
 	}
@@ -188,8 +203,10 @@ public class SongParser {
 
 		// Tekst od pocetka do indeksa na kojem je pronađen akord
 		String textBefore = newText.substring(0, currChord.getIndex() - 1);
-
+		System.out.println("textBefore " + textBefore);
 		String textAfter = newText.substring(currChord.getIndex() + currChord.getName().length());
+
+		System.out.println("textAfter " + textAfter);
 		// TODO ILI samo getLen()
 
 		newText = textBefore + " " + "[" + transposedChord + "]" + textAfter;
@@ -203,40 +220,56 @@ public class SongParser {
 	}
 
 	private String findMatchInScale(String chord, Integer transposeValue) {
-		List<SongKey> keys = iSongKeyService.getAllKeys();
-		int scaleLen = keys.size();
+		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H");
 
+		Map<String, String> normalizeMap = Stream
+				.of(new String[][] { { "Cb", "H" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
+						{ "B", "G#" }, { "E#", "A#" }, { "H#", "C" }, })
+				.collect(Collectors.toMap(data -> data[0], data -> data[1]));
+
+		int scaleLen = scale.size();
 		int matchIndex = 0;
+		String matchChord = "";
 
-		boolean isStandardName = true;
-		for (SongKey key : keys) {
-			if (key.getName().equals(chord)) {
-				matchIndex = key.getId();
-				isStandardName = true;
-			} else if (key.getOtherName().equals(chord)) {
-				matchIndex = key.getId();
-				isStandardName = false;
+		// Get the regex to be checked
+		String regex = "/CDEFGAH(b|#)?/g";
+		// Create a pattern from regex
+		Pattern pattern = Pattern.compile(regex);
+
+		// Get the String to be matched
+		String stringToBeMatched = chord;
+
+		// Create a matcher for the input String
+		Matcher matcher = pattern.matcher(stringToBeMatched);
+
+		while (matcher.find()) {
+			// Get the group matched using group() method
+			System.out.println("froup " + matcher.group());
+
+			for (int i = 0; i < normalizeMap.size(); i++) {
+				if (normalizeMap.get(matcher.group()).equals(matcher.group())) {
+					matchChord = normalizeMap.get(matcher.group());
+					// matchIndex = normalizeMap.;
+				} else
+					matchChord = matcher.group();
 			}
 		}
+		int i = 0;
+		if (matchChord != null)
+			i = (scale.indexOf(matchChord) + transposeValue) % 12;
 
-		int i = (matchIndex + transposeValue - 1) % scaleLen;
-
-		SongKey resultKey;
+		String resultKey;
 		if (i < 0) {
 
-			System.out.println(" manje od 0 : " + keys.get(i + scaleLen));
-			resultKey = keys.get(i + scaleLen);
+			System.out.println(" manje od 0 : " + scale.get(i + scaleLen));
+			resultKey = scale.get(i + scaleLen);
 		} else {
-			System.out.println(" vece od 0 : " + keys.get(i));
-			resultKey = keys.get(i);
+			System.out.println(" vece od 0 : " + scale.get(i));
+			resultKey = scale.get(i);
 
 		}
 
-		if (isStandardName) {
-			return resultKey.getName();
-		} else {
-			return resultKey.getOtherName();
-		}
+		return resultKey;
 	}
 
 	public void parseSongTextAndChords(Song song) {
@@ -291,5 +324,30 @@ public class SongParser {
 		String textAndChords = parseTextAndChords(rawSongText);
 		return parseChordsStr(textAndChords);
 
+	}
+
+	public List<ChordDetails> createChordsWithMatchIndex(String rawSongText) {
+		String[] parsedChords = parseChordsStrFromRawSongText(rawSongText);
+		String regex = "\\[[^\\[]*\\]";
+
+		int i = 0;
+
+		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+		Matcher matcher = pattern.matcher(rawSongText);
+		List<ChordDetails> foundChords = new ArrayList<ChordDetails>();
+
+		while (matcher.find()) {
+			ChordDetails chord = new ChordDetails();
+			chord.setId(i);
+			chord.setIndex(matcher.start());
+
+			String currChord = "[" + parsedChords[i] + "]";
+			chord.setName(currChord);
+			chord.setLen(currChord.length());
+
+			foundChords.add(chord);
+			i++;
+		}
+		return foundChords;
 	}
 }

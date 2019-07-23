@@ -3,8 +3,6 @@ package hr.tvz.java.zboroteka.forms;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-
 import hr.tvz.java.zboroteka.model.Song;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-@Entity
 public class SongSetForm implements Serializable {
 
 	private static final long serialVersionUID = -6765072929809195225L;

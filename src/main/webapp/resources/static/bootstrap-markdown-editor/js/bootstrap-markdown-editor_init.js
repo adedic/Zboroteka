@@ -210,7 +210,7 @@
                 if (options.preview === true) {
                     html += '<div class="btn-group pull-right">';
                         html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-edit active" data-btn="edit"><i class="fas fa-edit"></i> ' + options.label.btnEdit + '</button>';
-                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-preview" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
+                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-preview editBtns" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
                     html += '</div>'; // .btn-group
                 }
                 

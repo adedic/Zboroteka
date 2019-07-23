@@ -14,9 +14,16 @@ import hr.tvz.java.zboroteka.model.Song;
 public interface SongRepository extends JpaRepository<Song, Integer> {
 
 	//All songs created by current user filtered by query string
-	@Query("SELECT Song s FROM Song "
-			+ "WHERE (upper(s.name) LIKE %:query% OR upper(s.songText) LIKE %:query% OR upper(s.description) LIKE %:query%  OR upper(s.author) LIKE %:query% OR upper(s.usage) LIKE %:query% ) "
-			+ "AND s.creatorId = :creatorId")
+	@Query("SELECT s FROM Song s "
+			+ " WHERE "
+			+ " (upper(s.name) LIKE %:query% "
+			+ " OR upper(s.songText) LIKE %:query% "
+			+ " OR upper(s.description) LIKE %:query% "
+			+ " OR upper(s.author) LIKE %:query% "
+			+ " OR upper(s.usage) LIKE %:query% ) "
+			+ " AND "
+			+ "s.creatorId = :creatorId"
+			)
 	Optional<List<Song>> findAllByQueryAndCreator(@Param("query") String query, @Param("creatorId")Integer creatorId);
 
 }

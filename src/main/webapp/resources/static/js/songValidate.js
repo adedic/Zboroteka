@@ -20,7 +20,6 @@ var songValidate = (function() {
 	//checks if chords in editor textare invalid and unrecognized
 	var chordsInvalid = function(foundChords) {
 
-	    console.log("foundChords2 " + foundChords);
 		var foundChordsStr = [];
         for (var j = 0; j < foundChords.length; j++) {
         	var chordToAdd = foundChords[j].name;
@@ -29,7 +28,6 @@ var songValidate = (function() {
         	foundChordsStr.push(chordToAdd);
         }
 
-	    console.log("foundChordsStr " + foundChordsStr);
 	    
 		//ajax poziv provjera akorda postoje li
 		$.ajax({

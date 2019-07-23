@@ -50,9 +50,6 @@ var songUtil = (function() {
 		                console.log("postavi 12");
 
 	                }
-	                
-	        	    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
-	        	    //songUtil.updateKey(transposeValue, editor, newText);
 	            }
 
 	        });
@@ -190,38 +187,6 @@ var songUtil = (function() {
         })
     }
 
-    var replaceChordWithTransposed = function(currChord, transposedChord, newText) {
-
-        //Tekst od pocetka do indeksa na kojem je pronađen akord 
-        var textBefore = newText.substr(0, currChord.index - 1);
-
-        //Tekst od indeksa na kojem je pronađen akord, taj indeks uvecan duljinu pronadenog akorda = ostatak teksta
-        var textAfter = newText.substr(currChord.index + currChord.name.length);
-
-        newText = textBefore + " " + '[' + transposedChord + ']' + textAfter;
-
-        return newText;
-    }
-
-    var updateNextChordIndex = function(transposedChord, foundChords, diff, i) {
-        var currChord = foundChords[i];
-        var nextChord = foundChords[i + 1];
-        var chordsArrLen = foundChords.length;
-
-        var startLen = currChord.name.length;
-        var transLen = transposedChord.length + 2; //+2 je zbog zagrada 
-        diff += startLen - transLen;
-
-        //azuriraj matchIndeks sljedeceg akorda u tekstu s obzirom na promjene prethodnog
-        //dok ima akorda
-        if (i + 1 <= chordsArrLen - 1) {
-            var matchNextIndex = nextChord.index - diff;
-            nextChord.index = matchNextIndex;
-            console.log("azurirani indeks sljedeceg " + nextChord.index);
-        }
-        return diff;
-    }
-
     var createChordsWithMatchIndex = function(editorVal, foundChords) {
         //pronalazi sve akorde, [tekst unutar zagrada]
         var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
@@ -254,10 +219,7 @@ var songUtil = (function() {
         //transponira akorde
         transposeChords: transposeChords,
         transposeChord: transposeChord,
-        replaceChordWithTransposed: replaceChordWithTransposed,
-        updateNextChordIndex: updateNextChordIndex,
-        createChordsWithMatchIndex: createChordsWithMatchIndex,
-        updateKey: updateKey,
-        updateSongEditorValue: updateSongEditorValue
+        updateSongEditorValue: updateSongEditorValue,
+        createChordsWithMatchIndex: createChordsWithMatchIndex
     }
 })();

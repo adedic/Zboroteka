@@ -75,7 +75,7 @@ public class SongController {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		List<Song> resultSongs = iSongService.searchSongByQueryAndUser(query);
-		//TODO bendsongs
+		// TODO bendsongs
 
 		if (resultSongs.isEmpty()) {
 			jsonResponse.setStatus("notFound");
@@ -84,7 +84,7 @@ public class SongController {
 		jsonResponse.setStatus("ok");
 
 		model.addAttribute("resultSongs", resultSongs);
-		
+
 		return ResponseEntity.ok(jsonResponse);
 	}
 
@@ -125,29 +125,6 @@ public class SongController {
 			jsonResponse.setStatus("ok");
 		else
 			jsonResponse.setStatus("error");
-
-		return ResponseEntity.ok(jsonResponse);
-	}
-
-	// TODO maknuti i pozvati u metodi transposeChords nakon promjene teksta
-	@PostMapping(value = "updateKey", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object updateKey(Model model, @ModelAttribute SongForm songForm,
-			@RequestParam(value = "rawSongText", required = false) String rawSongText,
-			@RequestParam(value = "transposeValue", required = false) Integer transposeValue,
-			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
-
-		JsonResponse jsonResponse = new JsonResponse();
-
-		// new Key
-		Integer newKey = currentKey + transposeValue;
-
-		Map<String, Object> hmap = songParser.updateKeyInRawText(rawSongText, newKey);
-
-		// postavi promijenjeni rawSongText u rezultat
-		// i novi tonalitet nakon transposea
-		jsonResponse.setResult(hmap);
-
-		jsonResponse.setStatus("ok");
 
 		return ResponseEntity.ok(jsonResponse);
 	}

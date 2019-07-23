@@ -132,19 +132,17 @@
 	    console.log("foundChords " + foundChords);
 	    
 	    var chordsValid = true;
-	    
+	    //TODO NE ULAZI U VALIDACIJU
 	    if(songValidate.chordsNotFoundInEditor(foundChords) == true) 
 	    	chordsValid = false;
-	    else {
-	    	//PROVJERA POSTOJANJA AKORDA BACKEND
-	        if(songValidate.chordsInvalid(foundChords) == true) {
+	   //PROVJERA POSTOJANJA AKORDA BACKEND
+	    else if(songValidate.chordsInvalid(foundChords) == true) 
 	        	chordsValid = false;
-	        }
-	    }
 	    
         //ako su validacije prosle
         //TRANSPONIRANJE I ZAMJENA AKORDA
-        newText = songUtil.transposeChords(transposeValue, editor, foundChords);
+	    if(chordsValid)
+	    	newText = songUtil.transposeChords(transposeValue, editor, foundChords);
 	}
 
     function editorHtml (content, options) {
@@ -155,20 +153,20 @@
             html += '<div class="btn-toolbar" role="toolbar">';
 
                 html += '<div class="btn-group mr-2" role="group">';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader1 + '" class="md-btn btn btn-sm btn-outline-info" data-btn="h1">H1</button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader2 + '" class="md-btn btn btn-sm btn-outline-info" data-btn="h2">H2</button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader3 + '" class="md-btn btn btn-sm btn-outline-info" data-btn="h3">H3</button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader1 + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="h1">H1</button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader2 + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="h2">H2</button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader3 + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="h3">H3</button>';
                 html += '</div>'; // .btn-group
 
                 html += '<div class="btn-group mr-2" role="group">';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnBold + '" class="md-btn btn btn-sm btn-outline-info" data-btn="bold"><i class="fas fa-bold"></i></button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnItalic + '" class="md-btn btn btn-sm btn-outline-info" data-btn="italic"><i class="fas fa-italic"></i></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnBold + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="bold"><i class="fas fa-bold"></i></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnItalic + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="italic"><i class="fas fa-italic"></i></button>';
 
                html += '</div>'; // .btn-group
                
                html += '<div class="btn-group mr-2" role="group">';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnKeepFormat + '" class="md-btn btn btn-sm btn-outline-info" data-btn="keepFormat"><i class="fas fa-music"></i></button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnChord + '" class="md-btn btn btn-sm btn-outline-info" data-btn="chordBracket"><i class="fas fa-guitar"></i></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnKeepFormat + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="keepFormat"><i class="far fa-file-audio"></i></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnChord + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="chordBracket"><i class="fas fa-guitar"></i></button>';
                     
                 html += '</div>'; // .btn-group
 /*
@@ -189,14 +187,15 @@
                 
                 /*TRANSPOSE TIPKE + I -*/
                 html += '<div class="btn-group mr-2" role="group">';
-                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeUp + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeUp"><i class="fas fa-plus"></i></button>';
-                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeUp + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="transposeUp"><i class="fas fa-plus"></i></button>';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.transposeDown + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="transposeDown"><i class="fas fa-minus"></i></button>';
 	            html += '</div>'; // .btn-group
+	          
 	            
 	            /*INIT i update BUTTON - HIDDEN*/
 	            html += '<div class="btn-group mr-2" role="group">';
-                html += '<button type="button" id="btnSetEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="setEditorVal"></button>';
-                html += '<button type="button" id="btnUpdateFormContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info" data-btn="updateFormContent"></button>';
+                html += '<button type="button" id="btnSetEditorVal" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="setEditorVal"></button>';
+                html += '<button type="button" id="btnUpdateFormContent" hidden="hidden" data-mdtooltip="tooltip" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="updateFormContent"></button>';
 	            html += '</div>'; // .btn-group
 	         
                 
@@ -214,6 +213,17 @@
                         html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-preview" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
                     html += '</div>'; // .btn-group
                 }
+                
+	            
+	            /*ONLY TEXT OR CHORDS OR BOTH*/
+                html += '<div class="btn-group mr-2" role="group">';
+                html += '</div>'; // .btn-group
+                html += '<div class="btn-group mr-2" role="group">';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyText"><i class="fas fa-font"></i></button>';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyChords"><i class="fas fa-music"></i></button>';
+                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></button>';
+                html += '</div>'; // .btn-group
+	            
 
             html += '</div>'; // .btn-toolbar
         html += '</div>'; // .md-toolbar
@@ -351,6 +361,7 @@
                 }  
                 return false;
             }
+           
 
             // Toolbar events
             container.find('.md-btn').click(function () {
@@ -400,14 +411,15 @@
                 		editor.gotoLine(row + 1, column);
                 		
                 		snippetManager.insertSnippet(editor, '\n```\n\n[C]\t\t[Am]\n\nTekst i akordi pjesme\n\n```');
-                	}
-                	else {
+                	} else {
                 		commonModul.showAlert({
             				elementId : 'showAlertBox',
             				message : "Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
             				alertLevel : 'warning'
             			});
                 	}
+                	
+                	
                 } else if (btnType === 'chordBracket') {
         	    	commonModul.removeAllAlerts();
                 	
@@ -432,21 +444,23 @@
                     } else {
                         snippetManager.insertSnippet(editor, '[' + selectedText + ']');
                     }
-                    
+                   
                 }  else if (btnType === 'transposeUp') {
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE +1");
                     
         	        transposeChords(editor, 1);
+                	
                   
                 } else if (btnType === 'transposeDown') {
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE -1");
                     
         	        transposeChords(editor, -1);
+                	
         	        
                 }
-                else if (btnType === 'image') {
+                /*else if (btnType === 'image') {
                 	if(!checkForbiddenBtn()) {
 	                    if (selectedText === '') {
 	                        snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
@@ -455,7 +469,7 @@
 	                    }
                 	}
 
-                } else if (btnType === 'setEditorVal') {//hidden btn
+                }*/ else if (btnType === 'setEditorVal') {//hidden btn
                 	
                 	$.ajax({
             			type : "POST",
@@ -479,6 +493,7 @@
                     
                     mdPreview.hide();
                     mdEditor.show();
+            		$('.editBtns').show();
                     container.find('.btn-edit').addClass('active');
                     container.find('.btn-preview').removeClass('active');
 
@@ -488,6 +503,7 @@
 
                 } else if (btnType === 'preview') {
                     preview = true;
+            		$('.editBtns').hide();
 
                     mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {
@@ -578,9 +594,12 @@
             btnHeader3: 'Naslov 3',
             btnBold: 'Bold',
             btnItalic: 'Italic',
-            btnKeepFormat: 'Tekst i akordi',
+            btnKeepFormat: 'Umetni tekst i akorde',
             transposeUp: 'Transpose +1',
             transposeDown: 'Transpose -1',
+            onlyText: 'Prikaži samo tekst',
+            onlyChords: 'Prikaži samo akorde',
+            textAndChords: 'Prikaži tekst i akorde',
             btnChord: 'Akord',
             btnList: 'Lista',
             btnOrderedList: 'Numerirana lista',

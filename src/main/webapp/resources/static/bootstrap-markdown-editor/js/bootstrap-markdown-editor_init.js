@@ -218,10 +218,10 @@
 	            /*ONLY TEXT OR CHORDS OR BOTH*/
                 html += '<div class="btn-group mr-2" role="group">';
                 html += '</div>'; // .btn-group
-                html += '<div class="btn-group mr-2" role="group">';
-                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyText"><i class="fas fa-font"></i></button>';
-                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyChords"><i class="fas fa-music"></i></button>';
-                html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></button>';
+                html += '<div class="btn-group btn-group-toggle mr-2" role="group" id="radio-btns" data-toggle="buttons">';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-info active" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="onlyChords"><input type="radio" name="options" id="option2" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-info" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
                 html += '</div>'; // .btn-group
 	            
 
@@ -459,6 +459,15 @@
         	        transposeChords(editor, -1);
                 	
         	        
+                } else if (btnType === 'onlyText') {
+                    console.log("onlyText");
+                	
+                } else if (btnType === 'onlyChords') {
+                    console.log("onlyChords");
+                	
+                } else if (btnType === 'textAndChords') {
+                    console.log("textAndChords");
+                	
                 }
                 /*else if (btnType === 'image') {
                 	if(!checkForbiddenBtn()) {

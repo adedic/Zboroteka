@@ -213,6 +213,50 @@ var songUtil = (function() {
         }
     }
     
+    var showOnlyText = function (editor) {
+    	
+    	$.ajax({
+            type: "POST",
+            url: "showOnlyText",
+            data:  "rawSongText=" + editor.getSession().getValue(),
+            suppressErrors: true
+        }).done(function(data) {
+            debugger;
+
+            if(data.status == "ok") {
+            	//isprazni postojeci tekst na formi
+        	    editor.getSession().setValue("");
+        	    
+        	    //OVO POSTAVLJA VRIJEDNOST na editor 
+        	    editor.getSession().setValue(data.result);
+        	}
+
+        });
+    	
+    }
+    
+    var showOnlyChords = function (editor) {
+    	
+    	$.ajax({
+            type: "POST",
+            url: "showOnlyChords",
+            data:  "rawSongText=" + editor.getSession().getValue(),
+            suppressErrors: true
+        }).done(function(data) {
+            debugger;
+
+            if(data.status == "ok") {
+            	//isprazni postojeci tekst na formi
+        	    editor.getSession().setValue("");
+        	    
+        	    //OVO POSTAVLJA VRIJEDNOST na editor 
+        	    editor.getSession().setValue(data.result);
+        	}
+
+        });
+    	
+    }
+    
 
     // Public API
     return {
@@ -220,6 +264,8 @@ var songUtil = (function() {
         transposeChords: transposeChords,
         transposeChord: transposeChord,
         updateSongEditorValue: updateSongEditorValue,
-        createChordsWithMatchIndex: createChordsWithMatchIndex
+        createChordsWithMatchIndex: createChordsWithMatchIndex,
+        showOnlyText: showOnlyText,
+        showOnlyChords: showOnlyChords
     }
 })();

@@ -113,6 +113,38 @@ public class SongController {
 		return ResponseEntity.ok(jsonResponse);
 	}
 
+	@PostMapping(value = "showOnlyText", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object showOnlyText(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
+
+		jsonResponse.setResult(onlyText);
+
+		if (onlyText != "")
+			jsonResponse.setStatus("ok");
+		else
+			jsonResponse.setStatus("error");
+
+		return ResponseEntity.ok(jsonResponse);
+	}
+	
+	@PostMapping(value = "showOnlyChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object showOnlyChords(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
+
+		jsonResponse.setResult(onlyChords);
+
+		if (onlyChords != "")
+			jsonResponse.setStatus("ok");
+		else
+			jsonResponse.setStatus("error");
+
+		return ResponseEntity.ok(jsonResponse);
+	}
+
 	@PostMapping(value = "checkChordsExist", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Object checkChordsExist(Model model,
 			@RequestParam(value = "foundChordsStr", required = false) String[] foundChordsStr) {

@@ -64,7 +64,6 @@ public class SongParser {
 
 	}
 
-	// TODO PROVJERITI RADI LI DOBRO
 	public String setHeadingAuthorKeyToEditor(SongForm songForm) {
 		String songChordsText = "";
 
@@ -153,7 +152,6 @@ public class SongParser {
 			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
 
 			System.out.println("chordToTrans " + chordToTrans);
-			// OR chordToTrans = chordToTrans.replaceAll("[\\[\\]]", "");
 
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
@@ -199,7 +197,6 @@ public class SongParser {
 		// Tekst od pocetka do indeksa na kojem je pronađen akord
 		String textBefore = newText.substring(0, currChord.getIndex() - 1);
 		String textAfter = newText.substring(currChord.getIndex() + currChord.getLen());
-		// TODO provjeriti jel radi sa getLen
 
 		newText = textBefore + " " + "[" + transposedChord + "]" + textAfter;
 
@@ -339,5 +336,35 @@ public class SongParser {
 			i++;
 		}
 		return foundChords;
+	}
+
+	public String removeChordsFromRawSongText(String rawSongText) {
+		String textAndChords = parseTextAndChords(rawSongText);
+		String[] chords = parseChordsStr(textAndChords);
+
+		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+
+		if (chords != null && chords.length != 0) {
+			return restBefore + parseText(textAndChords, chords) + restAfter;
+		}
+		// ako nema akorda vrati text
+		return restBefore + textAndChords + restAfter;
+	}
+
+	public String removeSongTextFromRawSongText(String rawSongText) {
+		String textAndChords = parseTextAndChords(rawSongText);
+		String[] chords = parseChordsStr(textAndChords);
+		
+
+		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+		
+		if (chords != null && chords.length != 0) {
+			return restBefore + chords + restAfter;
+		}
+		
+		
+		return restBefore + textAndChords + restAfter;
 	}
 }

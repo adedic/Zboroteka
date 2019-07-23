@@ -460,9 +460,11 @@
                 	
         	        
                 } else if (btnType === 'onlyText') {
+                	songUtil.showOnlyText(editor);
                     console.log("onlyText");
                 	
                 } else if (btnType === 'onlyChords') {
+                	songUtil.showOnlyChords(editor);
                     console.log("onlyChords");
                 	
                 } else if (btnType === 'textAndChords') {

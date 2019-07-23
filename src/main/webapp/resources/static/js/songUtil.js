@@ -4,8 +4,6 @@ var songUtil = (function() {
         //transposeValue je UP (+1) ili DOWN (-1)
         commonModul.removeAllAlerts();
 
-        //////////////////////////////////TODO provjeriti treba li ovo?
-        
         //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
         var currentKey = parseInt($("#key").val());
         

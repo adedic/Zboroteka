@@ -136,52 +136,15 @@
 	    if(songValidate.chordsNotFoundInEditor(foundChords) == true) 
 	    	chordsValid = false;
 	    else {
-		    
-	    	//PROVJERA POSTOJANJA AKORDA BACKEND - IZDVOJITI, TODO pozove se updatekey
-		    //TODO provjeriti radi li
+	    	//PROVJERA POSTOJANJA AKORDA BACKEND
 	        if(songValidate.chordsInvalid(foundChords) == true) {
 	        	chordsValid = false;
 	        }
 	    }
 	    
-
-    	console.log("chordsValid " + chordsValid);
-		
-		
         //ako su validacije prosle
         //TRANSPONIRANJE I ZAMJENA AKORDA
-        //TODO OVO JE PREBACENO NA BACKEND, ISPROBATI S AJAX POZIVOM
         newText = songUtil.transposeChords(transposeValue, editor, foundChords);
-        
-	    /*if(chordsValid == true) {
-	    	songUtil.transposeChords(transposeValue, editor, foundChords);
-	    	
-	    	//razlika u pomaku indeksa
-			var diff = 0;
-			for(var i = 0; i < foundChords.length; i++) {
-		    	
-		    	//Akord iz teksta koji se treba transponirati, maknute zagrade
-		    	var chordToTrans = foundChords[i].name;
-		    	chordToTrans = chordToTrans.replace('[','');
-		    	chordToTrans = chordToTrans.replace(']','');
-		    	
-		    	//Transponirani akord
-		    	var transposedChord = songUtil.transposeChord(chordToTrans, transposeValue);
-		    	
-		    	//mijenja trenutni akord s transponiranim,a zadržava format ostalog teksta
-		    	newText = songUtil.replaceChordWithTransposed(foundChords[i], transposedChord, newText);
-		    	
-		    	//AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
-		    	//razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade = micanje indeksa sljedeceg akorda unazad
-		    	diff = songUtil.updateNextChordIndex(transposedChord, foundChords, diff, i);
-		    }
-		    
-		    //azurira odabrani tonalitet iz pocetne forme i tonalitet ispisan u formi editora
-		    songUtil.updateKey(transposeValue, editor, newText);
-		    
-	    }*/
-        
-	    
 	}
 
     function editorHtml (content, options) {

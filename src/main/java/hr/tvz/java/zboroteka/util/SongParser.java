@@ -212,8 +212,11 @@ public class SongParser {
 	}
 
 	private String findMatchInScale(String chord, Integer transposeValue) {
+
+		// Scale of basic keys
 		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H");
 
+		// Scale of basic keys with other names for every key
 		Map<String, String> normalizeMap = Stream
 				.of(new String[][] { { "Cb", "H" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
 						{ "Ab", "G#" }, { "B", "A#" }, { "E#", "F" }, { "H#", "C" }, })
@@ -223,52 +226,40 @@ public class SongParser {
 		String matchChord = "";
 
 		// Get the regex to be checked
-		String regex1 = "(?m)(^| )([CDEFGAH](##?|bb?)?((sus|maj|min|aug|dim|m)\\d?)?(/[CDEFGAH](##?|bb?)?)?)( (?!\\w)|$)";
+		// String regex1 = "(?m)(^|
+		// )([CDEFGAH](##?|bb?)?((sus|maj|min|aug|dim|m)\\d?)?(/[CDEFGAH](##?|bb?)?)?)(
+		// (?!\\w)|$)";
 
+		// regex to match all chord form normalizeMap
 		String regex = "(?m)(^| )([CDEFGAH](#?|b?))";
-		/// [CDEFGAH](b|#)?/g
-		// Create a pattern from regex
-		Pattern pattern = Pattern.compile(regex1);
 
-		// Get the String to be matched
-		String stringToBeMatched = chord;
+		// Create a pattern from regex
+		Pattern pattern = Pattern.compile(regex);
 
 		// Create a matcher for the input String
-		Matcher matcher = pattern.matcher(stringToBeMatched);
+		Matcher matcher = pattern.matcher(chord);
 
 		while (matcher.find()) {
-			// Get the group matched using group() method
-			System.out.println("froup " + matcher.group());
+			// if match is not found in normalizeMap
+			matchChord = matcher.group();
 
+			// get match from normalizedMap if exists
 			for (int i = 0; i < normalizeMap.size(); i++) {
 				if (normalizeMap.get(matcher.group()) != null
 						&& normalizeMap.get(matcher.group()).equals(matcher.group())) {
 					matchChord = normalizeMap.get(matcher.group());
-				} else
-					matchChord = matcher.group(); // TODO REMOVE sus|maj|min|aug|dim|m ##?|bb
+				}
 			}
 		}
 
-		System.out.println("matchChord: " + matchChord);
 		int i = 0;
 		if (matchChord != null)
 			i = (scale.indexOf(matchChord) + transposeValue) % 12;
 
-		String resultKey;
-		if (i < 0) {
+		String resultKey = i < 0 ? scale.get(i + scaleLen) : scale.get(i);
 
-			System.out.println(" manje od 0 : " + scale.get(i + scaleLen));
-			resultKey = scale.get(i + scaleLen);
-		} else {
-			System.out.println(" vece od 0 : " + scale.get(i));
-			resultKey = scale.get(i);
-
-		}
-		
-		//TODO provjeriti
-		//chord.replace(regex, matchChord);
-
-		return resultKey;
+		chord = chord.replaceAll(regex, resultKey);
+		return chord;
 	}
 
 	public void parseSongTextAndChords(Song song) {

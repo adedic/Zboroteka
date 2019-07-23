@@ -153,7 +153,7 @@ public class SongParser {
 			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
 
 			System.out.println("chordToTrans " + chordToTrans);
-			// chordToTrans = chordToTrans.replaceAll("[\\[\\]]", "");
+			// OR chordToTrans = chordToTrans.replaceAll("[\\[\\]]", "");
 
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
@@ -161,8 +161,6 @@ public class SongParser {
 			System.out.println("transposedChord " + transposedChord);
 
 			newText = replaceChordWithTransposed(foundChords.get(i), transposedChord, newText);
-
-			// System.out.println("newText " + newText);
 
 			// AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
 			// razlika duljine chordToTrans i transposedChord koji se dodaje uz zagrade =
@@ -177,7 +175,6 @@ public class SongParser {
 	private Integer updateNextChordIndex(String transposedChord, List<ChordDetails> foundChords, Integer diff, int i) {
 
 		ChordDetails currChord = foundChords.get(i);
-		System.out.println("currChord " + currChord);
 		Integer chordsArrLen = foundChords.size();
 
 		Integer startLen = currChord.getName().length();
@@ -192,7 +189,6 @@ public class SongParser {
 			ChordDetails nextChord = foundChords.get(i + 1);
 			Integer matchNextIndex = nextChord.getIndex() - diff;
 			nextChord.setIndex(matchNextIndex);
-			System.out.println("azurirani indeks sljedeceg " + nextChord.getIndex());
 		}
 
 		return diff;
@@ -202,11 +198,8 @@ public class SongParser {
 
 		// Tekst od pocetka do indeksa na kojem je pronađen akord
 		String textBefore = newText.substring(0, currChord.getIndex() - 1);
-		System.out.println("textBefore " + textBefore);
-		String textAfter = newText.substring(currChord.getIndex() + currChord.getName().length());
-
-		System.out.println("textAfter " + textAfter);
-		// TODO ILI samo getLen()
+		String textAfter = newText.substring(currChord.getIndex() + currChord.getLen());
+		// TODO provjeriti jel radi sa getLen
 
 		newText = textBefore + " " + "[" + transposedChord + "]" + textAfter;
 
@@ -223,16 +216,17 @@ public class SongParser {
 
 		Map<String, String> normalizeMap = Stream
 				.of(new String[][] { { "Cb", "H" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
-						{ "B", "G#" }, { "E#", "A#" }, { "H#", "C" }, })
+						{ "Ab", "G#" }, { "B", "A#" }, { "E#", "F" }, { "H#", "C" }, })
 				.collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
 		int scaleLen = scale.size();
-		int matchIndex = 0;
 		String matchChord = "";
 
 		// Get the regex to be checked
 		String regex1 = "(?m)(^| )([CDEFGAH](##?|bb?)?((sus|maj|min|aug|dim|m)\\d?)?(/[CDEFGAH](##?|bb?)?)?)( (?!\\w)|$)";
-		// String regex = "/CDEFGAH(b|#)?/g";
+
+		String regex = "(?m)(^| )([CDEFGAH](#?|b?))";
+		/// [CDEFGAH](b|#)?/g
 		// Create a pattern from regex
 		Pattern pattern = Pattern.compile(regex1);
 
@@ -250,9 +244,8 @@ public class SongParser {
 				if (normalizeMap.get(matcher.group()) != null
 						&& normalizeMap.get(matcher.group()).equals(matcher.group())) {
 					matchChord = normalizeMap.get(matcher.group());
-					// matchIndex = normalizeMap.;
 				} else
-					matchChord = matcher.group(); //TODO REMOVE sus|maj|min|aug|dim|m ##?|bb
+					matchChord = matcher.group(); // TODO REMOVE sus|maj|min|aug|dim|m ##?|bb
 			}
 		}
 
@@ -260,7 +253,6 @@ public class SongParser {
 		int i = 0;
 		if (matchChord != null)
 			i = (scale.indexOf(matchChord) + transposeValue) % 12;
-		System.out.println("i : " + i);
 
 		String resultKey;
 		if (i < 0) {
@@ -272,6 +264,9 @@ public class SongParser {
 			resultKey = scale.get(i);
 
 		}
+		
+		//TODO provjeriti
+		//chord.replace(regex, matchChord);
 
 		return resultKey;
 	}
@@ -338,7 +333,7 @@ public class SongParser {
 
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(rawSongText);
-		List<ChordDetails> foundChords = new ArrayList<ChordDetails>();
+		List<ChordDetails> foundChords = new ArrayList<>();
 
 		while (matcher.find()) {
 			ChordDetails chord = new ChordDetails();

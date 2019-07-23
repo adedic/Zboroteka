@@ -17,8 +17,6 @@ public class IChordService implements ChordService {
 
 	@Override
 	public Optional<Chord> getChordByName(String name) {
-
-		System.err.println(name);
 		return chordRepository.findOneByName(name);
 	}
 }

@@ -18,6 +18,7 @@ public class SongValidator {
 
 	/**
 	 * Checks if unrecognized chords are entered in chord list
+	 * 
 	 * @param chords
 	 * @return
 	 */
@@ -27,7 +28,6 @@ public class SongValidator {
 		for (String chordStr : chords) {
 			Optional<Chord> chord = iChordService.getChordByName(chordStr);
 			if (!chord.isPresent()) {
-				System.out.println("chord not found");
 				unrecognizedChords.add(chordStr);
 			}
 		}

@@ -16,9 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BandForm implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4579767843807741693L;
 
 	Integer id;

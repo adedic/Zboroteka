@@ -25,13 +25,13 @@
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songName">Naziv:</label>
                             <input type="text" class="form-control" th:field="*{name}" required="required" data-error="Unesi naziv pjesme" id="songName" placeholder="Naziv pjesme" />
-                            <div class="form-control-feedback"></div>
+                            <div class="invalid-feedback">Unesi naziv pjesme</div>
 
                         </div>
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songAuthor">Autor:</label>
                             <input type="text" class="form-control" th:field="*{author}" data-error="Unesi autora pjesme" id="songAuthor" placeholder="Autor ili više njih" />
-                            <div class="form-control-feedback"></div>
+                            
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-8 col-md-5">
@@ -40,33 +40,31 @@
 						    <option value="0" disabled="disabled">Odaberi tonalitet...</option>
 						    <option th:each="key : ${songKeys}" th:value="${key.id}" th:text="${key.name + ' (' + key.otherName + ')'}"></option>
 						    </select>
-						    <div class="form-control-feedback"></div>
+						    <div class="invalid-feedback">Odaberi tonalitet pjesme</div>
 						</div>
 						                        
                         <div class="form-group col-xs-12 col-sm-8 col-md-5">
                             <label for="songName">Mjera:</label>
                             <input type="text" class="form-control" th:field="*{measure}" data-error="Unesi mjeru pjesme" id="songMeasure" placeholder="4/4, 2/4, 3/4..." />
-                            <div class="form-control-feedback"></div>
-
+                            
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-8 col-md-5">
                             <label for="songGenre">Žanr:</label>
                             <input type="number" class="form-control" th:field="*{genre}" data-error="Odaberi žanr pjesme" id="songGenre" placeholder="Odaberi žanr" />
-                            <div class="form-control-feedback"></div>
+                            
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songUsage">Upotreba:</label>
                             <input type="text" class="form-control" th:field="*{usage}" data-error="Unesi upotrebu pjesme" id="songUsage" placeholder="Unesi način upotrebe pjesme" />
-                            <div class="form-control-feedback"></div>
+                            
                         </div>
 
                         <div class="form-group col-xs-12 col-sm-12 col-md-10">
                             <label for="songDescription">Opis:</label>
                             <textarea class="form-control" data-error="Unesi opis pjesme" th:field="*{description}" id="songDescription" placeholder="Opis pjesme">
                             </textarea>
-                            <div class="form-control-feedback"></div>
                         </div>
 
                         <br>

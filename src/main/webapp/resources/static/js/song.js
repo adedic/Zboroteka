@@ -3,7 +3,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 		// validate form osnovni podaci
 		// ako je validacija prosla
 		if (!$("#createSongForm")[0].checkValidity()) {
-			$("#createSongForm").addClass("¸was-validated");
+			$("#createSongForm").addClass("was-validated");
 			commonModul
 					.showAlert({
 						elementId : 'showAlertBox',

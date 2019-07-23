@@ -1,7 +1,11 @@
 package hr.tvz.java.zboroteka.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,9 @@ public class ISongService implements SongService {
 	private SongRepository songRepository;
 
 	@Autowired
+	HttpSession session;
+
+	@Autowired
 	SongMapper songMapper;
 
 	@Autowired
@@ -35,9 +42,9 @@ public class ISongService implements SongService {
 
 		// map chordsStr from raw song text to song
 		songMapper.mapRawSongTextToChordsStr(song);
-		
+
 		HashMap<String, Object> hmap = new HashMap<>();
-		
+
 		// chord validation
 		if (song.getChordsStr() != null && song.getChordsStr().length != 0) {
 			List<String> unrecognizedChords = songValidator.checkInvalidChords(song.getChordsStr());
@@ -59,6 +66,16 @@ public class ISongService implements SongService {
 
 		jsonResponse.setResult(hmap);
 
+	}
+
+	@Override
+	public List<Song> searchSongByQueryAndUser(String query) {
+		// TODO ZASAD HARDKODIRANO JER NIJE IMPLENETIRANA PRIJAVA
+		// Integer creatorId = (Integer) session.getAttribute("userId");
+		Integer creatorId = 1;
+		Optional<List<Song>> userSongs = songRepository.findAllByQueryAndCreator(query.toUpperCase(), creatorId);
+
+		return userSongs.isPresent() ? userSongs.get() : new ArrayList<>();
 	}
 
 }

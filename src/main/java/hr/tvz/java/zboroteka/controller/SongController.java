@@ -1,29 +1,25 @@
 package hr.tvz.java.zboroteka.controller;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.ChordDetails;
+import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
 import hr.tvz.java.zboroteka.service.ISongKeyService;
 import hr.tvz.java.zboroteka.service.ISongService;
@@ -33,8 +29,6 @@ import hr.tvz.java.zboroteka.validator.SongValidator;
 @Controller
 @RequestMapping("/song")
 public class SongController {
-
-	private static final String NEW_SONG_VIEW_NAME = "redirect:/song/newSong/";
 
 	private static final String SONG_DETAILS_VIEW_NAME = "redirect:/song/details/";
 
@@ -64,21 +58,33 @@ public class SongController {
 	}
 
 	@PostMapping("/createSong")
-	public Object createNewSong(@Valid @ModelAttribute("createSongForm") SongForm songForm,
-			RedirectAttributes redirectAttributes, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			initSongScreen(model);
-			return NEW_SONG_VIEW_NAME;
-		}
+	public Object createNewSong(@ModelAttribute("createSongForm") SongForm songForm, Model model) {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		iSongService.saveSong(songForm, jsonResponse);
+		jsonResponse.setStatus("ok");
 
 		// redirect na details page
 		// return SONG_DETAILS_VIEW_NAME + song.getId();
 
-		// return NEW_SONG_VIEW_NAME;
+		return ResponseEntity.ok(jsonResponse);
+	}
 
+	@PostMapping("/searchSong")
+	public Object searchSong(Model model, @RequestParam(value = "query", required = false) String query) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		List<Song> resultSongs = iSongService.searchSongByQueryAndUser(query);
+		//TODO bendsongs
+
+		if (resultSongs.isEmpty()) {
+			jsonResponse.setStatus("notFound");
+		}
+
+		jsonResponse.setStatus("ok");
+
+		model.addAttribute("resultSongs", resultSongs);
+		
 		return ResponseEntity.ok(jsonResponse);
 	}
 
@@ -86,7 +92,7 @@ public class SongController {
 	public Object transposeChords(Model model, @ModelAttribute SongForm songForm,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
 			@RequestParam(value = "transposeValue", required = false) Integer transposeValue,
-			@RequestParam(value = "currentKey", required = false) Integer currentKey) throws IOException {
+			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		List<ChordDetails> foundChords = songParser.createChordsWithMatchIndex(rawSongText);

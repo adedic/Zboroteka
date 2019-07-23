@@ -21,11 +21,13 @@ public class ISongKeyService implements SongKeyService {
 		return songKeyRepository.findAll();
 	}
 
+	@Override
 	public Optional<SongKey> findOne(Integer id) {
 		return songKeyRepository.findById(id);
 
 	}
 
+	@Override
 	public Optional<SongKey> findOneByNameOrOtherName(String keyName) {
 		return songKeyRepository.findOneByNameOrOtherName(keyName, keyName);
 	}

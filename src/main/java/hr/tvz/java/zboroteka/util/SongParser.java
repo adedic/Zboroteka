@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -232,9 +231,10 @@ public class SongParser {
 		String matchChord = "";
 
 		// Get the regex to be checked
-		String regex = "/CDEFGAH(b|#)?/g";
+		String regex1 = "(?m)(^| )([CDEFGAH](##?|bb?)?((sus|maj|min|aug|dim|m)\\d?)?(/[CDEFGAH](##?|bb?)?)?)( (?!\\w)|$)";
+		// String regex = "/CDEFGAH(b|#)?/g";
 		// Create a pattern from regex
-		Pattern pattern = Pattern.compile(regex);
+		Pattern pattern = Pattern.compile(regex1);
 
 		// Get the String to be matched
 		String stringToBeMatched = chord;
@@ -247,16 +247,20 @@ public class SongParser {
 			System.out.println("froup " + matcher.group());
 
 			for (int i = 0; i < normalizeMap.size(); i++) {
-				if (normalizeMap.get(matcher.group()).equals(matcher.group())) {
+				if (normalizeMap.get(matcher.group()) != null
+						&& normalizeMap.get(matcher.group()).equals(matcher.group())) {
 					matchChord = normalizeMap.get(matcher.group());
 					// matchIndex = normalizeMap.;
 				} else
-					matchChord = matcher.group();
+					matchChord = matcher.group(); //TODO REMOVE sus|maj|min|aug|dim|m ##?|bb
 			}
 		}
+
+		System.out.println("matchChord: " + matchChord);
 		int i = 0;
 		if (matchChord != null)
 			i = (scale.indexOf(matchChord) + transposeValue) % 12;
+		System.out.println("i : " + i);
 
 		String resultKey;
 		if (i < 0) {

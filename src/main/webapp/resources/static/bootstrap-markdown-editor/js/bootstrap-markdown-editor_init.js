@@ -121,29 +121,6 @@
 	    editor.getSession().setValue(newText);
     }
     
-	    
-    function transposeChords(editor, transposeValue) {
-	    var newText = editor.getSession().getValue();
-		
-		//Pronalazi indekse akorda u tekstu i puni polje objekata u koje sprema indeks pronadenog akorda, naziv i duljinu cijelog teksta akorda
-	    var foundChords = [];
-	    songUtil.createChordsWithMatchIndex(editor.getSession().getValue(), foundChords);
-	    
-	    console.log("foundChords " + foundChords);
-	    
-	    var chordsValid = true;
-	    //TODO NE ULAZI U VALIDACIJU
-	    if(songValidate.chordsNotFoundInEditor(foundChords) == true) 
-	    	chordsValid = false;
-	   //PROVJERA POSTOJANJA AKORDA BACKEND
-	    else if(songValidate.chordsInvalid(foundChords) == true) 
-	        	chordsValid = false;
-	    
-        //ako su validacije prosle
-        //TRANSPONIRANJE I ZAMJENA AKORDA
-	    if(chordsValid)
-	    	newText = songUtil.transposeChords(transposeValue, editor, foundChords);
-	}
 
     function editorHtml (content, options) {
         var html = '';
@@ -219,9 +196,9 @@
                 html += '<div class="btn-group mr-2" role="group">';
                 html += '</div>'; // .btn-group
                 html += '<div class="btn-group btn-group-toggle mr-2" role="group" id="radio-btns" data-toggle="buttons">';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary active" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-secondary" data-btn="onlyChords"><input type="radio" name="options" id="option2" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary active previewBtns" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyChords"><input type="radio" name="options" id="option2" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
                 html += '</div>'; // .btn-group
 	            
 
@@ -448,15 +425,15 @@
                 }  else if (btnType === 'transposeUp') {
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE +1");
-                    
-        	        transposeChords(editor, 1);
-                	
+
+            	    songUtil.transposeChords(1, editor);
+                  
                   
                 } else if (btnType === 'transposeDown') {
         	    	commonModul.removeAllAlerts();
                     console.log("TRANSPOSE -1");
-                    
-        	        transposeChords(editor, -1);
+
+            	    songUtil.transposeChords(-1, editor);
                 	
         	        
                 } else if (btnType === 'onlyText') {
@@ -505,6 +482,7 @@
                     mdPreview.hide();
                     mdEditor.show();
             		$('.editBtns').show();
+            		$('.previewBtns').hide();
                     container.find('.btn-edit').addClass('active');
                     container.find('.btn-preview').removeClass('active');
 
@@ -515,6 +493,8 @@
                 } else if (btnType === 'preview') {
                     preview = true;
             		$('.editBtns').hide();
+            		$('.previewBtns').show();
+            		//$("#songEditor").val(editor.getSession().getValue());
 
                     mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
                     defaults.onPreview(editor.getSession().getValue(), function (content) {

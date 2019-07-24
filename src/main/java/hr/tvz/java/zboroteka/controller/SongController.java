@@ -95,20 +95,34 @@ public class SongController {
 			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
 
 		JsonResponse jsonResponse = new JsonResponse();
+		//validations
+		if (songValidator.chordsNotFoundInEditor(rawSongText)) {
+			jsonResponse.setStatus("chordsNotFound");
+			return ResponseEntity.ok(jsonResponse);
+		}
+
+		List<String> unrecognizedChords = songValidator.findChordsAndCheckInvalid(rawSongText);
+
+		if (!unrecognizedChords.isEmpty()) {
+			jsonResponse.setStatus("invalidChords");
+			jsonResponse.setResult(unrecognizedChords);
+			return ResponseEntity.ok(jsonResponse);
+		}
+		
+		
+		
 		List<ChordDetails> foundChords = songParser.createChordsWithMatchIndex(rawSongText);
 
 		// Napravi transpose i vrati tekst s transponiranim akordima
 		String newText = songParser.transposeChordsInSongText(foundChords, rawSongText, transposeValue);
-
 		Integer newKey = currentKey + transposeValue;
 
 		Map<String, Object> hmap = songParser.updateKeyInRawText(newText, newKey);
-
-		jsonResponse.setStatus("ok");
-
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
 		jsonResponse.setResult(hmap);
+		
+		jsonResponse.setStatus("ok");
 
 		return ResponseEntity.ok(jsonResponse);
 	}
@@ -128,9 +142,10 @@ public class SongController {
 
 		return ResponseEntity.ok(jsonResponse);
 	}
-	
+
 	@PostMapping(value = "showOnlyChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object showOnlyChords(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText) {
+	public Object showOnlyChords(Model model,
+			@RequestParam(value = "rawSongText", required = false) String rawSongText) {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
@@ -140,23 +155,28 @@ public class SongController {
 		if (onlyChords != "")
 			jsonResponse.setStatus("ok");
 		else
-			jsonResponse.setStatus("error");
+			jsonResponse.setStatus("invalidChords");
 
 		return ResponseEntity.ok(jsonResponse);
 	}
 
-	@PostMapping(value = "checkChordsExist", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object checkChordsExist(Model model,
-			@RequestParam(value = "foundChordsStr", required = false) String[] foundChordsStr) {
+	@PostMapping(value = "checkChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object checkChords(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		List<String> unrecognizedChords = songValidator.checkInvalidChords(foundChordsStr);
-		jsonResponse.setResult(unrecognizedChords);
+		if (songValidator.chordsNotFoundInEditor(rawSongText)) {
+			jsonResponse.setStatus("chordsNotFound");
+			return ResponseEntity.ok(jsonResponse);
+		}
 
-		if (unrecognizedChords.isEmpty())
+		List<String> unrecognizedChords = songValidator.findChordsAndCheckInvalid(rawSongText);
+
+		if (!unrecognizedChords.isEmpty()) {
+			jsonResponse.setStatus("invalidChords");
+			jsonResponse.setResult(unrecognizedChords);
+			return ResponseEntity.ok(jsonResponse);
+		} else
 			jsonResponse.setStatus("ok");
-		else
-			jsonResponse.setStatus("error");
 
 		return ResponseEntity.ok(jsonResponse);
 	}

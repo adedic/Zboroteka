@@ -1,6 +1,6 @@
 var songUtil = (function() {
 	
-    var transposeChords = function(transposeValue, editor, foundChords) {
+    var transposeChords = function(transposeValue, editor) {
         //transposeValue je UP (+1) ili DOWN (-1)
         commonModul.removeAllAlerts();
 
@@ -22,37 +22,39 @@ var songUtil = (function() {
 
         //transponiraj akorde pjesme
         
-	        $.ajax({
-	            type: "POST",
-	            url: "transposeChords",
-	            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
-	            async: false,    //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
-	            cache: false,    //This will force requested pages not to be cached by the browser  
-	            suppressErrors: true
-	        }).done(function(data) {
-	            debugger;
+        $.ajax({
+            type: "POST",
+            url: "transposeChords",
+            data:  "rawSongText=" + editor.getSession().getValue() + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
+            async: false,    //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
+            cache: false,    //This will force requested pages not to be cached by the browser  
+            suppressErrors: true
+        }).done(function(data) {
+            debugger;
+            
+            songValidate.checkValidationMsg(data);
 
-	            if(data.status == "ok") {
-	                //azuriranje rawSongText na formi
-	                updateSongEditorValue(data.result.newText, editor);
+            if(data.status == "ok") {
+                //azuriranje rawSongText na formi
+                updateSongEditorValue(data.result.newText, editor);
 
-		            
-	                //azurirati trenutni tontalitet na formi
-	                $("#key").val(data.result.newKey).change();
+	            
+                //azurirati trenutni tontalitet na formi
+                $("#key").val(data.result.newKey).change();
 
-	        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-	                if(data.result.newKey == 13) {
-		                $("#key").val(1).change(); 
-		                console.log("postavi 1");
-	                } else if(data.result.newKey == -1) {
-	            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-		                $("#key").val(data.result.newKey).change(12); 
-		                console.log("postavi 12");
+        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
+                if(data.result.newKey == 13) {
+	                $("#key").val(1).change(); 
+	                console.log("postavi 1");
+                } else if(data.result.newKey == -1) {
+            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
+	                $("#key").val(data.result.newKey).change(12); 
+	                console.log("postavi 12");
 
-	                }
-	            }
+                }
+            }
 
-	        });
+        });
     };
     
     var updateKey = function(transposeValue, editor, newText) {
@@ -187,31 +189,6 @@ var songUtil = (function() {
         })
     }
 
-    var createChordsWithMatchIndex = function(editorVal, foundChords) {
-        //pronalazi sve akorde, [tekst unutar zagrada]
-        var regexp = /\[(.*?)\]/gi; //gi je za sve, a ne samo jedan
-        var matches_chords = editorVal.match(regexp);
-
-        var chords = [];
-        if (matches_chords != null)
-            chords.push(...matches_chords);
-
-        for (var i = 0; i < chords.length; i++) {
-
-            var match = regexp.exec(editorVal);
-            if (match != null) {
-            	console.log("akord trenutno  " + chords[i]);
-            	console.log("match index " + match.index);
-                var chord = {
-                    "id": i,
-                    "index": match.index,
-                    "name": chords[i],
-                    "len": chords[i].length
-                }
-                foundChords.push(chord);
-            }
-        }
-    }
     
     var showOnlyText = function (editor) {
     	
@@ -264,7 +241,6 @@ var songUtil = (function() {
         transposeChords: transposeChords,
         transposeChord: transposeChord,
         updateSongEditorValue: updateSongEditorValue,
-        createChordsWithMatchIndex: createChordsWithMatchIndex,
         showOnlyText: showOnlyText,
         showOnlyChords: showOnlyChords
     }

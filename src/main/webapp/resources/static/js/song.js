@@ -7,7 +7,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 			commonModul
 					.showAlert({
 						elementId : 'showAlertBox',
-						message : "Popunite tražene podatke kako biste mogli spremiti pjesmu!",
+						message : "Popunite tražene podatke kako biste nastaviti s unosom pjesme!",
 						alertLevel : 'danger'
 					});
 		} else {
@@ -18,6 +18,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 
 			$("#mainSongInfo").hide();
 			$("#formSongText").show();
+			$(".previewBtns").hide();
 		}
 	});
 

@@ -287,7 +287,7 @@ public class SongParser {
 		return text.toString();
 	}
 
-	private String[] parseChordsStr(String textAndChords) {
+	public String[] parseChordsStr(String textAndChords) {
 		return StringUtils.substringsBetween(textAndChords, "[", "]");
 	}
 
@@ -303,7 +303,7 @@ public class SongParser {
 		return chordList;
 	}
 
-	private String parseTextAndChords(String text) {
+	public String parseTextAndChords(String text) {
 		return StringUtils.substringBetween(text, "```", "```");
 	}
 

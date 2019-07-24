@@ -1,6 +1,7 @@
 package hr.tvz.java.zboroteka.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +96,7 @@ public class SongController {
 			@RequestParam(value = "currentKey", required = false) Integer currentKey) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		//validations
+		// validations
 		if (songValidator.chordsNotFoundInEditor(rawSongText)) {
 			jsonResponse.setStatus("chordsNotFound");
 			return ResponseEntity.ok(jsonResponse);
@@ -108,9 +109,7 @@ public class SongController {
 			jsonResponse.setResult(unrecognizedChords);
 			return ResponseEntity.ok(jsonResponse);
 		}
-		
-		
-		
+
 		List<ChordDetails> foundChords = songParser.createChordsWithMatchIndex(rawSongText);
 
 		// Napravi transpose i vrati tekst s transponiranim akordima
@@ -121,41 +120,47 @@ public class SongController {
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
 		jsonResponse.setResult(hmap);
-		
+
 		jsonResponse.setStatus("ok");
 
 		return ResponseEntity.ok(jsonResponse);
 	}
 
-	@PostMapping(value = "showOnlyText", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object showOnlyText(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText) {
+	@PostMapping(value = "showTextChordsRadio", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Object showOnlyText(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText,
+			@RequestParam(value = "option", required = false) Integer option) {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
-
-		jsonResponse.setResult(onlyText);
-
-		if (onlyText != "")
-			jsonResponse.setStatus("ok");
-		else
-			jsonResponse.setStatus("error");
-
-		return ResponseEntity.ok(jsonResponse);
-	}
-
-	@PostMapping(value = "showOnlyChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object showOnlyChords(Model model,
-			@RequestParam(value = "rawSongText", required = false) String rawSongText) {
-
-		JsonResponse jsonResponse = new JsonResponse();
+		System.out.println("onlyText " + onlyText);
 		String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
 
-		jsonResponse.setResult(onlyChords);
+		switch (option) {
+		case 1:
+			if (onlyText != "")
+				jsonResponse.setStatus("okText");
+			else
+				jsonResponse.setStatus("noText");
+			break;
+		case 2:
+			if (onlyChords != "")
+				jsonResponse.setStatus("okChords");
+			else
+				jsonResponse.setStatus("invalidChords");
+			break;
+		case 3:
+			if (rawSongText != "")
+				jsonResponse.setStatus("okBoth");
+			else
+				jsonResponse.setStatus("noRawText");
+			break;
+		}
 
-		if (onlyChords != "")
-			jsonResponse.setStatus("ok");
-		else
-			jsonResponse.setStatus("invalidChords");
+		Map<String, Object> hmap = new HashMap<String, Object>();
+		hmap.put("onlyText", onlyText);
+		hmap.put("onlyChords", onlyChords);
+		hmap.put("textAndChords", rawSongText);
+		jsonResponse.setResult(hmap);
 
 		return ResponseEntity.ok(jsonResponse);
 	}

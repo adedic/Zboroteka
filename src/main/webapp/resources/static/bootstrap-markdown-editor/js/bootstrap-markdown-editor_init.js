@@ -186,8 +186,8 @@
 
                 if (options.preview === true) {
                     html += '<div class="btn-group pull-right">';
-                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-edit active" data-btn="edit"><i class="fas fa-edit"></i> ' + options.label.btnEdit + '</button>';
-                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-preview editBtns" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
+                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-edit active previewBtns" data-btn="edit"><i class="fas fa-edit"></i> ' + options.label.btnEdit + '</button>';
+                        html += '<button type="button" id="btnPreview" class="md-btn btn btn-sm btn-outline-info btn-preview editBtns" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
                     html += '</div>'; // .btn-group
                 }
                 
@@ -267,7 +267,8 @@
             
             // Sync ace with the textarea
             editor.getSession().on('change', function() {
-                plugin.val(editor.getSession().getValue());
+                //plugin.val(editor.getSession().getValue());
+                console.log("preview " + preview);
             });
 
             editor.setHighlightActiveLine(false);
@@ -437,14 +438,15 @@
                 	
         	        
                 } else if (btnType === 'onlyText') {
-                	songUtil.showOnlyText(editor);
+                	songUtil.showTextChordsRadio(editor, 1);
                     console.log("onlyText");
                 	
                 } else if (btnType === 'onlyChords') {
-                	songUtil.showOnlyChords(editor);
+                	songUtil.showTextChordsRadio(editor, 2);
                     console.log("onlyChords");
                 	
                 } else if (btnType === 'textAndChords') {
+                	songUtil.showTextChordsRadio(editor, 3);
                     console.log("textAndChords");
                 	
                 }
@@ -489,19 +491,43 @@
                     if (fullscreen === true) {
                         adjustFullscreenLayout(mdEditor);
                     }
+                   // editor.getSession().setValue("");
+
+            		//editor.getSession().setValue($("#songEditor").val());
+            	    
+
+                    //if(preview == false)
+                    	//$("#songEditor").val(editor.getSession().getValue()).change();
+            	    //OVO POSTAVLJA VRIJEDNOST na editor 
+            	   /* if($("#songEditor").val() != "") {
+            			//isprazni postojeci tekst na formi
+                	    editor.getSession().setValue("");
+            	    	editor.getSession().setValue($("#songEditor").val());
+            	    }*/
 
                 } else if (btnType === 'preview') {
                     preview = true;
             		$('.editBtns').hide();
             		$('.previewBtns').show();
-            		//$("#songEditor").val(editor.getSession().getValue());
+            		
+            		
+        			//$("#songEditor").val( editor.getSession().getValue()).change();
 
                     mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
-                    defaults.onPreview(editor.getSession().getValue(), function (content) {
-                        
-                        mdPreview.html(content);
-                    });
+                    //TODO ajax poziv koji mijenja editor.getSession().getValue() - mice zagrade?
+                    
+                    if($("#songPreview").val() != "") {
+                    	defaults.onPreview($("#songPreview").val(), function (content) {
+                            mdPreview.html(content);
+                        });
+                    } else {
+                        defaults.onPreview(editor.getSession().getValue(), function (content) {
+                            
+                            mdPreview.html(content);
+                        });
 
+                    }
+                    
                     mdEditor.hide();
                     mdPreview.show();
                     container.find('.btn-preview').addClass('active');

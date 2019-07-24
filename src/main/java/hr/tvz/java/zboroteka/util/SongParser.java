@@ -355,16 +355,20 @@ public class SongParser {
 	public String removeSongTextFromRawSongText(String rawSongText) {
 		String textAndChords = parseTextAndChords(rawSongText);
 		String[] chords = parseChordsStr(textAndChords);
-		
+
+		System.out.println("chords " + chords);
 
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
-		
+
+		System.out.println("restBefore " + restBefore);
+
+		System.out.println("restAfter " + restAfter);
+
 		if (chords != null && chords.length != 0) {
 			return restBefore + chords + restAfter;
 		}
-		
-		
+
 		return restBefore + textAndChords + restAfter;
 	}
 }

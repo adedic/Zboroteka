@@ -353,22 +353,64 @@ public class SongParser {
 	}
 
 	public String removeSongTextFromRawSongText(String rawSongText) {
-		String textAndChords = parseTextAndChords(rawSongText);
-		String[] chords = parseChordsStr(textAndChords);
 
-		System.out.println("chords " + chords);
+		String textAndChords = parseTextAndChords(rawSongText);
 
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+		
+		Integer startIndex = StringUtils.indexOf(textAndChords, "```");
+		Integer endIndex = StringUtils.lastIndexOf(textAndChords, "```");
+		
+		
+		String newText = "";
 
-		System.out.println("restBefore " + restBefore);
+		List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText);
 
-		System.out.println("restAfter " + restAfter);
+		// prođi kroz listu parsiranih akorda
+		/*for (int i = 0; i < foundChords.size(); i++) {
+			String chordToTrans = foundChords.get(i).getName();
+			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
+			
+			
+			// Tekst od pocetka do indeksa na kojem je pronađen akord
+			String textBefore = rawSongText.substring(startIndex, foundChords.get(i).getIndex());
+			String textAfter = rawSongText.substring(foundChords.get(i).getIndex() + foundChords.get(i).getLen() + endIndex);
+			//textBefore = textBefore.replace(textBefore, " ");
+			//textAfter = textAfter.replace(textBefore, " ");
 
-		if (chords != null && chords.length != 0) {
-			return restBefore + chords + restAfter;
+			//System.out.println("textBefore " + textBefore);
+			//System.out.println("textAfter " + textAfter);
+			
+			newText += textBefore + " " + "[" + chordToTrans + "]" + textAfter;
+			System.out.println("resultText " + newText);
+
+			// AZURIRANJE, TJ SMANJIVANJE INDEKSA SLJEDECEG ZA MAKNUTI TEKST
 		}
+		return restBefore + newText + restAfter;*/
 
-		return restBefore + textAndChords + restAfter;
+		/*
+		String resultText = "";
+		 * String regex = "\\]*\\[]"; Pattern pattern = Pattern.compile(regex,
+		 * Pattern.MULTILINE); String textAndChords = parseTextAndChords(rawSongText);
+		 * String resultText = "";
+		 * 
+		 * String restBefore = StringUtils.substringBefore(rawSongText, "```" +
+		 * textAndChords); String restAfter = StringUtils.substringAfter(rawSongText,
+		 * textAndChords + "```");
+		 * 
+		 * Matcher matcher = pattern.matcher(textAndChords);
+		 * 
+		 * while (matcher.find()) {
+		 * 
+		 * // resultText = resultText + matcher.group();
+		 * System.out.println("(matcher.group() " + matcher.group()); resultText =
+		 * textAndChords.replace(matcher.group(), ""); }
+		 * 
+		 * System.out.println("resultText " + resultText);
+		 * 
+		 * return restBefore + resultText + restAfter;
+		 */
+		return newText;
 	}
 }

@@ -132,7 +132,6 @@ public class SongController {
 
 		JsonResponse jsonResponse = new JsonResponse();
 		String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
-		System.out.println("onlyText " + onlyText);
 		String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
 
 		switch (option) {

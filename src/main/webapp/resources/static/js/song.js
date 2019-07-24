@@ -11,6 +11,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 						alertLevel : 'danger'
 					});
 		} else {
+			commonModul.removeAllAlerts();
 			// poziv skivenog gumba za inicijalno popunjavanje
 			// naslova, autora, tonaliteta i placeholdera za tekst i
 			// akorde

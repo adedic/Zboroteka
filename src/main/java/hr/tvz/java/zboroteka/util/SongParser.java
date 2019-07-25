@@ -358,59 +358,60 @@ public class SongParser {
 
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
-		
-		Integer startIndex = StringUtils.indexOf(textAndChords, "```");
-		Integer endIndex = StringUtils.lastIndexOf(textAndChords, "```");
-		
-		
-		String newText = "";
+
+		char[] textAndChordsChars = textAndChords.toCharArray();
+		for (int i = 0; i < textAndChords.length(); i++) {
+
+			if (textAndChordsChars[i] == '\n') {
+				System.out.println("razmak  ");
+				textAndChordsChars[i] = '\r';
+			} else if (textAndChordsChars[i] == '\b') {
+				System.out.println("razmak b  ");
+				textAndChordsChars[i] = '\b';
+			} else if (textAndChordsChars[i] == '\r') {
+				System.out.println("razmak r  ");
+				textAndChordsChars[i] = '\r';
+			} else if (textAndChordsChars[i] == '\f') {
+				System.out.println("razmak f  ");
+				textAndChordsChars[i] = '\f';
+			} else if (textAndChordsChars[i] == '\t') {
+				System.out.println("razmak t  ");
+				textAndChordsChars[i] = '\r';
+			} else
+				textAndChordsChars[i] = ' ';
+
+			textAndChords = String.valueOf(textAndChordsChars);
+		}
 
 		List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText);
 
-		// prođi kroz listu parsiranih akorda
-		/*for (int i = 0; i < foundChords.size(); i++) {
-			String chordToTrans = foundChords.get(i).getName();
-			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
-			
-			
-			// Tekst od pocetka do indeksa na kojem je pronađen akord
-			String textBefore = rawSongText.substring(startIndex, foundChords.get(i).getIndex());
-			String textAfter = rawSongText.substring(foundChords.get(i).getIndex() + foundChords.get(i).getLen() + endIndex);
-			//textBefore = textBefore.replace(textBefore, " ");
-			//textAfter = textAfter.replace(textBefore, " ");
+		// char[] textAndChordsChars = textAndChords.toCharArray();
+		for (int i = 0, k = 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
 
-			//System.out.println("textBefore " + textBefore);
-			//System.out.println("textAfter " + textAfter);
-			
-			newText += textBefore + " " + "[" + chordToTrans + "]" + textAfter;
-			System.out.println("resultText " + newText);
+			// prođi kroz listu parsiranih akorda
+			String currChord = foundChords.get(i).getName();
+			// currChord = currChord.replace("[", "").replace("]", "");
 
-			// AZURIRANJE, TJ SMANJIVANJE INDEKSA SLJEDECEG ZA MAKNUTI TEKST
+			Integer chordStartIndex = foundChords.get(i).getIndex();
+			k = chordStartIndex;
+
+			for (int j = 0; j < currChord.length(); j++) {// Maknuti zagrade j+1 leng-1
+
+				textAndChordsChars[k] = currChord.charAt(j);
+
+				System.out.println("textAndChordsChars[k]  " + textAndChordsChars[k]);
+				k++;
+
+				textAndChords = String.valueOf(textAndChordsChars);
+				System.out.println("curr " + textAndChords);
+
+			}
+
 		}
-		return restBefore + newText + restAfter;*/
 
-		/*
-		String resultText = "";
-		 * String regex = "\\]*\\[]"; Pattern pattern = Pattern.compile(regex,
-		 * Pattern.MULTILINE); String textAndChords = parseTextAndChords(rawSongText);
-		 * String resultText = "";
-		 * 
-		 * String restBefore = StringUtils.substringBefore(rawSongText, "```" +
-		 * textAndChords); String restAfter = StringUtils.substringAfter(rawSongText,
-		 * textAndChords + "```");
-		 * 
-		 * Matcher matcher = pattern.matcher(textAndChords);
-		 * 
-		 * while (matcher.find()) {
-		 * 
-		 * // resultText = resultText + matcher.group();
-		 * System.out.println("(matcher.group() " + matcher.group()); resultText =
-		 * textAndChords.replace(matcher.group(), ""); }
-		 * 
-		 * System.out.println("resultText " + resultText);
-		 * 
-		 * return restBefore + resultText + restAfter;
-		 */
-		return newText;
+		// textAndChords = textAndChords.replace("[", " ").textAndChords("]", " ");
+
+		return restBefore + textAndChords + restAfter;
+
 	}
 }

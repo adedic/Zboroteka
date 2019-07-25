@@ -196,9 +196,9 @@
                 html += '<div class="btn-group mr-2" role="group">';
                 html += '</div>'; // .btn-group
                 html += '<div class="btn-group btn-group-toggle mr-2" role="group" id="radio-btns" data-toggle="buttons">';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary active previewBtns" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
                 html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyChords"><input type="radio" name="options" id="option2" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary active previewBtns" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
                 html += '</div>'; // .btn-group
 	            
 

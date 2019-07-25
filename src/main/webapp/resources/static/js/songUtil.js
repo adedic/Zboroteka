@@ -191,6 +191,7 @@ var songUtil = (function() {
 
     
     var showTextChordsRadio = function (editor, option) {
+    	commonModul.removeAllAlerts();
     	
     	$.ajax({
             type: "POST",
@@ -223,6 +224,7 @@ var songUtil = (function() {
         		else if(data.status == "okChords") {
         			$("#songPreview").val(data.result.onlyChords).change();
         			$("#btnPreview").click();
+        			console.log("TEKST": + data.result.onlyChords );
             	}
             } else if(option == 3) {
         		if (data.status == "noRawText") {

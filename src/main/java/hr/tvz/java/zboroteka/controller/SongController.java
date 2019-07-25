@@ -127,38 +127,42 @@ public class SongController {
 	}
 
 	@PostMapping(value = "showTextChordsRadio", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Object showOnlyText(Model model, @RequestParam(value = "rawSongText", required = false) String rawSongText,
+	public Object showTextChordsRadio(Model model,
+			@RequestParam(value = "rawSongText", required = false) String rawSongText,
 			@RequestParam(value = "option", required = false) Integer option) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
-		String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
 
+		Map<String, Object> hmap = new HashMap<String, Object>();
 		switch (option) {
 		case 1:
+			String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
 			if (onlyText != "")
 				jsonResponse.setStatus("okText");
 			else
 				jsonResponse.setStatus("noText");
+
+			hmap.put("onlyText", onlyText);
 			break;
 		case 2:
+			String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
 			if (onlyChords != "")
 				jsonResponse.setStatus("okChords");
+
 			else
 				jsonResponse.setStatus("invalidChords");
+			hmap.put("onlyChords", onlyChords);
 			break;
 		case 3:
 			if (rawSongText != "")
 				jsonResponse.setStatus("okBoth");
 			else
 				jsonResponse.setStatus("noRawText");
+
+			rawSongText = rawSongText.replace("[", "").replace("]", "");
+			hmap.put("textAndChords", rawSongText);
 			break;
 		}
-
-		Map<String, Object> hmap = new HashMap<String, Object>();
-		hmap.put("onlyText", onlyText);
-		hmap.put("onlyChords", onlyChords);
-		hmap.put("textAndChords", rawSongText);
 		jsonResponse.setResult(hmap);
 
 		return ResponseEntity.ok(jsonResponse);

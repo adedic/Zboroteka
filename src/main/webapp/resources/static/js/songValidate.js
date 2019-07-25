@@ -7,7 +7,7 @@ var songValidate = (function() {
 	    	commonModul.removeAllAlerts();
     		commonModul.showAlert({
 				elementId : 'showAlertBox',
-				message : "Unesi tekst i akorde za korištenje transpose opcije!",
+				message : "Unesi tekst i akorde!",
 				alertLevel : 'danger'
 			});
     		return true;

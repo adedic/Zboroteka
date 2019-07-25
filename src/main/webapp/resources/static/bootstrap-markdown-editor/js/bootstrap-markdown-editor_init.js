@@ -196,9 +196,9 @@
                 html += '<div class="btn-group mr-2" role="group">';
                 html += '</div>'; // .btn-group
                 html += '<div class="btn-group btn-group-toggle mr-2" role="group" id="radio-btns" data-toggle="buttons">';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyText"><input type="radio" name="options" id="option1" autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyChords"><input type="radio" name="options" id="option2" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
-                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary active previewBtns" data-btn="textAndChords"><input type="radio" name="options" id="option3" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyText + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyText" id="option1"><input type="radio" name="options"  autocomplete="off" checked value="onlyText"><i class="fas fa-font"></i></label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.onlyChords + '" class="md-btn btn btn-sm btn-outline-secondary previewBtns" data-btn="onlyChords" id="option2"><input type="radio" name="options" autocomplete="off" value="onlyChords"><i class="fas fa-music"></i> </label>';
+                html += '<label data-mdtooltip="tooltip" title="' + options.label.textAndChords + '" class="md-btn btn btn-sm btn-outline-secondary active previewBtns" data-btn="textAndChords" id="option3"><input type="radio" name="options" autocomplete="off" value="textAndChords"><i class="fas fa-font"></i> + <i class="fas fa-music"></i></label>';
                 html += '</div>'; // .btn-group
 	            
 
@@ -491,38 +491,31 @@
                     if (fullscreen === true) {
                         adjustFullscreenLayout(mdEditor);
                     }
-                   // editor.getSession().setValue("");
-
-            		//editor.getSession().setValue($("#songEditor").val());
-            	    
-
-                    //if(preview == false)
-                    	//$("#songEditor").val(editor.getSession().getValue()).change();
-            	    //OVO POSTAVLJA VRIJEDNOST na editor 
-            	   /* if($("#songEditor").val() != "") {
-            			//isprazni postojeci tekst na formi
-                	    editor.getSession().setValue("");
-            	    	editor.getSession().setValue($("#songEditor").val());
-            	    }*/
 
                 } else if (btnType === 'preview') {
                     preview = true;
             		$('.editBtns').hide();
             		$('.previewBtns').show();
-            		
-            		
-        			//$("#songEditor").val( editor.getSession().getValue()).change();
+    
 
                     mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
                     //TODO ajax poziv koji mijenja editor.getSession().getValue() - mice zagrade?
-                    
+                    //azuriranje prethodno odabrane opcije za prikaz
+            		
                     if($("#songPreview").val() != "") {
                     	defaults.onPreview($("#songPreview").val(), function (content) {
+                    		
                             mdPreview.html(content);
                         });
                     } else {
                         defaults.onPreview(editor.getSession().getValue(), function (content) {
-                            
+                        	if($("#option1").hasClass("active")) {
+                    			$("#option1").click();
+                    		} else if($("#option2").hasClass("active")) {
+                    			$("#option2").click();
+                    		} else if($("#option3").hasClass("active")) {
+                    			$("#option3").click();
+                    		} 
                             mdPreview.html(content);
                         });
 

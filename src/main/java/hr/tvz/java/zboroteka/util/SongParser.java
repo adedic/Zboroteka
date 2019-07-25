@@ -342,8 +342,8 @@ public class SongParser {
 		String textAndChords = parseTextAndChords(rawSongText);
 		String[] chords = parseChordsStr(textAndChords);
 
-		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
-		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+		String restBefore = StringUtils.substringBefore(rawSongText, textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords);
 
 		if (chords != null && chords.length != 0) {
 			return restBefore + parseText(textAndChords, chords) + restAfter;
@@ -355,16 +355,18 @@ public class SongParser {
 	public String removeSongTextFromRawSongText(String rawSongText) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
-
-		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
-		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+		
+		if(textAndChords.isEmpty())
+			return "";
+		String restBefore = StringUtils.substringBefore(rawSongText, textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords);
 
 		char[] textAndChordsChars = textAndChords.toCharArray();
 		for (int i = 0; i < textAndChords.length(); i++) {
 
 			if (textAndChordsChars[i] == '\n') {
-				System.out.println("razmak  ");
-				textAndChordsChars[i] = '\r';
+				System.out.println("razmak  n");
+				textAndChordsChars[i] = ' ';
 			} else if (textAndChordsChars[i] == '\b') {
 				System.out.println("razmak b  ");
 				textAndChordsChars[i] = '\b';
@@ -376,7 +378,7 @@ public class SongParser {
 				textAndChordsChars[i] = '\f';
 			} else if (textAndChordsChars[i] == '\t') {
 				System.out.println("razmak t  ");
-				textAndChordsChars[i] = '\r';
+				textAndChordsChars[i] = ' ';
 			} else
 				textAndChordsChars[i] = ' ';
 
@@ -384,6 +386,8 @@ public class SongParser {
 		}
 
 		List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText);
+		if (foundChords.isEmpty())
+			return "";
 
 		// char[] textAndChordsChars = textAndChords.toCharArray();
 		for (int i = 0, k = 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
@@ -398,8 +402,6 @@ public class SongParser {
 			for (int j = 0; j < currChord.length(); j++) {// Maknuti zagrade j+1 leng-1
 
 				textAndChordsChars[k] = currChord.charAt(j);
-
-				System.out.println("textAndChordsChars[k]  " + textAndChordsChars[k]);
 				k++;
 
 				textAndChords = String.valueOf(textAndChordsChars);
@@ -409,7 +411,7 @@ public class SongParser {
 
 		}
 
-		// textAndChords = textAndChords.replace("[", " ").textAndChords("]", " ");
+		textAndChords = textAndChords.replace("[", " ").replace("]", " ");
 
 		return restBefore + textAndChords + restAfter;
 

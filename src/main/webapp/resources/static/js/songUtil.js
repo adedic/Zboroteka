@@ -192,55 +192,66 @@ var songUtil = (function() {
     
     var showTextChordsRadio = function (editor, option) {
     	commonModul.removeAllAlerts();
-    	
-    	$.ajax({
-            type: "POST",
-            url: "showTextChordsRadio",
-            data:  "rawSongText=" + editor.getSession().getValue() + "&option="+option,
-            suppressErrors: true
-        }).done(function(data) {
-            debugger;
 
-            if(option == 1) {
-        		if (data.status == "noText") {
-        			commonModul.showAlert({
-        				elementId : 'showAlertBox',
-        				message : "Unesi tekst pjesme!",
-        				alertLevel : 'danger'
-        			});
-        		}
-        		else if(data.status == "okText") {
-        			$("#songPreview").val(data.result.onlyText).change();
-        			$("#btnPreview").click();
-            	}
-            } else if(option == 2) {
-        		if (data.status == "invalidChords") {
-        			commonModul.showAlert({
-        				elementId : 'showAlertBox',
-        				message : "Unesi akorde pjesme!",
-        				alertLevel : 'danger'
-        			});
-        		}
-        		else if(data.status == "okChords") {
-        			$("#songPreview").val(data.result.onlyChords).change();
-        			$("#btnPreview").click();
-        			console.log("TEKST": + data.result.onlyChords );
-            	}
-            } else if(option == 3) {
-        		if (data.status == "noRawText") {
-        			commonModul.showAlert({
-        				elementId : 'showAlertBox',
-        				message : "Unesi text i akorde pjesme!",
-        				alertLevel : 'danger'
-        			});
-        		}
-        		else if(data.status == "okBoth") {
-        			$("#songPreview").val(data.result.textAndChords).change();
-        			$("#btnPreview").click();
-            	}
-            }
+    	if(!editor.getSession().getValue().includes("```")) {
+        	commonModul.showAlert({
+				elementId : 'showAlertBox',
+				message : "Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
+				alertLevel : 'warning'
+			});
+    	}
 
-        });
+        else {
+	    	$.ajax({
+	            type: "POST",
+	            url: "showTextChordsRadio",
+	            data:  "rawSongText=" + editor.getSession().getValue() + "&option="+option,
+	            suppressErrors: true
+	        }).done(function(data) {
+	            debugger;
+	        		if(option == 1) {
+	            		if (data.status == "noText") {
+	            			commonModul.showAlert({
+	            				elementId : 'showAlertBox',
+	            				message : "Unesi tekst pjesme!",
+	            				alertLevel : 'danger'
+	            			});
+	            		}
+	            		else if(data.status == "okText") {
+	            			$("#songPreview").val(data.result.onlyText).change();
+	            			$("#btnPreview").click();
+	                	}
+	                } else if(option == 2) {
+	            		if (data.status == "invalidChords") {
+	            			commonModul.showAlert({
+	            				elementId : 'showAlertBox',
+	            				message : "Unesi akorde pjesme!",
+	            				alertLevel : 'danger'
+	            			});
+	            		}
+	            		else if(data.status == "okChords") {
+	            			$("#songPreview").val(data.result.onlyChords).change();
+	            			$("#btnPreview").click();
+	            			console.log("TEKST" + data.result.onlyChords);
+	                	}
+	                } else if(option == 3) {
+	            		if (data.status == "noRawText") {
+	            			commonModul.showAlert({
+	            				elementId : 'showAlertBox',
+	            				message : "Unesi text i akorde pjesme!",
+	            				alertLevel : 'danger'
+	            			});
+	            		}
+	            		else if(data.status == "okBoth") {
+	            			$("#songPreview").val(data.result.textAndChords).change();
+	            			$("#btnPreview").click();
+	                	}
+	                }
+	            
+	
+	        });
+
+    	}
     	
     }
     

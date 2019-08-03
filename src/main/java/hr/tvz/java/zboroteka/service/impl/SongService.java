@@ -12,4 +12,6 @@ public interface SongService {
 
 	public List<Song> searchSongByQueryAndUser(String query);
 
+	List<Song> findSongsByCreator();
+
 }

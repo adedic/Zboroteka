@@ -498,28 +498,29 @@
             		$('.previewBtns').show();
     
 
-                    mdPreview.html('<p font-size:16px">' + defaults.label.loading+ '...</p>'); 
-                    //TODO ajax poziv koji mijenja editor.getSession().getValue() - mice zagrade?
-                    //azuriranje prethodno odabrane opcije za prikaz
-            		
+                    mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
+                    
                     if($("#songPreview").val() != "") {
                     	defaults.onPreview($("#songPreview").val(), function (content) {
                     		
                             mdPreview.html(content);
                         });
+                    	
                     } else {
+                    	
                         defaults.onPreview(editor.getSession().getValue(), function (content) {
-                        	if($("#option1").hasClass("active")) {
-                    			$("#option1").click();
-                    		} else if($("#option2").hasClass("active")) {
-                    			$("#option2").click();
-                    		} else if($("#option3").hasClass("active")) {
-                    			$("#option3").click();
-                    		} 
+                        	 if($("#option1").hasClass("active")) {
+                     			$("#option1").click();
+                     		} else if($("#option2").hasClass("active")) {
+                     			$("#option2").click();
+                     		} else if($("#option3").hasClass("active")) {
+                     			$("#option3").click();
+                     		} 
                             mdPreview.html(content);
                         });
 
                     }
+                    
                     
                     mdEditor.hide();
                     mdPreview.show();

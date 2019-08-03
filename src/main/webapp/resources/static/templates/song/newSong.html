@@ -12,13 +12,14 @@
     <div layout:fragment="content">
     
         <div class="container">
-            <h1>Kreiranje pjesme</h1><br>
+    	<br><br>
+            <h1 th:text="${songHeading}"></h1><br>
             
             <form action="" th:object="${createSongForm}" id="createSongForm" class="needs-validation" novalidate>
 
                 <div class="card w-50 border-info" id="mainSongInfo">
                     <div class="card-header bg-info">
-                        <h4 class="card-title">Unos osnovnih podataka</h4>
+                        <h4 class="card-title">Osnovni podaci</h4>
                     </div>
                     <div class="card-body">
 

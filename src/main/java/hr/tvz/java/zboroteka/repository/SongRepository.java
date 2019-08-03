@@ -26,4 +26,6 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 			)
 	Optional<List<Song>> findAllByQueryAndCreator(@Param("query") String query, @Param("creatorId")Integer creatorId);
 
+	Optional<List<Song>> findAllByCreatorId(Integer creatorId);
+
 }

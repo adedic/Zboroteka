@@ -15,7 +15,7 @@
                 <a href="#" class="list-group-item list-group-item-action bg-light list-group-item-info" id="musicGroupLink" th:text="#{msg.nav.musicGroup}"></a>
                 <a href="#" class="list-group-item list-group-item-action bg-light" id="songsLink" th:text="#{msg.nav.groupSongs}"></a>
                 <a href="#" class="list-group-item list-group-item-action bg-light" id="setsLink" th:text="#{msg.nav.sets}"></a>
-                <a href="#" class="list-group-item list-group-item-action bg-light" id="mySongsLink" th:text="#{msg.nav.mySongs}"></a>
+                <a th:href="@{/song/mySongs}"  class="list-group-item list-group-item-action bg-light" id="mySongsLink" th:text="#{msg.nav.mySongs}"></a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->

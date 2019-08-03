@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,6 +55,22 @@ public class SongController {
 	public String showNewSong(Model model) {
 		model.addAttribute("createSongForm", new SongForm());
 		initSongScreen(model);
+		model.addAttribute("songHeading", "Kreiranje pjesme");
+
+		return "song/newSong";
+	}
+
+	@GetMapping("/details")
+	public String showSongDetails(Model model, @RequestParam(value = "id", required = false) String songId) {
+		model.addAttribute("createSongForm", new SongForm());
+		initSongScreen(model);
+
+		// TODO
+		// popuniti formu
+		// popuniti markdown editor
+		// prikazati preview
+		// promijeniti naslov iz kreiranje pjesme u detalji pjesme
+		model.addAttribute("songHeading", "Detalji pjesme");
 
 		return "song/newSong";
 	}
@@ -69,6 +86,20 @@ public class SongController {
 		// return SONG_DETAILS_VIEW_NAME + song.getId();
 
 		return ResponseEntity.ok(jsonResponse);
+	}
+
+	@GetMapping("/mySongs")
+	public String showMySongs(Model model) {
+		System.out.println("prva pjesma " + iSongService.findSongsByCreator().get(0).getName());
+		model.addAttribute("songs", iSongService.findSongsByCreator());
+
+		return "song/mySongs";
+	}
+
+	// song details
+	@GetMapping("/mySongs/{id}")
+	String getSongDetails(@PathVariable Integer id) {
+		return "redirect:/song/details?id=" + id;
 	}
 
 	@PostMapping("/searchSong")
@@ -126,7 +157,7 @@ public class SongController {
 		return ResponseEntity.ok(jsonResponse);
 	}
 
-	@PostMapping(value = "showTextChordsRadio", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "showTextChordsRadio")
 	public Object showTextChordsRadio(Model model,
 			@RequestParam(value = "rawSongText", required = false) String rawSongText,
 			@RequestParam(value = "option", required = false) Integer option) {
@@ -152,6 +183,8 @@ public class SongController {
 			else
 				jsonResponse.setStatus("invalidChords");
 			hmap.put("onlyChords", onlyChords);
+
+			System.out.println(onlyChords);
 			break;
 		case 3:
 			if (rawSongText != "")
@@ -163,6 +196,7 @@ public class SongController {
 			hmap.put("textAndChords", rawSongText);
 			break;
 		}
+
 		jsonResponse.setResult(hmap);
 
 		return ResponseEntity.ok(jsonResponse);

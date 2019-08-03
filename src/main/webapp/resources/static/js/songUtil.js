@@ -202,6 +202,7 @@ var songUtil = (function() {
     	}
 
         else {
+        	
 	    	$.ajax({
 	            type: "POST",
 	            url: "showTextChordsRadio",
@@ -233,6 +234,7 @@ var songUtil = (function() {
 	            			$("#songPreview").val(data.result.onlyChords).change();
 	            			$("#btnPreview").click();
 	            			console.log("TEKST" + data.result.onlyChords);
+	            			
 	                	}
 	                } else if(option == 3) {
 	            		if (data.status == "noRawText") {

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Moje pjesme'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+</head>
+
+<body>
+    <div layout:fragment="content">
+    
+    <div class="container">
+    <br><br>
+	  	<div class="row">
+	  		<div class="col-8">
+	        	<h1>Moje pjesme</h1>
+	        </div>
+	        <div class="col-4">
+		        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
+				Nova pjesma <i class="fas fa-plus"></i></a>
+	        </div>
+	         
+	     </div>
+	                
+            
+	<br><br>
+         <div class="list-group" th:each="song : ${songs}">
+			<a class="list-group-item list-group-item-action" 
+			th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
+			th:href="@{/song/details(id=${song.id})}">
+			</a>
+		</div>
+    </div>
+    
+    
+    
+    <!-- Additional scripts -->
+	<div th:replace="fragments/scripts :: markdownScripts"></div>
+    </div>
+</body>
+
+</html>

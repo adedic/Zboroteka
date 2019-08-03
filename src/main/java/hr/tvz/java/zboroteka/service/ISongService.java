@@ -78,4 +78,14 @@ public class ISongService implements SongService {
 		return userSongs.isPresent() ? userSongs.get() : new ArrayList<>();
 	}
 
+	@Override
+	public List<Song> findSongsByCreator() {
+		// Integer creatorId = (Integer) session.getAttribute("userId");
+		Integer creatorId = 1;
+		Optional<List<Song>> userSongs = songRepository.findAllByCreatorId(creatorId);
+
+		return userSongs.isPresent() ? userSongs.get() : new ArrayList<>();
+
+	}
+
 }

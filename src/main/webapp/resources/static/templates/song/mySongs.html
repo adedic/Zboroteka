@@ -23,6 +23,13 @@
 	        </div>
 	         
 	     </div>
+	     <div th:if="!${songsExists}">
+    		<br><br>
+    		<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+				Ne postoje nijedna pjesma u tvojoj kolekciji pjesama.
+			</div>
+    	</div>
 	                
             
 	<br><br>

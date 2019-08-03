@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import hr.tvz.java.zboroteka.forms.SongSetForm;
 import hr.tvz.java.zboroteka.model.Band;
 import hr.tvz.java.zboroteka.model.SongSet;
-import hr.tvz.java.zboroteka.service.impl.BandService;
+import hr.tvz.java.zboroteka.service.BandService;
 
 @Component
 public class SongSetMapper {

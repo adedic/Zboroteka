@@ -23,8 +23,8 @@ import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.ChordDetails;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.enums.SongGenre;
-import hr.tvz.java.zboroteka.service.ISongKeyService;
-import hr.tvz.java.zboroteka.service.ISongService;
+import hr.tvz.java.zboroteka.service.impl.ISongKeyService;
+import hr.tvz.java.zboroteka.service.impl.ISongService;
 import hr.tvz.java.zboroteka.util.SongParser;
 import hr.tvz.java.zboroteka.validator.SongValidator;
 
@@ -87,7 +87,12 @@ public class SongController {
 
 	@GetMapping("/mySongs")
 	public String showMySongs(Model model) {
-		model.addAttribute("songs", iSongService.findSongsByCreator());
+		List<Song> songs = iSongService.findSongsByCreator();
+		model.addAttribute("songs", songs);
+		model.addAttribute("songsExists", true);
+
+		if (songs.isEmpty())
+			model.addAttribute("songsExists", false);
 
 		return "song/mySongs";
 	}

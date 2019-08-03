@@ -20,8 +20,8 @@ import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.model.ChordDetails;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
-import hr.tvz.java.zboroteka.service.IChordService;
-import hr.tvz.java.zboroteka.service.ISongKeyService;
+import hr.tvz.java.zboroteka.service.impl.IChordService;
+import hr.tvz.java.zboroteka.service.impl.ISongKeyService;
 import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Component

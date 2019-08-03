@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service.impl;
+package hr.tvz.java.zboroteka.service;
 
 import java.util.Optional;
 

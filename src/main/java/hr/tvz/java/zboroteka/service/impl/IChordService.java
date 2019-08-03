@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.repository.ChordRepository;
-import hr.tvz.java.zboroteka.service.impl.ChordService;
+import hr.tvz.java.zboroteka.service.ChordService;
 
 @Service
 public class IChordService implements ChordService {

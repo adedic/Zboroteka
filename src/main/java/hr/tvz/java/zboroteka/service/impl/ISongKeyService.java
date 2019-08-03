@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.repository.SongKeyRepository;
-import hr.tvz.java.zboroteka.service.impl.SongKeyService;
+import hr.tvz.java.zboroteka.service.SongKeyService;
 
 @Service
 public class ISongKeyService implements SongKeyService {

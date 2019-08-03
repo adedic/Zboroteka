@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import hr.tvz.java.zboroteka.model.User;
 import hr.tvz.java.zboroteka.repository.UserRepository;
-import hr.tvz.java.zboroteka.service.impl.UserService;
+import hr.tvz.java.zboroteka.service.UserService;
 
 @Service
 public class IUserService implements UserService {

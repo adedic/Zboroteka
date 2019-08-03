@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import hr.tvz.java.zboroteka.forms.BandForm;
 import hr.tvz.java.zboroteka.mappers.BandMapper;
 import hr.tvz.java.zboroteka.model.Band;
 import hr.tvz.java.zboroteka.repository.BandRepository;
-import hr.tvz.java.zboroteka.service.impl.BandService;
+import hr.tvz.java.zboroteka.service.BandService;
 
 @Service
 public class IBandService implements BandService {

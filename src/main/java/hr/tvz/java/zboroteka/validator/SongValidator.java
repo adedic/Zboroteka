@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hr.tvz.java.zboroteka.model.Chord;
-import hr.tvz.java.zboroteka.service.IChordService;
+import hr.tvz.java.zboroteka.service.impl.IChordService;
 import hr.tvz.java.zboroteka.util.SongParser;
 
 @Component

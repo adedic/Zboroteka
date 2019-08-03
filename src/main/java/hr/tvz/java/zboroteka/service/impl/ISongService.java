@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.mappers.SongMapper;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.repository.SongRepository;
-import hr.tvz.java.zboroteka.service.impl.SongService;
+import hr.tvz.java.zboroteka.service.SongService;
 import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Service

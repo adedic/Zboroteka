@@ -1,4 +1,4 @@
-package hr.tvz.java.zboroteka.service;
+package hr.tvz.java.zboroteka.service.impl;
 
 import java.text.ParseException;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import hr.tvz.java.zboroteka.forms.SongSetForm;
 import hr.tvz.java.zboroteka.mappers.SongSetMapper;
 import hr.tvz.java.zboroteka.model.SongSet;
 import hr.tvz.java.zboroteka.repository.SongSetRepository;
-import hr.tvz.java.zboroteka.service.impl.SongSetService;
+import hr.tvz.java.zboroteka.service.SongSetService;
 
 @Service
 public class ISongSetService implements SongSetService {

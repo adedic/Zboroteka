@@ -14,10 +14,10 @@ import hr.tvz.java.zboroteka.model.Band;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.model.SongKey;
 import hr.tvz.java.zboroteka.model.SongSet;
-import hr.tvz.java.zboroteka.service.impl.BandService;
-import hr.tvz.java.zboroteka.service.impl.SongKeyService;
-import hr.tvz.java.zboroteka.service.impl.SongSetService;
-import hr.tvz.java.zboroteka.service.impl.UserService;
+import hr.tvz.java.zboroteka.service.BandService;
+import hr.tvz.java.zboroteka.service.SongKeyService;
+import hr.tvz.java.zboroteka.service.SongSetService;
+import hr.tvz.java.zboroteka.service.UserService;
 import hr.tvz.java.zboroteka.util.SongParser;
 
 @Component

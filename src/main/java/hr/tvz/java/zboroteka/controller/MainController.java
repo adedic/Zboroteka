@@ -9,7 +9,7 @@ public class MainController {
 
 	@GetMapping("index")
 	public ModelAndView show() {
-		return new ModelAndView("index");
+		return new ModelAndView("redirect:/song/mySongs");
 	}
 
 	@GetMapping("musicGroup")

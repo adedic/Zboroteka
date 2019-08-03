@@ -97,12 +97,15 @@ public class Song implements Serializable {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 
+	@Column(name = "preview_option")
+	private Integer previewOption;
+
 	@ManyToMany(cascade = CascadeType.ALL) // song can be only with text, no chords
 	@JoinTable(name = "song_chord", joinColumns = {
 			@JoinColumn(name = "song_id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "chord_id", insertable = false, updatable = false, nullable = true) })
 	private List<Chord> chords;
-	
+
 	private String[] chordsStr;
 
 }

@@ -84,9 +84,12 @@
                 
 	                <br>
 	                <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Natrag na unos osnovnih podataka" id="backToMainSongData"><i class="fas fa-arrow-left"></i></button>
-	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Spremi pjesmu" id="saveSongBtn">Spremi pjesmu</button>
+	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Ažuriraj pjesmu" id="updateSongBtn">Ažuriraj pjesmu</button>
             	
 				</div>
+				
+				
+				<input type="number" class="form-control"  th:field="*{previewOption}" hidden="hidden" id="optionPreview" />
             </form>
             
         </div>
@@ -96,6 +99,13 @@
 	<!-- Additional scripts -->
 	<div th:replace="fragments/scripts :: markdownScripts"></div>
     </div>
+    <script>
+    $(document).ready(function() {
+        console.log( "ready!" );
+        $("#showSongEditorFormBtn").click();
+        $("#btnPreview").click();
+    });
+    </script>
 	
 	
 	

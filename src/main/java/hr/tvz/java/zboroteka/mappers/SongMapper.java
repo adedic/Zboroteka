@@ -61,9 +61,8 @@ public class SongMapper {
 		songForm.setMeasure(song.getMeasure());
 		songForm.setName(song.getName());
 		songForm.setRawSongText(song.getRawSongText());
+		songForm.setPreviewOption(song.getPreviewOption());
 		songForm.setUsage(song.getUsage());
-		// songForm.setChordsText(song.getChordsStr());
-
 		songForm.setCreatorId(song.getCreatorId());
 		songForm.setCreator(userService.findById(song.getCreatorId()));
 
@@ -76,6 +75,7 @@ public class SongMapper {
 	public void mapSongFormToSong(Song song, SongForm songForm) {
 		// if exists
 		if (songForm.getId() != null) {
+			System.out.println("id pjesme postoji na formi ");
 
 			song.setId(songForm.getId());
 			Optional<SongSet> songSet = setService.findSongSetBySongId(songForm.getId());
@@ -105,6 +105,9 @@ public class SongMapper {
 
 		song.setRawSongText(songForm.getRawSongText());
 		song.setCreationDate(new Date());
+
+		if (songForm.getPreviewOption() != null)
+			song.setPreviewOption(songForm.getPreviewOption());
 
 	}
 

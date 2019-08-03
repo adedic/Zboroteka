@@ -55,26 +55,22 @@ public class SongController {
 		model.addAttribute("createSongForm", new SongForm());
 		initSongScreen(model);
 		model.addAttribute("songHeading", "Kreiranje pjesme");
-		model.addAttribute("tabTitle", "Unos pjesme");
 
 		return "song/newSong";
 	}
 
 	@GetMapping("/details")
 	public String showSongDetails(Model model, @RequestParam(value = "id", required = false) Integer songId) {
+		initSongScreen(model);
 		SongForm songForm = iSongService.getSongDetails(songId);
 
 		model.addAttribute("createSongForm", songForm);
 
-		initSongScreen(model);
-
 		// TODO
-		// popuniti formu
-		// popuniti markdown editor
+		// ako ne postoji pjesma s tim ID-em vratiti poruku
 
 		// promijeniti naslov iz kreiranje pjesme u detalji pjesme
 		model.addAttribute("songHeading", "Detalji pjesme");
-		model.addAttribute("tabTitle", "Detalji pjesme");
 		model.addAttribute("rawSongText", songForm.getRawSongText());
 
 		// prikazati preview
@@ -83,22 +79,29 @@ public class SongController {
 	}
 
 	@PostMapping("/createSong")
-	public Object createNewSong(Model model, @ModelAttribute("createSongForm") SongForm songForm,
-			@RequestParam(value = "rawSongText", required = false) String rawSongText) {
+	public Object createNewSong(Model model, @ModelAttribute("createSongForm") SongForm songForm) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		songForm.setRawSongText(rawSongText);
 		iSongService.saveSong(songForm, jsonResponse);
 
 		// redirect na details page
 		// return SONG_DETAILS_VIEW_NAME + song.getId();
+		return ResponseEntity.ok(jsonResponse);
+	}
+
+	@PostMapping("/updateSong")
+	public Object updateFSong(Model model, @ModelAttribute("createSongForm") SongForm songForm/*,
+			@RequestParam(value = "rawSongText", required = false) String rawSongText*/) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		//songForm.setRawSongText(rawSongText);
+		iSongService.saveSong(songForm, jsonResponse);
 
 		return ResponseEntity.ok(jsonResponse);
 	}
 
 	@GetMapping("/mySongs")
 	public String showMySongs(Model model) {
-		System.out.println("prva pjesma " + iSongService.findSongsByCreator().get(0).getName());
 		model.addAttribute("songs", iSongService.findSongsByCreator());
 
 		return "song/mySongs";

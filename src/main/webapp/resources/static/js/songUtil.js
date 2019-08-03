@@ -202,6 +202,7 @@ var songUtil = (function() {
     	}
 
         else {
+        	$("#optionPreview").val(option).change();
         	
 	    	$.ajax({
 	            type: "POST",

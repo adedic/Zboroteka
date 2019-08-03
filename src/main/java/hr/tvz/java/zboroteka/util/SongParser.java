@@ -150,9 +150,7 @@ public class SongParser {
 		for (int i = 0; i < foundChords.size(); i++) {
 			String chordToTrans = foundChords.get(i).getName();
 			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
-
-			System.out.println("chordToTrans " + chordToTrans);
-
+			
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
 
@@ -211,12 +209,12 @@ public class SongParser {
 	private String findMatchInScale(String chord, Integer transposeValue) {
 
 		// Scale of basic keys
-		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H");
+		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
 
 		// Scale of basic keys with other names for every key
 		Map<String, String> normalizeMap = Stream
-				.of(new String[][] { { "Cb", "H" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
-						{ "Ab", "G#" }, { "B", "A#" }, { "E#", "F" }, { "H#", "C" }, })
+				.of(new String[][] { { "Cb", "B" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
+						{ "Ab", "G#" }, { "Bb", "A#" }, { "E#", "F" }, { "B#", "C" }, })
 				.collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
 		int scaleLen = scale.size();
@@ -228,7 +226,7 @@ public class SongParser {
 		// (?!\\w)|$)";
 
 		// regex to match all chord form normalizeMap
-		String regex = "(?m)(^| )([CDEFGAH](#?|b?))";
+		String regex = "(?m)(^| )([CDEFGAB](#?|b?))";
 
 		// Create a pattern from regex
 		Pattern pattern = Pattern.compile(regex);

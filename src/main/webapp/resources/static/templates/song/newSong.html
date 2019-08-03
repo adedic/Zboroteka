@@ -22,7 +22,7 @@
                         <h4 class="card-title">Osnovni podaci</h4>
                     </div>
                     <div class="card-body">
-						<input type="text" class="form-control" th:field="*{id}" hidden="hidden" id="id" />
+						<input type="text" class="form-control" th:field="*{id}" hidden="hidden" id="id" th:value="${songId}"/>
                             
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songName">Naziv:</label>
@@ -78,7 +78,7 @@
                 </div>
 				<div id="formSongText" style="display:none" >
 				
-                	<textarea id="songEditor" name="rawSongText" th:value="${rawSongText}" th:field="*{rawSongText}"></textarea>
+                	<textarea id="songEditor" name="rawSongText" th:value="${rawSongText}"></textarea>
                 	<textarea id="songPreview" name="songPreview" hidden="hidden"></textarea>
                 	
                 
@@ -87,6 +87,8 @@
 	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Spremi pjesmu" id="saveSongBtn">Spremi pjesmu</button>
             	
 				</div>
+				
+				<input type="number" class="form-control" th:field="*{previewOption}" hidden="hidden" id="optionPreview" />
             </form>
             
         </div>

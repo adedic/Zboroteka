@@ -53,7 +53,8 @@ public class ISongService implements SongService {
 
 				// map song text and song chords to song
 				songMapper.mapRawSongTextToSong(song);
-				songRepository.save(song);
+				Song savedSong = songRepository.save(song);
+				hmap.put("songId", savedSong.getId());
 				jsonResponse.setStatus("ok");
 
 			} else if (!unrecognizedChords.isEmpty()) {

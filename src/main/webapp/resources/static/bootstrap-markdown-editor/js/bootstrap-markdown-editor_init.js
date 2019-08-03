@@ -186,7 +186,7 @@
 
                 if (options.preview === true) {
                     html += '<div class="btn-group pull-right">';
-                        html += '<button type="button" class="md-btn btn btn-sm btn-outline-info btn-edit active previewBtns" data-btn="edit"><i class="fas fa-edit"></i> ' + options.label.btnEdit + '</button>';
+                        html += '<button type="button" id="btnEdit" class="md-btn btn btn-sm btn-outline-info btn-edit active previewBtns" data-btn="edit"><i class="fas fa-edit"></i> ' + options.label.btnEdit + '</button>';
                         html += '<button type="button" id="btnPreview" class="md-btn btn btn-sm btn-outline-info btn-preview editBtns" data-btn="preview"><i class="fas fa-eye"></i> ' + options.label.btnPreview + '</button>';
                     html += '</div>'; // .btn-group
                 }
@@ -471,7 +471,7 @@
             				//PUNJENJE EDITORA PODACIMA UNESENIM NA FORMI PJESME
             				updateEditorValue(data.result, editor);
 
-            				//TODO PROVJERITI
+            				//TODO PROVJERITI -- samo na spremanju!
                     	    $("#songEditor").val(data.result).change();
             			}
             				
@@ -512,12 +512,28 @@
                     } else {
                     	
                         defaults.onPreview(editor.getSession().getValue(), function (content) {
+                        	if($("#optionPreview").val() != null) {
+                        		if($("#optionPreview").val() == 1) {
+                         			$("#option1").click();
+                        		} else if($("#optionPreview").val() == 2) {
+                         			$("#option2").click();
+                        		} else if($("#optionPreview").val() == 3) {
+                         			$("#option3").click();
+                        		}
+                        	} else if($("#optionPreview").val() == null) {
+                        		//defaultno tekst i akordi
+                        		$("#optionPreview").val(3);
+                        	}
+                        	
                         	 if($("#option1").hasClass("active")) {
+                        		$("#optionPreview").val(1);
                      			$("#option1").click();
                      		} else if($("#option2").hasClass("active")) {
+                     			$("#optionPreview").val(2);
                      			$("#option2").click();
                      		} else if($("#option3").hasClass("active")) {
-                     			$("#option3").click();
+                     			$("#optionPreview").val(3);
+                       		 	$("#option3").click();
                      		} 
                             mdPreview.html(content);
                         });

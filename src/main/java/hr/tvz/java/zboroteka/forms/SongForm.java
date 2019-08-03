@@ -46,4 +46,6 @@ public class SongForm implements Serializable {
 	private Band band;
 
 	private User creator;
+
+	private Integer previewOption;
 }

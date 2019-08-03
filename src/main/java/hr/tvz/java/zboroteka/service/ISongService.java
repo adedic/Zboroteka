@@ -56,6 +56,11 @@ public class ISongService implements SongService {
 				Song savedSong = songRepository.save(song);
 				hmap.put("songId", savedSong.getId());
 				jsonResponse.setStatus("ok");
+				
+				if (songForm.getId() == null)
+					hmap.put("msg", "spremanje");
+				else
+					hmap.put("msg", "ažuriranje");
 
 			} else if (!unrecognizedChords.isEmpty()) {
 				jsonResponse.setStatus("error");
@@ -89,10 +94,15 @@ public class ISongService implements SongService {
 
 	}
 
-	public SongForm getSongDetails(Integer songId) {
+	@Override
+	public Song findSong(Integer songId) {
 		Optional<Song> song = songRepository.findById(songId);
 
-		return song.isPresent() ? songMapper.mapSongToSongForm(song.get()) : new SongForm();
+		return song.isPresent() ? song.get() : null;
+	}
+
+	public SongForm getSongFormDetails(Song song) {
+		return songMapper.mapSongToSongForm(song);
 	}
 
 }

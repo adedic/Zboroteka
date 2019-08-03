@@ -8,10 +8,12 @@ import hr.tvz.java.zboroteka.model.Song;
 
 public interface SongService {
 
-	public void saveSong(SongForm songForm, JsonResponse jsonResponse);
-
 	public List<Song> searchSongByQueryAndUser(String query);
 
 	List<Song> findSongsByCreator();
+
+	Song findSong(Integer songId);
+
+	void saveSong(SongForm songForm, JsonResponse jsonResponse);
 
 }

@@ -33,72 +33,43 @@ $("#backToMainSongData").click(function(e) {
 	$("#btnUpdateFormContent").click();
 });
 
-$("#saveSongBtn").click(function(e) {
+
+
+
+$("#saveUpdateSongBtn").click(function(e) {
 	if($("#optionPreview").val() == "")
 		$("#optionPreview").val(3).change();
 	e.preventDefault();
+
+	// poziv skriveni gumb za azurirati sadrzaj editora u pocetnu formu
+	$("#btnUpdateFormContent").click();
 	// ajax poziv na controller
 	console.log($('#createSongForm').serialize());
-
-	$("#btnUpdateFormContent").click();
 	$.ajax({
 		type : "POST",
-		url : "createSong",
+		url : "createUpdateSong",
 		data : $('#createSongForm').serialize(),
 		suppressErrors : true
 	}).done(function(data) {
 		debugger;
 		commonModul.removeAllAlerts();
 		if (data.status == "ok") {
+			if(data.result.msg == "spremanje") {
+				// redirect na detalje
+				window.setTimeout(function() {
 
-	        $("#btnPreview").click();
-			commonModul.showAlert({
-				elementId : 'showAlertBox',
-				message : "Uspješno dodavanje nove pjesme!",
-				alertLevel : 'success'
-			});
-
-			//TODO redirect na detalje
-			//window.location.href = "/song/details?id="+data.result.songId;
-		} else {
-
-	        $("#btnEdit").click();
-			// provjera statusa, validacija nepostojecih akorda
-			commonModul.showAlert({
-				elementId : 'showAlertBox',
-				message : "Nespješno dodavanje nove pjesme! Uneseni su akordi koji ne postoje: " + data.result.unrecognizedChords,
-				alertLevel : 'danger'
-			});
-
-		}
-	});
-
-});
-
-
-
-$("#updateSongBtn").click(function(e) {
-	if($("#optionPreview").val() == "")
-		$("#optionPreview").val(3).change();
-	e.preventDefault();
-	// ajax poziv na controller
-	console.log($('#createSongForm').serialize());
-	$.ajax({
-		type : "POST",
-		url : "updateSong",
-		data : $('#createSongForm').serialize()/* + "&rawSongText=" + $("#songEditor").val()*/,
-		suppressErrors : true
-	}).done(function(data) {
-		debugger;
-		commonModul.removeAllAlerts();
-		if (data.status == "ok") {
-
-	        $("#btnPreview").click();
-			commonModul.showAlert({
-				elementId : 'showAlertBox',
-				message : "Uspješno ažuriranje pjesme!",
-				alertLevel : 'success'
-			});
+		            localStorage.setItem("songSaved", "Uspješno spremanje nove pjesme!");
+					window.location.href = '/song/details?id='+data.result.songId;
+	            }, 500);
+				
+			} else if(data.result.msg == "ažuriranje") {
+				$("#btnPreview").click();
+				commonModul.showAlert({
+					elementId : 'showAlertBox',
+					message : "Uspješno ažuriranje pjesme!",
+					alertLevel : 'success'
+				});
+			}
 			
 		} else {
 
@@ -106,7 +77,7 @@ $("#updateSongBtn").click(function(e) {
 			// provjera statusa, validacija nepostojecih akorda
 			commonModul.showAlert({
 				elementId : 'showAlertBox',
-				message : "Nespješno ažuriranje pjesme! Uneseni su akordi koji ne postoje: " + data.result.unrecognizedChords,
+				message : "Nespješno " + data.result.msg + " pjesme! Uneseni su akordi koji ne postoje: " + data.result.unrecognizedChords,
 				alertLevel : 'danger'
 			});
 

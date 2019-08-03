@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
@@ -30,8 +31,6 @@ import hr.tvz.java.zboroteka.validator.SongValidator;
 @Controller
 @RequestMapping("/song")
 public class SongController {
-
-	private static final String SONG_DETAILS_VIEW_NAME = "redirect:/song/details/";
 
 	@Autowired
 	public SongParser songParser;
@@ -59,42 +58,28 @@ public class SongController {
 		return "song/newSong";
 	}
 
-	@GetMapping("/details")
-	public String showSongDetails(Model model, @RequestParam(value = "id", required = false) Integer songId) {
+	@GetMapping(value = "details")
+	public ModelAndView showSongDetails(@RequestParam(value = "id", required = false) Integer songId, Model model) {
 		initSongScreen(model);
-		SongForm songForm = iSongService.getSongDetails(songId);
 
-		model.addAttribute("createSongForm", songForm);
+		Song song = iSongService.findSong(songId);
+		if (song != null) {
+			SongForm songForm = iSongService.getSongFormDetails(song);
 
-		// TODO
-		// ako ne postoji pjesma s tim ID-em vratiti poruku
+			// promijeniti naslov iz kreiranje pjesme u detalji pjesme
+			model.addAttribute("songHeading", "Detalji pjesme");
+			model.addAttribute("rawSongText", songForm.getRawSongText());
+			model.addAttribute("createSongForm", songForm);
+			model.addAttribute("songExists", true);
+		}
 
-		// promijeniti naslov iz kreiranje pjesme u detalji pjesme
-		model.addAttribute("songHeading", "Detalji pjesme");
-		model.addAttribute("rawSongText", songForm.getRawSongText());
-
-		// prikazati preview
-
-		return "song/songDetails";
+		return new ModelAndView("/song/songDetails");
 	}
 
-	@PostMapping("/createSong")
-	public Object createNewSong(Model model, @ModelAttribute("createSongForm") SongForm songForm) {
+	@PostMapping("/createUpdateSong")
+	public Object createUpdateSong(Model model, @ModelAttribute("createSongForm") SongForm songForm) {
 
 		JsonResponse jsonResponse = new JsonResponse();
-		iSongService.saveSong(songForm, jsonResponse);
-
-		// redirect na details page
-		// return SONG_DETAILS_VIEW_NAME + song.getId();
-		return ResponseEntity.ok(jsonResponse);
-	}
-
-	@PostMapping("/updateSong")
-	public Object updateFSong(Model model, @ModelAttribute("createSongForm") SongForm songForm/*,
-			@RequestParam(value = "rawSongText", required = false) String rawSongText*/) {
-
-		JsonResponse jsonResponse = new JsonResponse();
-		//songForm.setRawSongText(rawSongText);
 		iSongService.saveSong(songForm, jsonResponse);
 
 		return ResponseEntity.ok(jsonResponse);
@@ -173,6 +158,7 @@ public class SongController {
 		switch (option) {
 		case 1:
 			String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
+			System.out.println("onlyText " + onlyText);
 			if (onlyText != "")
 				jsonResponse.setStatus("okText");
 			else

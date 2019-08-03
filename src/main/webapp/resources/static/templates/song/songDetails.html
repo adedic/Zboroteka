@@ -13,7 +13,24 @@
     
         <div class="container">
     	<br><br>
+    	<div th:if="!${songExists}">
+    		<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+				Ne postoji pjesma s traženim ID-em.
+			</div>
+	        <a th:href="@{/song/mySongs}" class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Moje pjesme">Moje pjesme</a>
+        
+    	</div>
+    	<div th:if="${songExists}">
             <h1 th:text="${songHeading}"></h1><br>
+           
+			 <div th:if="${songUpdated}">
+				<div class="alert alert-success alert-dismissable">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+					Uspješno ažuriranje pjesme!
+				</div>
+			</div>
+            
             
             <form action="" th:object="${createSongForm}" id="createSongForm" class="needs-validation" novalidate>
 
@@ -84,13 +101,14 @@
                 
 	                <br>
 	                <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Natrag na unos osnovnih podataka" id="backToMainSongData"><i class="fas fa-arrow-left"></i></button>
-	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Ažuriraj pjesmu" id="updateSongBtn">Ažuriraj pjesmu</button>
+	                <button class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Ažuriraj pjesmu" id="saveUpdateSongBtn">Ažuriraj pjesmu</button>
             	
 				</div>
 				
 				
 				<input type="number" class="form-control"  th:field="*{previewOption}" hidden="hidden" id="optionPreview" />
             </form>
+        </div>
             
         </div>
         
@@ -98,14 +116,33 @@
     
 	<!-- Additional scripts -->
 	<div th:replace="fragments/scripts :: markdownScripts"></div>
-    </div>
-    <script>
+	  
+ 
+    <script th:inline="javascript">
     $(document).ready(function() {
-        console.log( "ready!" );
-        $("#showSongEditorFormBtn").click();
-        $("#btnPreview").click();
+    	if (localStorage.getItem("songSaved")) {
+    	    var msg = localStorage.getItem('songSaved');
+
+    		console.log(msg);
+    		
+    	    commonModul.showAlert({
+    	        elementId: 'showAlertBox',
+    	        message: msg,
+    	        alertLevel: 'success'
+    	    });
+
+    	    window.localStorage.clear();
+    	}
+    	
+    	//$("#showSongEditorFormBtn").click();
+    	//$("#btnPreview").click();
     });
+    
+    
     </script>
+    </div>
+    
+  
 	
 	
 	

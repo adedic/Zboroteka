@@ -499,45 +499,28 @@
                     preview = true;
             		$('.editBtns').hide();
             		$('.previewBtns').show();
+            		
+            		/*if($("#optionPreview").val() != "") {
+                  		$("#option"+$("#optionPreview").val()).click();
+                 	} else if($("#optionPreview").val() == "") {
+                 		//defaultno tekst i akordi
+                 		$("#optionPreview").val(3);
+                 	}*/
     
 
                     mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
                     
                     if($("#songPreview").val() != "") {
                     	defaults.onPreview($("#songPreview").val(), function (content) {
-                    		
                             mdPreview.html(content);
                         });
                     	
                     } else {
-                    	
                         defaults.onPreview(editor.getSession().getValue(), function (content) {
-                        	if($("#optionPreview").val() != null) {
-                        		if($("#optionPreview").val() == 1) {
-                         			$("#option1").click();
-                        		} else if($("#optionPreview").val() == 2) {
-                         			$("#option2").click();
-                        		} else if($("#optionPreview").val() == 3) {
-                         			$("#option3").click();
-                        		}
-                        	} else if($("#optionPreview").val() == null) {
-                        		//defaultno tekst i akordi
-                        		$("#optionPreview").val(3);
-                        	}
                         	
-                        	 if($("#option1").hasClass("active")) {
-                        		$("#optionPreview").val(1);
-                     			$("#option1").click();
-                     		} else if($("#option2").hasClass("active")) {
-                     			$("#optionPreview").val(2);
-                     			$("#option2").click();
-                     		} else if($("#option3").hasClass("active")) {
-                     			$("#optionPreview").val(3);
-                       		 	$("#option3").click();
-                     		} 
                             mdPreview.html(content);
                         });
-
+                        
                     }
                     
                     

@@ -150,7 +150,7 @@ public class SongParser {
 		for (int i = 0; i < foundChords.size(); i++) {
 			String chordToTrans = foundChords.get(i).getName();
 			chordToTrans = chordToTrans.replace("[", "").replace("]", "");
-			
+
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
 
@@ -353,6 +353,7 @@ public class SongParser {
 	public String removeSongTextFromRawSongText(String rawSongText) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
+		String[] chords = parseChordsStr(textAndChords);
 
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
@@ -380,9 +381,14 @@ public class SongParser {
 
 			textAndChords = String.valueOf(textAndChordsChars);
 		}
+		
 
+		String diffStr = "";
+		String text = parseText(textAndChords, chords);
+			diffStr = StringUtils.substringsBetween(textAndChords, "]", "[").toString();
+		
+		/*
 		List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText);
-
 		// char[] textAndChordsChars = textAndChords.toCharArray();
 		for (int i = 0, k = 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
 
@@ -405,11 +411,11 @@ public class SongParser {
 
 			}
 
-		}
+		}*/
 
 		// textAndChords = textAndChords.replace("[", " ").textAndChords("]", " ");
 
-		return restBefore + textAndChords + restAfter;
+		return restBefore + diffStr + restAfter;
 
 	}
 }

@@ -222,6 +222,7 @@ var songUtil = (function() {
 	            		else if(data.status == "okText") {
 	            			$("#songPreview").val(data.result.onlyText).change();
 	            			$("#btnPreview").click();
+	            			
 	                	}
 	                } else if(option == 2) {
 	            		if (data.status == "invalidChords") {

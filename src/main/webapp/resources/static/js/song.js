@@ -40,7 +40,7 @@ $("#saveSongBtn").click(function(e) {
 	$.ajax({
 		type : "POST",
 		url : "createSong",
-		data : $('#createSongForm').serialize(),
+		data : $('#createSongForm').serialize() + "rawSongText=" + $("#songEditor").val(),
 		suppressErrors : true
 	}).done(function(data) {
 		debugger;
@@ -51,6 +51,8 @@ $("#saveSongBtn").click(function(e) {
 				message : "Uspješno dodavanje nove pjesme!",
 				alertLevel : 'success'
 			});
+			
+			//TODO redirect na detalje
 		} else {
 			// provjera statusa, validacija nepostojecih akorda
 			commonModul.showAlert({

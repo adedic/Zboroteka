@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title th:text="'Unos pjesme'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title th:text="${songHeading}"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
 </head>
@@ -22,7 +22,8 @@
                         <h4 class="card-title">Osnovni podaci</h4>
                     </div>
                     <div class="card-body">
-
+						<input type="text" class="form-control" th:field="*{id}" hidden="hidden" id="id" />
+                            
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songName">Naziv:</label>
                             <input type="text" class="form-control" th:field="*{name}" required="required" data-error="Unesi naziv pjesme" id="songName" placeholder="Naziv pjesme" />
@@ -77,7 +78,7 @@
                 </div>
 				<div id="formSongText" style="display:none" >
 				
-                	<textarea id="songEditor" name="rawSongText" th:value="${rawSongText}"></textarea>
+                	<textarea id="songEditor" name="rawSongText" th:value="${rawSongText}" th:field="*{rawSongText}"></textarea>
                 	<textarea id="songPreview" name="songPreview" hidden="hidden"></textarea>
                 	
                 

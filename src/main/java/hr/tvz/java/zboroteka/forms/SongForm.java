@@ -2,6 +2,8 @@ package hr.tvz.java.zboroteka.forms;
 
 import java.io.Serializable;
 
+import hr.tvz.java.zboroteka.model.Band;
+import hr.tvz.java.zboroteka.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,4 +41,9 @@ public class SongForm implements Serializable {
 
 	private Integer bandId;
 
+	private Integer creatorId;
+
+	private Band band;
+
+	private User creator;
 }

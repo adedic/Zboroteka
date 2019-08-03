@@ -88,4 +88,10 @@ public class ISongService implements SongService {
 
 	}
 
+	public SongForm getSongDetails(Integer songId) {
+		Optional<Song> song = songRepository.findById(songId);
+
+		return song.isPresent() ? songMapper.mapSongToSongForm(song.get()) : new SongForm();
+	}
+
 }

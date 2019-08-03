@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,31 +55,40 @@ public class SongController {
 		model.addAttribute("createSongForm", new SongForm());
 		initSongScreen(model);
 		model.addAttribute("songHeading", "Kreiranje pjesme");
+		model.addAttribute("tabTitle", "Unos pjesme");
 
 		return "song/newSong";
 	}
 
 	@GetMapping("/details")
-	public String showSongDetails(Model model, @RequestParam(value = "id", required = false) String songId) {
-		model.addAttribute("createSongForm", new SongForm());
+	public String showSongDetails(Model model, @RequestParam(value = "id", required = false) Integer songId) {
+		SongForm songForm = iSongService.getSongDetails(songId);
+
+		model.addAttribute("createSongForm", songForm);
+
 		initSongScreen(model);
 
 		// TODO
 		// popuniti formu
 		// popuniti markdown editor
-		// prikazati preview
+
 		// promijeniti naslov iz kreiranje pjesme u detalji pjesme
 		model.addAttribute("songHeading", "Detalji pjesme");
+		model.addAttribute("tabTitle", "Detalji pjesme");
+		model.addAttribute("rawSongText", songForm.getRawSongText());
 
-		return "song/newSong";
+		// prikazati preview
+
+		return "song/songDetails";
 	}
 
 	@PostMapping("/createSong")
-	public Object createNewSong(@ModelAttribute("createSongForm") SongForm songForm, Model model) {
+	public Object createNewSong(Model model, @ModelAttribute("createSongForm") SongForm songForm,
+			@RequestParam(value = "rawSongText", required = false) String rawSongText) {
 
 		JsonResponse jsonResponse = new JsonResponse();
+		songForm.setRawSongText(rawSongText);
 		iSongService.saveSong(songForm, jsonResponse);
-		jsonResponse.setStatus("ok");
 
 		// redirect na details page
 		// return SONG_DETAILS_VIEW_NAME + song.getId();
@@ -94,12 +102,6 @@ public class SongController {
 		model.addAttribute("songs", iSongService.findSongsByCreator());
 
 		return "song/mySongs";
-	}
-
-	// song details
-	@GetMapping("/mySongs/{id}")
-	String getSongDetails(@PathVariable Integer id) {
-		return "redirect:/song/details?id=" + id;
 	}
 
 	@PostMapping("/searchSong")

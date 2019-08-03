@@ -470,6 +470,9 @@
             			if(data.status == "ok") {
             				//PUNJENJE EDITORA PODACIMA UNESENIM NA FORMI PJESME
             				updateEditorValue(data.result, editor);
+
+            				//TODO PROVJERITI
+                    	    $("#songEditor").val(data.result).change();
             			}
             				
         	        });

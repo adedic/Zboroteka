@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title th:text="'Moje pjesme'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title th:text="'Rezultati pretrage pnesama'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
 </head>
@@ -15,7 +15,7 @@
     <br><br>
 	  	<div class="row">
 	  		<div class="col-8">
-	        	<h1>Moje pjesme</h1>
+	        	<h1>Rezultati pretrage</h1>
 	        </div>
 	        <div class="col-4">
 		        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
@@ -27,13 +27,13 @@
     		<br><br>
     		<div class="alert alert-danger alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-				Ne postoji nijedna pjesma u tvojoj kolekciji pjesama. Dodaj novu pjesmu.
+				Ne postoji nijedna pjesma za traženi tekst.
 			</div>
     	</div>
 	                
             
-	<br><br>
-         <div class="list-group" th:each="song : ${songs}">
+		<br><br>
+        <div class="list-group" th:each="song : ${songs}">
 			<a class="list-group-item list-group-item-action" 
 			th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
 			th:href="@{/song/details(id=${song.id})}">

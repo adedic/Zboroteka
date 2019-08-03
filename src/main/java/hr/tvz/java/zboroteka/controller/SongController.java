@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
@@ -97,22 +98,31 @@ public class SongController {
 		return "song/mySongs";
 	}
 
-	@PostMapping("/searchSong")
-	public Object searchSong(Model model, @RequestParam(value = "query", required = false) String query) {
-
-		JsonResponse jsonResponse = new JsonResponse();
-		List<Song> resultSongs = iSongService.searchSongByQueryAndUser(query);
+	@GetMapping("/searchResults")
+	public String showSearchResults(Model model, @RequestParam(value = "query", required = true) String query,
+			RedirectAttributes redirectAttributes) {
+		System.out.println("query " + query);
+		List<Song> songs = iSongService.searchSongByQueryAndUser(query);
 		// TODO bendsongs
+		if (!songs.isEmpty())
+			model.addAttribute("songsExists", songs);
+		
+		for (Song song : songs)
+			System.out.println("pjems " + song.getName());
 
-		if (resultSongs.isEmpty()) {
-			jsonResponse.setStatus("notFound");
-		}
+		redirectAttributes.addFlashAttribute("query", query);
+		model.addAttribute("songs", songs);
 
-		jsonResponse.setStatus("ok");
+		return "song/searchResults";
+	}
 
-		model.addAttribute("resultSongs", resultSongs);
+	@PostMapping("/searchSong")
+	public String searchSong(Model model, @RequestParam(value = "query", required = false) String query,
+			RedirectAttributes redirectAttributes) {
 
-		return ResponseEntity.ok(jsonResponse);
+		model.addAttribute("query", query);
+		redirectAttributes.addAttribute("query", query);
+		return "/song/searchResults";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

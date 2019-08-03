@@ -59,7 +59,7 @@ $("#saveUpdateSongBtn").click(function(e) {
 				window.setTimeout(function() {
 
 		            localStorage.setItem("songSaved", "Uspješno spremanje nove pjesme!");
-					window.location.href = '/song/details?id='+data.result.songId;
+					window.location.href = '/zboroteka/song/details?id='+data.result.songId;
 	            }, 500);
 				
 			} else if(data.result.msg == "ažuriranje") {
@@ -84,4 +84,15 @@ $("#saveUpdateSongBtn").click(function(e) {
 		}
 	});
 
+});
+
+$("#searchSong").change(function(e) {
+	$.ajax({
+		type : "POST",
+		url : "searchSong",
+		data :  "query=" + $("#searchSong").val(),
+		suppressErrors : true
+	}).done(function(data) {
+		
+	});
 });

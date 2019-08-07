@@ -4,8 +4,8 @@ $("#showSongEditorFormBtn").click(function(e) {
 		// ako je validacija prosla
 		if (!$("#createSongForm")[0].checkValidity()) {
 			$("#createSongForm").addClass("was-validated");
-			commonModul
-					.showAlert({
+			commonModul.removeAllAlerts();
+			commonModul.showAlert({
 						elementId : 'showAlertBox',
 						message : "Popunite tražene podatke kako biste nastaviti s unosom pjesme!",
 						alertLevel : 'danger'

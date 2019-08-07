@@ -45,18 +45,21 @@ public class SongController {
 	@Autowired
 	SongValidator songValidator;
 
-	private void initSongScreen(Model model) {
-		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
-		model.addAttribute("songKeys", iSongKeyService.getAllKeys());
-	}
-
 	@GetMapping("/newSong")
 	public String showNewSong(Model model) {
 		model.addAttribute("createSongForm", new SongForm());
 		initSongScreen(model);
-		model.addAttribute("songHeading", "Kreiranje pjesme");
 
 		return "song/newSong";
+	}
+
+	@PostMapping("/createUpdateSong")
+	public Object createUpdateSong(Model model, @ModelAttribute("createSongForm") SongForm songForm) {
+
+		JsonResponse jsonResponse = new JsonResponse();
+		iSongService.saveSong(songForm, jsonResponse);
+
+		return ResponseEntity.ok(jsonResponse);
 	}
 
 	@GetMapping(value = "details")
@@ -67,23 +70,12 @@ public class SongController {
 		if (song != null) {
 			SongForm songForm = iSongService.getSongFormDetails(song);
 
-			// promijeniti naslov iz kreiranje pjesme u detalji pjesme
-			model.addAttribute("songHeading", "Detalji pjesme");
 			model.addAttribute("rawSongText", songForm.getRawSongText());
 			model.addAttribute("createSongForm", songForm);
 			model.addAttribute("songExists", true);
 		}
 
 		return new ModelAndView("/song/songDetails");
-	}
-
-	@PostMapping("/createUpdateSong")
-	public Object createUpdateSong(Model model, @ModelAttribute("createSongForm") SongForm songForm) {
-
-		JsonResponse jsonResponse = new JsonResponse();
-		iSongService.saveSong(songForm, jsonResponse);
-
-		return ResponseEntity.ok(jsonResponse);
 	}
 
 	@GetMapping("/mySongs")
@@ -106,7 +98,7 @@ public class SongController {
 		// TODO bendsongs
 		if (!songs.isEmpty())
 			model.addAttribute("songsExists", songs);
-		
+
 		for (Song song : songs)
 			System.out.println("pjems " + song.getName());
 
@@ -250,5 +242,10 @@ public class SongController {
 
 		// a ako ima pjesme prikazati mu popis svih pjesama
 
+	}
+
+	private void initSongScreen(Model model) {
+		model.addAttribute("songGenres", Arrays.asList(SongGenre.values()));
+		model.addAttribute("songKeys", iSongKeyService.getAllKeys());
 	}
 }

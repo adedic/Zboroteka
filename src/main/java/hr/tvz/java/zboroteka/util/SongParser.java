@@ -42,6 +42,10 @@ public class SongParser {
 	}
 
 	public Map<String, Object> updateKeyInRawText(String rawSongText, Integer newKey) {
+		if (newKey == 12)
+			newKey = 0;
+		else if (newKey == -1)
+			newKey = 11;
 
 		String textAndChords = parseTextAndChords(rawSongText);
 		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
@@ -153,9 +157,6 @@ public class SongParser {
 
 			// Transponirani akord
 			String transposedChord = transposeChord(chordToTrans, transposeValue);
-
-			System.out.println("transposedChord " + transposedChord);
-
 			newText = replaceChordWithTransposed(foundChords.get(i), transposedChord, newText);
 
 			// AZURIRANJE, TJ POVECAVANJE INDEKSA SLJEDECEG ZA dodani TEKST
@@ -202,8 +203,49 @@ public class SongParser {
 	}
 
 	private String transposeChord(String chord, Integer transposeValue) {
-		return findMatchInScale(chord, transposeValue);
+		// pronađi match u skali
 
+		// Scale of basic keys
+		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
+
+		// Scale of basic keys with other names for every key
+		Map<String, String> normalizeMap = Stream
+				.of(new String[][] { { "Cb", "B" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
+						{ "Ab", "G#" }, { "Bb", "A#" }, { "E#", "F" }, { "B#", "C" }, })
+				.collect(Collectors.toMap(data -> data[0], data -> data[1]));
+
+		int scaleLen = scale.size();
+		String matchChord = "";
+
+		// regex to match all chord form normalizeMap
+		String regex = "(?m)(^| )([CDEFGAB](#?|b?))";
+
+		// Create a pattern from regex
+		Pattern pattern = Pattern.compile(regex);
+
+		// Create a matcher for the input String
+		Matcher matcher = pattern.matcher(chord);
+
+		while (matcher.find()) {
+			// if match is not found in normalizeMap
+			matchChord = matcher.group();
+
+			// get match from normalizedMap if exists
+			for (int i = 0; i < normalizeMap.size(); i++) {
+				if (normalizeMap.get(matcher.group()) != null
+						&& normalizeMap.get(matcher.group()).equals(matcher.group())) {
+					matchChord = normalizeMap.get(matcher.group());
+				}
+			}
+		}
+
+		int i = 0;
+		if (matchChord != null)
+			i = (scale.indexOf(matchChord) + transposeValue) % 12;
+
+		String resultKey = i < 0 ? scale.get(i + scaleLen) : scale.get(i);
+
+		return chord.replaceAll(regex, resultKey);
 	}
 
 	private String findMatchInScale(String chord, Integer transposeValue) {
@@ -265,7 +307,7 @@ public class SongParser {
 		if (chords != null && chords.length != 0) {
 			song.setSongText(parseText(textAndChords, chords));
 
-			song.setChords(parseChords(chords));
+			song.setChords(createChords(chords));
 		}
 
 	}
@@ -289,7 +331,7 @@ public class SongParser {
 		return StringUtils.substringsBetween(textAndChords, "[", "]");
 	}
 
-	public List<Chord> parseChords(String[] chords) {
+	public List<Chord> createChords(String[] chords) {
 		List<Chord> chordList = new ArrayList<>();
 
 		for (String chordStr : chords) {
@@ -381,37 +423,35 @@ public class SongParser {
 
 			textAndChords = String.valueOf(textAndChordsChars);
 		}
-		
 
 		String diffStr = "";
 		String text = parseText(textAndChords, chords);
-			diffStr = StringUtils.substringsBetween(textAndChords, "]", "[").toString();
-		
+		diffStr = StringUtils.substringsBetween(textAndChords, "]", "[").toString();
+
 		/*
-		List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText);
-		// char[] textAndChordsChars = textAndChords.toCharArray();
-		for (int i = 0, k = 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
-
-			// prođi kroz listu parsiranih akorda
-			String currChord = foundChords.get(i).getName();
-			// currChord = currChord.replace("[", "").replace("]", "");
-
-			Integer chordStartIndex = foundChords.get(i).getIndex();
-			k = chordStartIndex;
-
-			for (int j = 0; j < currChord.length(); j++) {// Maknuti zagrade j+1 leng-1
-
-				textAndChordsChars[k] = currChord.charAt(j);
-
-				System.out.println("textAndChordsChars[k]  " + textAndChordsChars[k]);
-				k++;
-
-				textAndChords = String.valueOf(textAndChordsChars);
-				System.out.println("curr " + textAndChords);
-
-			}
-
-		}*/
+		 * List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText); //
+		 * char[] textAndChordsChars = textAndChords.toCharArray(); for (int i = 0, k =
+		 * 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
+		 * 
+		 * // prođi kroz listu parsiranih akorda String currChord =
+		 * foundChords.get(i).getName(); // currChord = currChord.replace("[",
+		 * "").replace("]", "");
+		 * 
+		 * Integer chordStartIndex = foundChords.get(i).getIndex(); k = chordStartIndex;
+		 * 
+		 * for (int j = 0; j < currChord.length(); j++) {// Maknuti zagrade j+1 leng-1
+		 * 
+		 * textAndChordsChars[k] = currChord.charAt(j);
+		 * 
+		 * System.out.println("textAndChordsChars[k]  " + textAndChordsChars[k]); k++;
+		 * 
+		 * textAndChords = String.valueOf(textAndChordsChars);
+		 * System.out.println("curr " + textAndChords);
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 
 		// textAndChords = textAndChords.replace("[", " ").textAndChords("]", " ");
 

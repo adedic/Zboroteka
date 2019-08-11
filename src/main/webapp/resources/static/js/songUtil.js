@@ -38,20 +38,8 @@ var songUtil = (function() {
                 //azuriranje rawSongText na formi
                 updateSongEditorValue(data.result.newText, editor);
 
-	            
                 //azurirati trenutni tontalitet na formi
                 $("#key").val(data.result.newKey).change();
-
-        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-                if(data.result.newKey == 13) {
-	                $("#key").val(1).change(); 
-	                console.log("postavi 1");
-                } else if(data.result.newKey == -1) {
-            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-	                $("#key").val(data.result.newKey).change(12); 
-	                console.log("postavi 12");
-
-                }
             }
 
         });

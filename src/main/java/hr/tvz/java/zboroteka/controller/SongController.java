@@ -142,9 +142,8 @@ public class SongController {
 
 		// Napravi transpose i vrati tekst s transponiranim akordima
 		String newText = songParser.transposeChordsInSongText(foundChords, rawSongText, transposeValue);
-		Integer newKey = currentKey + transposeValue;
-
-		Map<String, Object> hmap = songParser.updateKeyInRawText(newText, newKey);
+		
+		Map<String, Object> hmap = songParser.updateKeyInRawText(newText, currentKey + transposeValue);
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
 		jsonResponse.setResult(hmap);

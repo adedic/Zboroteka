@@ -7,7 +7,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 			commonModul.removeAllAlerts();
 			commonModul.showAlert({
 						elementId : 'showAlertBox',
-						message : "Popunite tražene podatke kako biste nastaviti s unosom pjesme!",
+						message : "Popunite tražene podatke kako biste mogli nastaviti s unosom pjesme!",
 						alertLevel : 'danger'
 					});
 		} else {

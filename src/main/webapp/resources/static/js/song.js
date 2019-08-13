@@ -19,7 +19,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 
 			$("#mainSongInfo").hide();
 			$("#formSongText").show();
-			$(".previewBtns").hide();
+	        $("#btnEdit").click();
 		}
 	});
 

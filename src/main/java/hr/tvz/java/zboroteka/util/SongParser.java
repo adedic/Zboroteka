@@ -372,7 +372,6 @@ public class SongParser {
 			}
 			// RED SAMO S PRAZNINAMA
 			if (!currOtherText.matches(".*\\w.*")) {
-				System.out.println("samo praznine " + currOtherText);
 				areChords.add("\n");
 			}
 		}

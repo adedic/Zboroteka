@@ -142,7 +142,7 @@ public class SongController {
 
 		// Napravi transpose i vrati tekst s transponiranim akordima
 		String newText = songParser.transposeChordsInSongText(foundChords, rawSongText, transposeValue);
-		
+
 		Map<String, Object> hmap = songParser.updateKeyInRawText(newText, currentKey + transposeValue);
 		// postavi promijenjeni rawSongText u rezultat
 		// i novi tonalitet nakon transposea
@@ -164,7 +164,6 @@ public class SongController {
 		switch (option) {
 		case 1:
 			String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
-			System.out.println("onlyText " + onlyText);
 			if (onlyText != "")
 				jsonResponse.setStatus("okText");
 			else
@@ -173,15 +172,13 @@ public class SongController {
 			hmap.put("onlyText", onlyText);
 			break;
 		case 2:
-			String onlyChords = songParser.removeSongTextFromRawSongText(rawSongText);
+			String onlyChords = songParser.onlyChords(rawSongText);
 			if (onlyChords != "")
 				jsonResponse.setStatus("okChords");
 
 			else
 				jsonResponse.setStatus("invalidChords");
 			hmap.put("onlyChords", onlyChords);
-
-			System.out.println(onlyChords);
 			break;
 		case 3:
 			if (rawSongText != "")

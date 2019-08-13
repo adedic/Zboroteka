@@ -248,57 +248,6 @@ public class SongParser {
 		return chord.replaceAll(regex, resultKey);
 	}
 
-	private String findMatchInScale(String chord, Integer transposeValue) {
-
-		// Scale of basic keys
-		List<String> scale = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
-
-		// Scale of basic keys with other names for every key
-		Map<String, String> normalizeMap = Stream
-				.of(new String[][] { { "Cb", "B" }, { "Db", "C#" }, { "Eb", "D#" }, { "Fb", "E" }, { "Gb", "F#" },
-						{ "Ab", "G#" }, { "Bb", "A#" }, { "E#", "F" }, { "B#", "C" }, })
-				.collect(Collectors.toMap(data -> data[0], data -> data[1]));
-
-		int scaleLen = scale.size();
-		String matchChord = "";
-
-		// Get the regex to be checked
-		// String regex1 = "(?m)(^|
-		// )([CDEFGAH](##?|bb?)?((sus|maj|min|aug|dim|m)\\d?)?(/[CDEFGAH](##?|bb?)?)?)(
-		// (?!\\w)|$)";
-
-		// regex to match all chord form normalizeMap
-		String regex = "(?m)(^| )([CDEFGAB](#?|b?))";
-
-		// Create a pattern from regex
-		Pattern pattern = Pattern.compile(regex);
-
-		// Create a matcher for the input String
-		Matcher matcher = pattern.matcher(chord);
-
-		while (matcher.find()) {
-			// if match is not found in normalizeMap
-			matchChord = matcher.group();
-
-			// get match from normalizedMap if exists
-			for (int i = 0; i < normalizeMap.size(); i++) {
-				if (normalizeMap.get(matcher.group()) != null
-						&& normalizeMap.get(matcher.group()).equals(matcher.group())) {
-					matchChord = normalizeMap.get(matcher.group());
-				}
-			}
-		}
-
-		int i = 0;
-		if (matchChord != null)
-			i = (scale.indexOf(matchChord) + transposeValue) % 12;
-
-		String resultKey = i < 0 ? scale.get(i + scaleLen) : scale.get(i);
-
-		chord = chord.replaceAll(regex, resultKey);
-		return chord;
-	}
-
 	public void parseSongTextAndChords(Song song) {
 		String rawText = song.getRawSongText();
 		String textAndChords = parseTextAndChords(rawText);
@@ -306,7 +255,6 @@ public class SongParser {
 
 		if (chords != null && chords.length != 0) {
 			song.setSongText(parseText(textAndChords, chords));
-
 			song.setChords(createChords(chords));
 		}
 
@@ -392,70 +340,47 @@ public class SongParser {
 		return restBefore + textAndChords + restAfter;
 	}
 
-	public String removeSongTextFromRawSongText(String rawSongText) {
+	public String onlyChords(String rawSongText) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
+		String restBefore = StringUtils.substringBefore(rawSongText, textAndChords);
+		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords);
+
 		String[] chords = parseChordsStr(textAndChords);
 
-		String restBefore = StringUtils.substringBefore(rawSongText, "```" + textAndChords);
-		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords + "```");
+		List<String> areChords = new ArrayList<>();
 
-		char[] textAndChordsChars = textAndChords.toCharArray();
-		for (int i = 0; i < textAndChords.length(); i++) {
+		String regex = "\\[(.*?)\\]";
+		String negRegex = negateRegex(regex);
 
-			if (textAndChordsChars[i] == '\n') {
-				System.out.println("razmak  ");
-				textAndChordsChars[i] = '\r';
-			} else if (textAndChordsChars[i] == '\b') {
-				System.out.println("razmak b  ");
-				textAndChordsChars[i] = '\b';
-			} else if (textAndChordsChars[i] == '\r') {
-				System.out.println("razmak r  ");
-				textAndChordsChars[i] = '\r';
-			} else if (textAndChordsChars[i] == '\f') {
-				System.out.println("razmak f  ");
-				textAndChordsChars[i] = '\f';
-			} else if (textAndChordsChars[i] == '\t') {
-				System.out.println("razmak t  ");
-				textAndChordsChars[i] = '\r';
-			} else
-				textAndChordsChars[i] = ' ';
+		Pattern pattern = Pattern.compile(negRegex, Pattern.MULTILINE);
+		Matcher matcher = pattern.matcher(textAndChords);
 
-			textAndChords = String.valueOf(textAndChordsChars);
+		while (matcher.find()) {
+			String currOtherText = matcher.group();
+
+			for (String chord : chords) {
+				// RED S AKORDIMA
+				if (currOtherText.contains("[" + chord + "]")) {
+					// da se smanje razmaci između akorda
+					currOtherText = currOtherText.replace("   ", "  ").replace("    ", "  ").replace("     ", "  ");
+
+					areChords.add(currOtherText.replace("[", "").replace("]", ""));
+					break;
+				}
+
+			}
+			// RED SAMO S PRAZNINAMA
+			if (!currOtherText.matches(".*\\w.*")) {
+				areChords.add("\n");
+			}
 		}
 
-		String diffStr = "";
-		String text = parseText(textAndChords, chords);
-		diffStr = StringUtils.substringsBetween(textAndChords, "]", "[").toString();
+		return restBefore + StringUtils.join(areChords, "") + restAfter;
 
-		/*
-		 * List<ChordDetails> foundChords = createChordsWithMatchIndex(rawSongText); //
-		 * char[] textAndChordsChars = textAndChords.toCharArray(); for (int i = 0, k =
-		 * 0; k < textAndChordsChars.length && i < foundChords.size(); i++) {
-		 * 
-		 * // prođi kroz listu parsiranih akorda String currChord =
-		 * foundChords.get(i).getName(); // currChord = currChord.replace("[",
-		 * "").replace("]", "");
-		 * 
-		 * Integer chordStartIndex = foundChords.get(i).getIndex(); k = chordStartIndex;
-		 * 
-		 * for (int j = 0; j < currChord.length(); j++) {// Maknuti zagrade j+1 leng-1
-		 * 
-		 * textAndChordsChars[k] = currChord.charAt(j);
-		 * 
-		 * System.out.println("textAndChordsChars[k]  " + textAndChordsChars[k]); k++;
-		 * 
-		 * textAndChords = String.valueOf(textAndChordsChars);
-		 * System.out.println("curr " + textAndChords);
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
+	}
 
-		// textAndChords = textAndChords.replace("[", " ").textAndChords("]", " ");
-
-		return restBefore + diffStr + restAfter;
-
+	String negateRegex(String regex) {
+		return "(?!" + regex + "$).*";
 	}
 }

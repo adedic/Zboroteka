@@ -224,6 +224,8 @@ var songUtil = (function() {
 	            			$("#songPreview").val(data.result.onlyChords).change();
 	            			$("#btnPreview").click();
 	            			console.log("TEKST" + data.result.onlyChords);
+	            			$('code').css({'font-size' : '18px'});
+	            			$('code').css({'color' : 'blue'});
 	            			
 	                	}
 	                } else if(option == 3) {

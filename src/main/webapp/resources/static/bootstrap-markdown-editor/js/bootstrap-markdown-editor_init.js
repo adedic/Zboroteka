@@ -146,21 +146,7 @@
                     html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnChord + '" class="md-btn btn btn-sm btn-outline-info editBtns" data-btn="chordBracket"><i class="fas fa-guitar"></i></button>';
                     
                 html += '</div>'; // .btn-group
-/*
-                html += '<div class="btn-group mr-2" role="group">';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnList + '" class="md-btn btn btn-sm btn-outline-info" data-btn="ul"><i class="fas fa-list"></i></button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnOrderedList + '" class="md-btn btn btn-sm btn-outline-info" data-btn="ol"><i class="fas fa-list-ol"></i></button>';
-                html += '</div>'; // .btn-group
 
-                html += '<div class="btn-group mr-2" role="group">';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnLink + '" class="md-btn btn btn-sm btn-outline-info" data-btn="link"><i class="fas fa-link"></i></button>';
-                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnImage + '" class="md-btn btn btn-sm btn-outline-info" data-btn="image"><i class="far fa-image"></i></button>';
-                    if (options.imageUpload === true) {
-                        html += '<div data-mdtooltip="tooltip" title="' + options.label.btnUpload + '" class="btn btn-sm btn-outline-info md-btn-file"><i class="fas fa-upload"></i><input class="md-input-upload" type="file" multiple accept=".jpg,.jpeg,.png,.gif"></div>';
-                    }
-                html += '</div>'; // .btn-group
-
-                 */
                 
                 /*TRANSPOSE TIPKE + I -*/
                 html += '<div class="btn-group mr-2" role="group">';
@@ -438,28 +424,18 @@
                 	
         	        
                 } else if (btnType === 'onlyText') {
-                	songUtil.showTextChordsRadio(editor, 1);
+                	songUtil.showTextChordsRadio(editor, 1, preview);
                     console.log("onlyText");
                 	
                 } else if (btnType === 'onlyChords') {
-                	songUtil.showTextChordsRadio(editor, 2);
+                	songUtil.showTextChordsRadio(editor, 2, preview);
                     console.log("onlyChords");
                 	
                 } else if (btnType === 'textAndChords') {
-                	songUtil.showTextChordsRadio(editor, 3);
+                	songUtil.showTextChordsRadio(editor, 3, preview);
                     console.log("textAndChords");
                 	
-                }
-                /*else if (btnType === 'image') {
-                	if(!checkForbiddenBtn()) {
-	                    if (selectedText === '') {
-	                        snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
-	                    } else {
-	                        snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
-	                    }
-                	}
-
-                }*/ else if (btnType === 'setEditorVal') {//hidden btn
+                } else if (btnType === 'setEditorVal') {//hidden btn
                 	
                 	$.ajax({
             			type : "POST",
@@ -496,17 +472,15 @@
                     }
 
                 } else if (btnType === 'preview') {
-                    preview = true;
+                	
+                	if(preview == false) {
+                    	songUtil.showTextChordsRadio(editor, $("#optionPreview").val(), preview);
+                    	preview = true;
+                	} else if(preview == true) {
+                		preview = true;
+                	} 
             		$('.editBtns').hide();
             		$('.previewBtns').show();
-            		
-            		/*if($("#optionPreview").val() != "") {
-                  		$("#option"+$("#optionPreview").val()).click();
-                 	} else if($("#optionPreview").val() == "") {
-                 		//defaultno tekst i akordi
-                 		$("#optionPreview").val(3);
-                 	}*/
-    
 
                     mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
                     
@@ -522,7 +496,6 @@
                         });
                         
                     }
-                    
                     
                     mdEditor.hide();
                     mdPreview.show();

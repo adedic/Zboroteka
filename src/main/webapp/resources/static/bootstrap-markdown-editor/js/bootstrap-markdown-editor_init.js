@@ -563,7 +563,7 @@
 
     $.fn.markdownEditor.defaults = {
         width: '100%',
-        height: '800px',
+        height: '900px',
         fontSize: '14px',
         theme: 'tomorrow',
         softTabs: true,
@@ -581,8 +581,8 @@
             btnBold: 'Bold',
             btnItalic: 'Italic',
             btnKeepFormat: 'Umetni tekst i akorde',
-            transposeUp: 'Transpose +1',
-            transposeDown: 'Transpose -1',
+            transposeUp: 'Transponiraj +1',
+            transposeDown: 'Transponiraj -1',
             onlyText: 'Prikaži samo tekst',
             onlyChords: 'Prikaži samo akorde',
             textAndChords: 'Prikaži tekst i akorde',

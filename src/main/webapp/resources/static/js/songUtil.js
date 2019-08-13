@@ -168,6 +168,7 @@ var songUtil = (function() {
 	            			$("#option2").removeClass("active");
 	            			$("#option3").removeClass("active");
 	            			$("#btnPreview").click();
+	            			$('p').css({'color' : 'grey'});
 	            			
 	                	}
 	                } else if(option == 2) {
@@ -184,11 +185,9 @@ var songUtil = (function() {
 		            			$("#option2").addClass("active");
 		            			$("#option3").removeClass("active");
 	            				$("#btnPreview").click();
-		            			$('code').css({'font-size' : '18px'});
+		            			$('code').css({'font-size' : '16px'});
 		            			$('code').css({'color' : 'blue'});
-		            			console.log("TEKST" + data.result.onlyChords);
-	            			
-	            			
+		            			$('p').css({'color' : 'grey'});
 	                	}
 	                } else if(option == 3) {
 	            		if (data.status == "noRawText") {
@@ -204,7 +203,7 @@ var songUtil = (function() {
 	            			$("#option2").removeClass("active");
 	            			$("#option3").addClass("active");
 	            			$("#btnPreview").click();
-	            			
+	            			$('p').css({'color' : 'grey'});
 	                	}
 	                }
 	            

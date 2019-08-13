@@ -21,7 +21,7 @@ Tonalitet: **G**
     Ti, ti si ga upoznala
     jedne ljetnje veceri
     On, on te poljubio
-', 'Krivo je more', '4/4', 1, 1, 'Za druženja', 'Divlje jagode', 'Neki opis', 1, 1, 1);
+', 'Krivo je more', '4/4', 0, 1, 'Za druženja', 'Divlje jagode', 'Neki opis', 1, 1, 1);
 
 
 
@@ -35,8 +35,6 @@ Tonalitet: **C**
 
 ```
 1. KITICA
-
-    
     [C]            [F]           [G]           [C]
     Zlatni konci litnje zore došli su u njene dvore,
     [F]          [G]          [C]   [F]  [G]
@@ -69,7 +67,6 @@ REFREN:
                 	',
 '1. KITICA
 
-    
     Zlatni konci litnje zore došli su u njene dvore,
                              
     da bi moju jubav budili.
@@ -99,4 +96,4 @@ REFREN:
     ka cvice bez vode.
     
 
-', 'Cesarica', '4/4', 7, 1, 'Za druženja', 'Oliver Dragojević', 'Neki opis2', 1, 2);
+', 'Cesarica', '4/4', 0, 1, 'Za druženja', 'Oliver Dragojević', 'Neki opis2', 1, 2);

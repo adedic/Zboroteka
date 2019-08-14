@@ -183,8 +183,8 @@ public class SongController {
 			hmap.put("onlyChords", onlyChords);
 			break;
 		case 3:
-			if (rawSongText != "")
-				jsonResponse.setStatus("okBoth");
+			if (rawSongText == "")
+				jsonResponse.setStatus("ok");
 			else
 				jsonResponse.setStatus("noRawText");
 

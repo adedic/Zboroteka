@@ -345,7 +345,7 @@ public class SongParser {
 		} else if (textAndChords != null && textAndChords != "")
 			onlyText = textAndChords;
 
-		jsonResponse.setStatus("okText");
+		jsonResponse.setStatus("ok");
 		// ako nema akorda vrati text
 		return restBefore + onlyText + restAfter;
 	}
@@ -391,7 +391,7 @@ public class SongParser {
 			}
 		}
 		if (!areChords.isEmpty())
-			jsonResponse.setStatus("okChords");
+			jsonResponse.setStatus("ok");
 
 		return restBefore + StringUtils.join(areChords, "") + restAfter;
 

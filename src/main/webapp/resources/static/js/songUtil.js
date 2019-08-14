@@ -8,12 +8,12 @@ var songUtil = (function() {
         var currentKey = parseInt($("#key").val());
         
         if ($("#key").val() == null) {
-            if (transposeValue == 1) {
+            if (transposeValue == 11) {
                 //ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-                $("#key").val(1);
+                $("#key").val(0);
             } else if (transposeValue == -1) {
                 //ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-                $("#key").val(12);
+                $("#key").val(11);
             }
             //postavi vrijednost trenutnog tonaliteta koja se salje na backend
             currentKey = parseInt($("#key").val());
@@ -178,6 +178,12 @@ var songUtil = (function() {
             			});
             		}
                 } else if(option == 3) {
+        			$("#songPreview").val(data.result.textAndChords).change();
+        			$("#option1").removeClass("active");
+        			$("#option2").removeClass("active");
+        			$("#option3").addClass("active");
+        			$("#btnPreview").click();
+        			$('p').css({'color' : 'grey'});
             		if (data.status == "noRawText") {
             			commonModul.showAlert({
             				elementId : 'showAlertBox',
@@ -185,14 +191,6 @@ var songUtil = (function() {
             				alertLevel : 'danger'
             			});
             		}
-            		else if(data.status == "okBoth") {
-            			$("#songPreview").val(data.result.textAndChords).change();
-            			$("#option1").removeClass("active");
-            			$("#option2").removeClass("active");
-            			$("#option3").addClass("active");
-            			$("#btnPreview").click();
-            			$('p').css({'color' : 'grey'});
-                	}
                 }
 	            
 	        });

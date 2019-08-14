@@ -22,7 +22,7 @@ public class IBandService implements BandService {
 
 	@Override
 	public Optional<Band> findBandByUserId(Integer userId) {
-		return bandRepository.findById(userId);
+		return bandRepository.findByCreatorId(userId);
 
 	}
 

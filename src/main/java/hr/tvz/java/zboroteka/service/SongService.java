@@ -16,4 +16,6 @@ public interface SongService {
 
 	void saveSong(SongForm songForm, JsonResponse jsonResponse);
 
+	public List<Song> findSongsByBand();
+
 }

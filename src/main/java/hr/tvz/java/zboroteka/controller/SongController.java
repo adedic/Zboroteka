@@ -93,6 +93,20 @@ public class SongController {
 		return "song/mySongs";
 	}
 
+	@GetMapping("/bandSongs")
+	public String showBandSongs(Model model) {
+		List<Song> songs = iSongService.findSongsByBand();
+		model.addAttribute("songs", songs);
+		model.addAttribute("songsExists", true);
+
+		if (songs.isEmpty())
+			model.addAttribute("songsExists", false);
+
+		// a ako ima pjesme prikazati mu popis svih pjesama
+
+		return "song/allSongs"; //ili mySongs
+	}
+
 	@GetMapping("/searchResults")
 	public ModelAndView showSearchResults(Model model, @RequestParam(value = "query", required = true) String query,
 			RedirectAttributes redirectAttributes) {
@@ -233,16 +247,6 @@ public class SongController {
 		jsonResponse.setResult(newText);
 
 		return ResponseEntity.ok(jsonResponse);
-	}
-
-	@GetMapping("/songs")
-	public String showAllSongs(Model model) {
-
-		// ako trenutni korisnik nema nijednu pjesmu
-		return "song/noSong";
-
-		// a ako ima pjesme prikazati mu popis svih pjesama
-
 	}
 
 	// brisanje pjesme

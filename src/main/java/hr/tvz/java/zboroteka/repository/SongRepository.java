@@ -38,4 +38,6 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 	@Query("DELETE FROM Song s WHERE s.id = :songId")
 	void deleteSongById(@Param("songId") Integer songId);
 
+	Optional<List<Song>> findAllByBand_Id(Integer id);
+
 }

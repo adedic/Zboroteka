@@ -11,44 +11,42 @@
 <body>
     <div layout:fragment="content">
     
-    <div class="container">
-    <br><br>
-	  	<div class="row">
-	  		<div class="col-8">
-	        	<h1>Rezultati pretrage</h1>
-	        </div>
-	        <div class="col-4">
-		        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
-				Nova pjesma <i class="fas fa-plus"></i></a>
-	        </div>
-	         
-	     </div>
-	     <div th:if="!${songsExists}">
-    		<br><br>
-    		<div class="alert alert-danger alert-dismissable">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-				Ne postoji nijedna pjesma za traženi tekst.
+	    <div class="container">
+	    <br><br>
+		  	<div class="row">
+		  		<div class="col-8">
+		        	<h1>Rezultati pretrage</h1>
+		        </div>
+		        <div class="col-4">
+			        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
+					Nova pjesma <i class="fas fa-plus"></i></a>
+		        </div>
+		         
+		     </div>
+		     <div class="row" th:if="!${songsExists}">
+			     <div class="col-8">
+		    		<br><br>
+		    		<div class="alert alert-danger alert-dismissable">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+						Ne postoji nijedna pjesma za traženi tekst.
+					</div>
+				</div>
+	    	</div>
+		                
+	            
+			<br><br>
+	        <div class="list-group" th:each="song : ${songs}">
+				<a class="list-group-item list-group-item-action" 
+				th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
+				th:href="@{/song/details(id=${song.id})}">
+				</a>
 			</div>
-    	</div>
-	                
-            
-		<br><br>
-        <div class="list-group" th:each="song : ${songs}">
-			<a class="list-group-item list-group-item-action" 
-			th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
-			th:href="@{/song/details(id=${song.id})}">
-			</a>
-		</div>
-    </div>
-    
-    
-    
-    <!-- Additional scripts -->
-	<div th:replace="fragments/scripts :: markdownScripts"></div>
-	<script>
-    $(document).ready(function() {
-    });
-    </script>
+	    </div>
+	    
+	    
+	    
+	    <!-- Additional scripts -->
+		<div th:replace="fragments/scripts :: markdownScripts"></div>
     </div>
 </body>
 

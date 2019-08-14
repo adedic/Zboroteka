@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.mappers.SongMapper;
+import hr.tvz.java.zboroteka.model.Band;
 import hr.tvz.java.zboroteka.model.Song;
+import hr.tvz.java.zboroteka.repository.BandRepository;
 import hr.tvz.java.zboroteka.repository.BandSongRepository;
 import hr.tvz.java.zboroteka.repository.SongRepository;
 import hr.tvz.java.zboroteka.repository.UserSongRepository;
@@ -29,6 +31,9 @@ public class ISongService implements SongService {
 
 	@Autowired
 	private BandSongRepository bandSongRepository;
+
+	@Autowired
+	private BandRepository bandRepository;
 
 	@Autowired
 	private UserSongRepository userSongRepository;
@@ -107,6 +112,16 @@ public class ISongService implements SongService {
 
 		return userSongs.isPresent() ? userSongs.get() : new ArrayList<>();
 
+	}
+
+	@Override
+	public List<Song> findSongsByBand() {
+		// Integer creatorId = (Integer) session.getAttribute("userId");
+		Integer creatorId = 1;
+		Optional<Band> band = bandRepository.findByCreatorId(creatorId);
+		Optional<List<Song>> bandSongs = songRepository.findAllByBand_Id(band.get().getId());
+
+		return bandSongs.isPresent() ? bandSongs.get() : new ArrayList<>();
 	}
 
 	@Override

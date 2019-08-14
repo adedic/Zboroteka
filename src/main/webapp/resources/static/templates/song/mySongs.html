@@ -30,19 +30,24 @@
 				</div>
 
 			</div>
-			<div th:if="${deleteSuccess}">
-				<br> <br>
-				<div class="alert alert-success alert-dismissable">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-					Pjesma je uspješno obrisana.
+			<div class="row" th:if="${deleteSuccess}">
+				<div class="col-8">
+					<br> <br>
+					<div class="alert alert-success alert-dismissable">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+						Pjesma je uspješno obrisana.
+					</div>
 				</div>
 			</div>
-			<div th:if="!${songsExists}">
-				<br> <br>
-				<div class="alert alert-warning alert-dismissable">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-					Ne postoji nijedna pjesma u tvojoj kolekciji pjesama. Dodaj novu
-					pjesmu.
+			
+			<div class="row" th:if="!${songsExists}">
+				<div class="col-8">
+					<br> <br>
+					<div class="alert alert-warning alert-dismissable">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+						Ne postoji nijedna pjesma u tvojoj kolekciji pjesama. Dodaj novu
+						pjesmu.
+					</div>
 				</div>
 			</div>
 

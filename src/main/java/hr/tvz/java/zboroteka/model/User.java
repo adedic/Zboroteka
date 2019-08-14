@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,7 +43,7 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false, unique = true, updatable = true)
 	private Integer id;
 
 	@Column(name = "first_name", nullable = false)
@@ -83,12 +82,8 @@ public class User implements Serializable {
 
 	@Column(name = "sex")
 	private Integer sex;
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "user_song", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "song_id", referencedColumnName = "id") })
-	private List<Song> userSongs;
 
+	@OneToMany(mappedBy = "band", fetch = FetchType.LAZY)
+	private List<Song> userSongs;
 
 }

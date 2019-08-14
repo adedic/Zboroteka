@@ -12,4 +12,6 @@ public interface BandService {
 
 	Band saveBand(BandForm bandForm);
 
+	void saveBand(Band currBand);
+
 }

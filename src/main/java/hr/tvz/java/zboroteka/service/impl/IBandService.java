@@ -31,4 +31,9 @@ public class IBandService implements BandService {
 		return bandRepository.save(bandMapper.mapBandFormToBand(bandForm));
 	}
 
+	@Override
+	public void saveBand(Band currBand) {
+		bandRepository.save(currBand);
+	}
+
 }

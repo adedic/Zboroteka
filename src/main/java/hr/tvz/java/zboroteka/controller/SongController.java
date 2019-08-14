@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,7 +80,8 @@ public class SongController {
 	}
 
 	@GetMapping("/mySongs")
-	public String showMySongs(Model model) {
+	public String showMySongs(Model model,
+			@RequestParam(value = "deleteSuccess", required = false) String deleteSuccess) {
 		List<Song> songs = iSongService.findSongsByCreator();
 		model.addAttribute("songs", songs);
 		model.addAttribute("songsExists", true);
@@ -87,6 +89,7 @@ public class SongController {
 		if (songs.isEmpty())
 			model.addAttribute("songsExists", false);
 
+		model.addAttribute("deleteSuccess", deleteSuccess);
 		return "song/mySongs";
 	}
 
@@ -240,6 +243,13 @@ public class SongController {
 
 		// a ako ima pjesme prikazati mu popis svih pjesama
 
+	}
+
+	// brisanje pjesme
+	@GetMapping("/deleteSong/{id}")
+	String deleteSong(@PathVariable Integer id) {
+		iSongService.deleteSong(id);
+		return "redirect:/song/mySongs?deleteSuccess=true";
 	}
 
 	private void initSongScreen(Model model) {

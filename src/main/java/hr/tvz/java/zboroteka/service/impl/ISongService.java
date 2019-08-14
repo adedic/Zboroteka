@@ -14,7 +14,9 @@ import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.mappers.SongMapper;
 import hr.tvz.java.zboroteka.model.Song;
+import hr.tvz.java.zboroteka.repository.BandSongRepository;
 import hr.tvz.java.zboroteka.repository.SongRepository;
+import hr.tvz.java.zboroteka.repository.UserSongRepository;
 import hr.tvz.java.zboroteka.service.SongService;
 import hr.tvz.java.zboroteka.util.SongParser;
 import hr.tvz.java.zboroteka.validator.SongValidator;
@@ -24,6 +26,12 @@ public class ISongService implements SongService {
 
 	@Autowired
 	private SongRepository songRepository;
+
+	@Autowired
+	private BandSongRepository bandSongRepository;
+
+	@Autowired
+	private UserSongRepository userSongRepository;
 
 	@Autowired
 	HttpSession session;
@@ -110,6 +118,13 @@ public class ISongService implements SongService {
 
 	public SongForm getSongFormDetails(Song song) {
 		return songMapper.mapSongToSongForm(song);
+	}
+
+	public void deleteSong(Integer songId) {
+
+		bandSongRepository.deleteBandSongBySongId(songId);
+		userSongRepository.deleteUserSongBySongId(songId);
+		songRepository.deleteSongById(songId);
 	}
 
 }

@@ -33,7 +33,7 @@ public class Band implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false, unique = true, updatable = true)
 	private Integer id;
 
 	@Column(name = "name", nullable = false)
@@ -51,15 +51,17 @@ public class Band implements Serializable {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private Integer creatorId;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	/*@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "band_song", joinColumns = {
 			@JoinColumn(name = "band_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "song_id", referencedColumnName = "id") })
-	private List<Song> bandSongs;
+	private List<Song> bandSongs;*/
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "band_member", joinColumns = { @JoinColumn(name = "band_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "member_id") })
 	private List<User> members;
 
+	@OneToMany(mappedBy = "band", fetch = FetchType.LAZY)
+	private List<Song> bandSongs;
 }

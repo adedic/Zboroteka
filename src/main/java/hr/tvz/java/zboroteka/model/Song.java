@@ -37,7 +37,7 @@ public class Song implements Serializable {
 	private static final long serialVersionUID = 393192385042172713L;
 
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false, unique = true)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
@@ -52,15 +52,6 @@ public class Song implements Serializable {
 
 	@Column(name = "name")
 	private String name;
-
-	/*
-	 * 2/4 = dvije četvrtinke (četvrtine nota) u svakome taktu. Brzi korak i brzi
-	 * marš imaju ovu mjeru. 3/4 = tri četvrtinke u svakome taktu. Primjeri su
-	 * valcer i menuet. 4/4 = četiri četvrtinke u svakome taktu 2/2 = dvije
-	 * polovinke 6/8 //neuobicajene: 5/4 i 7/4. 9/8 kao (4 + 2 + 3)/8; 7/8 kao (2 +
-	 * 2 + 3)/8; 5/8; 8/8 kao (3 + 2 + 3)/8 ili (3 + 3 + 2)/8; 9/8 kao 2 + 2 + 2 +
-	 * 3/8. 2/16, 3/16, 5/16, 3/4
-	 */
 
 	@Column(name = "measure")
 	private String measure;
@@ -90,8 +81,13 @@ public class Song implements Serializable {
 	private SongSet songSet;
 
 	// @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "band_id", referencedColumnName = "id", nullable = true) // song can exist without band
-	private Integer bandId;
+	// @JoinColumn(name = "band_id", referencedColumnName = "id", nullable = true)
+	// // song can exist without band
+	// private Integer bandId;
+
+	@ManyToOne
+	@JoinColumn(name = "band_id")
+	private Band band;
 
 	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")

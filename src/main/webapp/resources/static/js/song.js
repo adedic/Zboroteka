@@ -7,7 +7,7 @@ $("#showSongEditorFormBtn").click(function(e) {
 			commonModul.removeAllAlerts();
 			commonModul.showAlert({
 						elementId : 'showAlertBox',
-						message : "Popunite tražene podatke kako biste mogli nastaviti s unosom pjesme!",
+						message : "Popuni tražene podatke za nastavak unosa pjesme!",
 						alertLevel : 'danger'
 					});
 		} else {
@@ -71,16 +71,22 @@ $("#saveUpdateSongBtn").click(function(e) {
 				});
 			}
 			
-		} else {
-
-	        $("#btnEdit").click();
+		} else  if(data.status == "noTextAndChords") {
+			$("#btnEdit").click();
+			// provjera statusa, validacija nepostojecih akorda
+			commonModul.showAlert({
+				elementId : 'showAlertBox',
+				message : "Nespješno " + data.result.msg + " pjesme! Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
+				alertLevel : 'danger'
+			});
+		} else if(data.status == "invalidChords") {
+			 $("#btnEdit").click();
 			// provjera statusa, validacija nepostojecih akorda
 			commonModul.showAlert({
 				elementId : 'showAlertBox',
 				message : "Nespješno " + data.result.msg + " pjesme! Uneseni su akordi koji ne postoje: " + data.result.unrecognizedChords,
 				alertLevel : 'danger'
 			});
-
 		}
 	});
 

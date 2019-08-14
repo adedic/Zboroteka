@@ -91,7 +91,7 @@ public class SongController {
 	}
 
 	@GetMapping("/searchResults")
-	public String showSearchResults(Model model, @RequestParam(value = "query", required = true) String query,
+	public ModelAndView showSearchResults(Model model, @RequestParam(value = "query", required = true) String query,
 			RedirectAttributes redirectAttributes) {
 		System.out.println("query " + query);
 		List<Song> songs = iSongService.searchSongByQueryAndUser(query);
@@ -105,7 +105,7 @@ public class SongController {
 		redirectAttributes.addFlashAttribute("query", query);
 		model.addAttribute("songs", songs);
 
-		return "song/searchResults";
+		return new ModelAndView("song/searchResults");
 	}
 
 	@PostMapping("/searchSong")
@@ -113,8 +113,19 @@ public class SongController {
 			RedirectAttributes redirectAttributes) {
 
 		model.addAttribute("query", query);
+		List<Song> songs = iSongService.searchSongByQueryAndUser(query);
+		// TODO bendsongs
+		if (!songs.isEmpty())
+			model.addAttribute("songsExists", songs);
+
+		for (Song song : songs)
+			System.out.println("pjems " + song.getName());
+
+		// redirectAttributes.addFlashAttribute("query", query);
+		model.addAttribute("songs", songs);
+
 		redirectAttributes.addAttribute("query", query);
-		return "/song/searchResults";
+		return "redirect:/song/searchResults";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -161,23 +172,14 @@ public class SongController {
 		JsonResponse jsonResponse = new JsonResponse();
 
 		Map<String, Object> hmap = new HashMap<String, Object>();
+
 		switch (option) {
 		case 1:
-			String onlyText = songParser.removeChordsFromRawSongText(rawSongText);
-			if (onlyText != "")
-				jsonResponse.setStatus("okText");
-			else
-				jsonResponse.setStatus("noText");
-
+			String onlyText = songParser.removeChordsFromRawSongText(rawSongText, jsonResponse);
 			hmap.put("onlyText", onlyText);
 			break;
 		case 2:
-			String onlyChords = songParser.onlyChords(rawSongText);
-			if (onlyChords != "")
-				jsonResponse.setStatus("okChords");
-
-			else
-				jsonResponse.setStatus("invalidChords");
+			String onlyChords = songParser.onlyChords(rawSongText, jsonResponse);
 			hmap.put("onlyChords", onlyChords);
 			break;
 		case 3:

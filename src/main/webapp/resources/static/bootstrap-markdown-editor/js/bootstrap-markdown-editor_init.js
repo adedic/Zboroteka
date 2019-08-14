@@ -472,39 +472,47 @@
                     }
 
                 } else if (btnType === 'preview') {
-                	
-                	if(preview == false) {
-                    	songUtil.showTextChordsRadio(editor, $("#optionPreview").val(), preview);
-                    	preview = true;
-                	} else if(preview == true) {
-                		preview = true;
-                	} 
-            		$('.editBtns').hide();
-            		$('.previewBtns').show();
+                	if(!editor.getSession().getValue().includes("```")) {
+            	        $("#btnEdit").click();
+                    	commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
+            				alertLevel : 'warning'
+            			});
+                	} else {
+                		if(preview == false) {
+                        	songUtil.showTextChordsRadio(editor, $("#optionPreview").val(), preview);
+                        	preview = true;
+                    	} else if(preview == true) {
+                    		preview = true;
+                    	} 
+                		$('.editBtns').hide();
+                		$('.previewBtns').show();
 
-                    mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
-                    
-                    if($("#songPreview").val() != "") {
-                    	defaults.onPreview($("#songPreview").val(), function (content) {
-                            mdPreview.html(content);
-                        });
-                    	
-                    } else {
-                        defaults.onPreview(editor.getSession().getValue(), function (content) {
-                        	
-                            mdPreview.html(content);
-                        });
+                        mdPreview.html('<pre font-size:16px">' + defaults.label.loading+ '...</pre>'); 
                         
-                    }
-                    
-                    mdEditor.hide();
-                    mdPreview.show();
-                    container.find('.btn-preview').addClass('active');
-                    container.find('.btn-edit').removeClass('active');
+                        if($("#songPreview").val() != "") {
+                        	defaults.onPreview($("#songPreview").val(), function (content) {
+                                mdPreview.html(content);
+                            });
+                        	
+                        } else {
+                            defaults.onPreview(editor.getSession().getValue(), function (content) {
+                            	
+                                mdPreview.html(content);
+                            });
+                            
+                        }
+                        
+                        mdEditor.hide();
+                        mdPreview.show();
+                        container.find('.btn-preview').addClass('active');
+                        container.find('.btn-edit').removeClass('active');
 
-                    if (fullscreen === true) {
-                        adjustFullscreenLayout(mdPreview);
-                    }
+                        if (fullscreen === true) {
+                            adjustFullscreenLayout(mdPreview);
+                        }
+                	}
 
                 } else if (btnType === 'fullscreen') {
 

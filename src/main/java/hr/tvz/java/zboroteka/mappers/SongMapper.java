@@ -75,8 +75,6 @@ public class SongMapper {
 	public void mapSongFormToSong(Song song, SongForm songForm) {
 		// if exists
 		if (songForm.getId() != null) {
-			System.out.println("id pjesme postoji na formi ");
-
 			song.setId(songForm.getId());
 			Optional<SongSet> songSet = setService.findSongSetBySongId(songForm.getId());
 			if (songSet.isPresent())

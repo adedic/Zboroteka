@@ -133,84 +133,70 @@ var songUtil = (function() {
     var showTextChordsRadio = function (editor, option, preview) {
     	commonModul.removeAllAlerts();
 
-    	if(!editor.getSession().getValue().includes("```")) {
-        	commonModul.showAlert({
-				elementId : 'showAlertBox',
-				message : "Upiši tekst i akorde pjesme unutar oznaka ```   ```!",
-				alertLevel : 'warning'
-			});
-    	}
-
-        else {
-        	if(option == "")
-        		option = 3;
-        	
-        	$("#optionPreview").val(option).change();
-        	
-	    	$.ajax({
-	            type: "POST",
-	            url: "showTextChordsRadio",
-	            data:  "rawSongText=" + editor.getSession().getValue() + "&option="+option,
-	            suppressErrors: true
-	        }).done(function(data) {
-	            debugger;
-	        		if(option == 1) {
-	            		if (data.status == "noText") {
-	            			commonModul.showAlert({
-	            				elementId : 'showAlertBox',
-	            				message : "Unesi tekst pjesme!",
-	            				alertLevel : 'danger'
-	            			});
-	            		}
-	            		else if(data.status == "okText") {
-	            			$("#songPreview").val(data.result.onlyText).change();
-	            			$("#option1").addClass("active");
-	            			$("#option2").removeClass("active");
-	            			$("#option3").removeClass("active");
-	            			$("#btnPreview").click();
-	            			$('p').css({'color' : 'grey'});
-	            			
-	                	}
-	                } else if(option == 2) {
-	            		if (data.status == "invalidChords") {
-	            			commonModul.showAlert({
-	            				elementId : 'showAlertBox',
-	            				message : "Unesi akorde pjesme!",
-	            				alertLevel : 'danger'
-	            			});
-	            		}
-	            		else if(data.status == "okChords") {
-	            			$("#songPreview").val(data.result.onlyChords).change();
-		            			$("#option1").removeClass("active");
-		            			$("#option2").addClass("active");
-		            			$("#option3").removeClass("active");
-	            				$("#btnPreview").click();
-		            			$('code').css({'font-size' : '16px'});
-		            			$('code').css({'color' : 'blue'});
-		            			$('p').css({'color' : 'grey'});
-	                	}
-	                } else if(option == 3) {
-	            		if (data.status == "noRawText") {
-	            			commonModul.showAlert({
-	            				elementId : 'showAlertBox',
-	            				message : "Unesi text i akorde pjesme!",
-	            				alertLevel : 'danger'
-	            			});
-	            		}
-	            		else if(data.status == "okBoth") {
-	            			$("#songPreview").val(data.result.textAndChords).change();
-	            			$("#option1").removeClass("active");
-	            			$("#option2").removeClass("active");
-	            			$("#option3").addClass("active");
-	            			$("#btnPreview").click();
-	            			$('p').css({'color' : 'grey'});
-	                	}
-	                }
+    	if(option == "")
+    		option = 3;
+    	
+    	$("#optionPreview").val(option).change();
+    	
+    	$.ajax({
+            type: "POST",
+            url: "showTextChordsRadio",
+            data:  "rawSongText=" + editor.getSession().getValue() + "&option="+option,
+            suppressErrors: true
+        }).done(function(data) {
+            debugger;
+        		if(option == 1) {
+        			$("#songPreview").val(data.result.onlyText).change();
+        			$("#option1").addClass("active");
+        			$("#option2").removeClass("active");
+        			$("#option3").removeClass("active");
+        			$("#btnPreview").click();
+        			$('p').css({'color' : 'grey'});
+        			
+            		if (data.status == "noText") {
+            			commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Unesi tekst pjesme!",
+            				alertLevel : 'warning'
+            			});
+            		}
+                } else if(option == 2) {
+                	$("#songPreview").val(data.result.onlyChords).change();
+        			$("#option1").removeClass("active");
+        			$("#option2").addClass("active");
+        			$("#option3").removeClass("active");
+    				$("#btnPreview").click();
+        			$('code').css({'font-size' : '16px'});
+        			$('code').css({'color' : 'blue'});
+        			$('p').css({'color' : 'grey'});
+        			
+            		if (data.status == "invalidChords") {
+            			commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Unesi akorde pjesme!",
+            				alertLevel : 'warning'
+            			});
+            		}
+                } else if(option == 3) {
+            		if (data.status == "noRawText") {
+            			commonModul.showAlert({
+            				elementId : 'showAlertBox',
+            				message : "Unesi tekst i akorde pjesme!",
+            				alertLevel : 'danger'
+            			});
+            		}
+            		else if(data.status == "okBoth") {
+            			$("#songPreview").val(data.result.textAndChords).change();
+            			$("#option1").removeClass("active");
+            			$("#option2").removeClass("active");
+            			$("#option3").addClass("active");
+            			$("#btnPreview").click();
+            			$('p').css({'color' : 'grey'});
+                	}
+                }
 	            
-	
 	        });
 
-    	}
     	
     }
     

@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
 import hr.tvz.java.zboroteka.model.Chord;
 import hr.tvz.java.zboroteka.model.ChordDetails;
@@ -326,27 +327,41 @@ public class SongParser {
 		return foundChords;
 	}
 
-	public String removeChordsFromRawSongText(String rawSongText) {
+	public String removeChordsFromRawSongText(String rawSongText, JsonResponse jsonResponse) {
 		String textAndChords = parseTextAndChords(rawSongText);
 		String[] chords = parseChordsStr(textAndChords);
 
 		String restBefore = StringUtils.substringBefore(rawSongText, textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords);
 
-		if (chords != null && chords.length != 0) {
-			return restBefore + parseText(textAndChords, chords) + restAfter;
+		String onlyText = "";
+		// SAMO PRAZNINE
+		if (textAndChords.trim().isEmpty()) {
+			jsonResponse.setStatus("noText");
+			return restBefore + "\n\n" + restAfter;
 		}
+		if (chords != null && chords.length != 0) {
+			onlyText = parseText(textAndChords, chords);
+		} else if (textAndChords != null && textAndChords != "")
+			onlyText = textAndChords;
+
+		jsonResponse.setStatus("okText");
 		// ako nema akorda vrati text
-		return restBefore + textAndChords + restAfter;
+		return restBefore + onlyText + restAfter;
 	}
 
-	public String onlyChords(String rawSongText) {
+	public String onlyChords(String rawSongText, JsonResponse jsonResponse) {
 
 		String textAndChords = parseTextAndChords(rawSongText);
 		String restBefore = StringUtils.substringBefore(rawSongText, textAndChords);
 		String restAfter = StringUtils.substringAfter(rawSongText, textAndChords);
 
 		String[] chords = parseChordsStr(textAndChords);
+
+		if (chords == null) {
+			jsonResponse.setStatus("invalidChords");
+			return restBefore + "\n\n" + restAfter;
+		}
 
 		List<String> areChords = new ArrayList<>();
 
@@ -371,10 +386,12 @@ public class SongParser {
 
 			}
 			// RED SAMO S PRAZNINAMA
-			if (!currOtherText.matches(".*\\w.*")) {
+			if (currOtherText.trim().isEmpty()) {
 				areChords.add("\n");
 			}
 		}
+		if (!areChords.isEmpty())
+			jsonResponse.setStatus("okChords");
 
 		return restBefore + StringUtils.join(areChords, "") + restAfter;
 

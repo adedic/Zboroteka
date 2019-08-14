@@ -16,6 +16,7 @@ import hr.tvz.java.zboroteka.mappers.SongMapper;
 import hr.tvz.java.zboroteka.model.Song;
 import hr.tvz.java.zboroteka.repository.SongRepository;
 import hr.tvz.java.zboroteka.service.SongService;
+import hr.tvz.java.zboroteka.util.SongParser;
 import hr.tvz.java.zboroteka.validator.SongValidator;
 
 @Service
@@ -31,6 +32,9 @@ public class ISongService implements SongService {
 	SongMapper songMapper;
 
 	@Autowired
+	SongParser songParser;
+
+	@Autowired
 	SongValidator songValidator;
 
 	@Override
@@ -44,6 +48,15 @@ public class ISongService implements SongService {
 		songMapper.mapRawSongTextToChordsStr(song);
 
 		HashMap<String, Object> hmap = new HashMap<>();
+		if (songForm.getId() == null)
+			hmap.put("msg", "spremanje");
+		else
+			hmap.put("msg", "ažuriranje");
+
+		// text and chords exists
+		String textAndChords = songParser.parseTextAndChords(song.getRawSongText());
+		if (textAndChords == null || textAndChords == "")
+			jsonResponse.setStatus("noTextAndChords");
 
 		// chord validation
 		if (song.getChordsStr() != null && song.getChordsStr().length != 0) {
@@ -56,14 +69,9 @@ public class ISongService implements SongService {
 				Song savedSong = songRepository.save(song);
 				hmap.put("songId", savedSong.getId());
 				jsonResponse.setStatus("ok");
-				
-				if (songForm.getId() == null)
-					hmap.put("msg", "spremanje");
-				else
-					hmap.put("msg", "ažuriranje");
 
 			} else if (!unrecognizedChords.isEmpty()) {
-				jsonResponse.setStatus("error");
+				jsonResponse.setStatus("invalidChords");
 				hmap.put("unrecognizedChords", unrecognizedChords);
 			}
 		}
@@ -71,7 +79,6 @@ public class ISongService implements SongService {
 			hmap.put("songId", song.getId());
 
 		jsonResponse.setResult(hmap);
-
 	}
 
 	@Override

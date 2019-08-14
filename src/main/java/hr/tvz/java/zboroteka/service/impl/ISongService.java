@@ -124,6 +124,7 @@ public class ISongService implements SongService {
 
 		bandSongRepository.deleteBandSongBySongId(songId);
 		userSongRepository.deleteUserSongBySongId(songId);
+		System.out.println("Brisem pjesmu " + songId);
 		songRepository.deleteSongById(songId);
 	}
 

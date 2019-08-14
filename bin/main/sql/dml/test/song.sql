@@ -21,7 +21,7 @@ Tonalitet: **G**
     Ti, ti si ga upoznala
     jedne ljetnje veceri
     On, on te poljubio
-', 'Krivo je more', '4/4', 0, 1, 'Za druženja', 'Divlje jagode', 'Neki opis', 1, 1, 1);
+', 'Krivo je more', '4/4', 0, 7, 'Za druženja', 'Divlje jagode', 'Neki opis', 1, 1, 1);
 
 
 

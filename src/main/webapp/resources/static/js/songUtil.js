@@ -21,7 +21,6 @@ var songUtil = (function() {
         //////////////////////////
 
         //transponiraj akorde pjesme
-        
         $.ajax({
             type: "POST",
             url: "transposeChords",
@@ -44,59 +43,7 @@ var songUtil = (function() {
 
         });
     };
-    
-    var updateKey = function(transposeValue, editor, newText) {
-    	//transposeValue je UP (+1) ili DOWN (-1)
-        commonModul.removeAllAlerts();
 
-        //DOHVATI TRENUTNI TONALITET - PREMA ODABRANOM id-u u formi
-        var currentKey = parseInt($("#key").val());
-        
-        if ($("#key").val() == null) {
-            if (transposeValue == 1) {
-                //ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-                $("#key").val(1);
-            } else if (transposeValue == -1) {
-                //ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-                $("#key").val(12);
-            }
-            //postavi vrijednost trenutnog tonaliteta koja se salje na backend
-            currentKey = parseInt($("#key").val());
-        }
-
-        //update key in form and in rawText TODO OVO MAKNUTI, JER SE POZIVA NA BACKENDU AZURIRANJE
-	        $.ajax({
-	            type: "POST",
-	            url: "updateKey",
-	            data:  "rawSongText=" + newText + "&transposeValue=" + transposeValue + "&currentKey=" + currentKey,
-	            suppressErrors: true
-	        }).done(function(data) {
-	            debugger;
-
-	            if(data.status == "ok") {
-
-                    //azurirati trenutni tontalitet na formi
-	                $("#key").val(data.result.newKey).change();
-
-	        		//ako je vrijednost izasla iz polja na desni kraj- vrati na pocetak niza, postavi 1
-	                if(data.result.newKey == 13) {
-		                $("#key").val(1).change(); 
-		                console.log("postavi 1");
-	                } else if(data.result.newKey == -1) {
-	            		//ako je vrijednost izasla iz polja na lijevi kraj- vrati na kraj niza, postavi 12
-		                $("#key").val(data.result.newKey).change(12); 
-		                console.log("postavi 12");
-
-	                }
-
-	                console.log("data.result.newText:	" + data.result.newText);
-	                //azuriranje rawSongText na formi
-	                //TODO OVO PREMJESTITI IZVAN A OSTALO OBRISATI JER JE NA BACKENDU?
-	                updateSongEditorValue(data.result.newText, editor);
-	            }
-
-	        });
-    };
     
     var updateSongEditorValue = function (newText, editor) {
     	//isprazni postojeci tekst na formi
@@ -203,7 +150,6 @@ var songUtil = (function() {
     return {
         //transponira akorde
         transposeChords: transposeChords,
-        transposeChord: transposeChord,
         updateSongEditorValue: updateSongEditorValue,
         showTextChordsRadio: showTextChordsRadio
     }

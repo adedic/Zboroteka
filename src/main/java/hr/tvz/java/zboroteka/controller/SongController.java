@@ -176,10 +176,10 @@ public class SongController {
 			hmap.put("onlyChords", onlyChords);
 			break;
 		case 3:
-			if (rawSongText == "")
-				jsonResponse.setStatus("ok");
-			else
+			if (rawSongText != "" && songParser.parseTextAndChords(rawSongText).trim().isEmpty())
 				jsonResponse.setStatus("noRawText");
+			else
+				jsonResponse.setStatus("ok");
 
 			rawSongText = rawSongText.replace("[", "").replace("]", "");
 			hmap.put("textAndChords", rawSongText);

@@ -131,6 +131,7 @@ var songUtil = (function() {
         			$("#option3").addClass("active");
         			$("#btnPreview").click();
         			$('p').css({'color' : 'grey'});
+        			
             		if (data.status == "noRawText") {
             			commonModul.showAlert({
             				elementId : 'showAlertBox',

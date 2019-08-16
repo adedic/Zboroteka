@@ -16,18 +16,13 @@
 		<div class="container-fluid" id="songs">
 			 <h1 class="mt-4"><small>Pjesme glazbene grupe</small></h1>
 			 <div id="createSong" th:if="!${songsExists}">
-			      <br>
-			      <br>
-			      <h2 class="mt-4">Nema nijedne pjesme glazbene grupe?</h2>
+			      <h4 class="mt-4">Nema nijedne pjesme glazbene grupe?</h4>
 			      <br></br>
-			      <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
-			      title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
+			      <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
+			      title="Kreiraj prvu pjesmu grupe" id="createSongBtn">Dodaj pjesmu  <i class="fas fa-plus"></i></a>
 			      <br></br>
 			      <br></br>
 			 </div>
-			 
-			 
-			 
 			 
 			 <div id="bandSongs" th:if="${songsExists}">
 			      <br>

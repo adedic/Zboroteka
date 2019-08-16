@@ -1,5 +1,6 @@
 package hr.tvz.java.zboroteka.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.tvz.java.zboroteka.JsonResponse;
 import hr.tvz.java.zboroteka.forms.SongForm;
@@ -104,45 +104,21 @@ public class SongController {
 
 		// a ako ima pjesme prikazati mu popis svih pjesama
 
-		return "song/allSongs"; //ili mySongs
+		return "song/allSongs"; // ili mySongs
 	}
 
 	@GetMapping("/searchResults")
-	public ModelAndView showSearchResults(Model model, @RequestParam(value = "query", required = true) String query,
-			RedirectAttributes redirectAttributes) {
-		System.out.println("query " + query);
-		List<Song> songs = iSongService.searchSongByQueryAndUser(query);
-		// TODO bendsongs
+	public String showSearchResults(@RequestParam(value = "songsIDs", required = false) Integer[] songsIDs,
+			Model model) {
+		ArrayList<Song> songs = new ArrayList<>();
+
+		for (Integer id : songsIDs) {
+			songs.add(iSongService.findSong(id));
+		}
 		if (!songs.isEmpty())
-			model.addAttribute("songsExists", songs);
-
-		for (Song song : songs)
-			System.out.println("pjems " + song.getName());
-
-		redirectAttributes.addFlashAttribute("query", query);
+			model.addAttribute("songsExists", true);
 		model.addAttribute("songs", songs);
-
-		return new ModelAndView("song/searchResults");
-	}
-
-	@PostMapping("/searchSong")
-	public String searchSong(Model model, @RequestParam(value = "query", required = false) String query,
-			RedirectAttributes redirectAttributes) {
-
-		model.addAttribute("query", query);
-		List<Song> songs = iSongService.searchSongByQueryAndUser(query);
-		// TODO bendsongs
-		if (!songs.isEmpty())
-			model.addAttribute("songsExists", songs);
-
-		for (Song song : songs)
-			System.out.println("pjems " + song.getName());
-
-		// redirectAttributes.addFlashAttribute("query", query);
-		model.addAttribute("songs", songs);
-
-		redirectAttributes.addAttribute("query", query);
-		return "redirect:/song/searchResults";
+		return "song/searchResults";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "transposeChords", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

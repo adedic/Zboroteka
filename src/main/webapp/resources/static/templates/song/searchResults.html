@@ -18,7 +18,7 @@
 		        	<h1>Rezultati pretrage</h1>
 		        </div>
 		        <div class="col-4">
-			        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info float-right" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
+			        <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Dodaj novu pjesmu" id="addNewSongBtn">
 					Nova pjesma <i class="fas fa-plus"></i></a>
 		        </div>
 		         
@@ -35,11 +35,15 @@
 		                
 	            
 			<br><br>
-	        <div class="list-group" th:each="song : ${songs}">
-				<a class="list-group-item list-group-item-action" 
-				th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
-				th:href="@{/song/details(id=${song.id})}">
-				</a>
+		    <div class="list-group" th:each="song : ${songs}">
+				<div class="row">
+					<div class="col-8">
+						<a class="list-group-item list-group-item-action" 
+						th:utext="${song.name + ', (' + song.songKey.name + ')' }" 
+						th:href="@{/song/details(id=${song.id})}">
+						</a>
+					</div>
+				</div>
 			</div>
 	    </div>
 	    

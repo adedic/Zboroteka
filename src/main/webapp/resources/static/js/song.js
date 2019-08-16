@@ -100,7 +100,7 @@ $("#searchSong").change(function(e) {
 		suppressErrors : true
 	}).done(function(data) {
 		window.setTimeout(function() {
-            //localStorage.setItem("query", $("#searchSong").val());
+            localStorage.setItem("query", $("#searchSong").val());
 	        localStorage.setItem("songsIDs", data.result);
 			window.location.href = '/zboroteka/song/searchResults?songsIDs='+ data.result;
         }, 500);

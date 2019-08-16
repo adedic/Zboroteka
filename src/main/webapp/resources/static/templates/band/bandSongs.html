@@ -13,19 +13,50 @@
     
         <div class="container">
     	<br><br>        
-			<div class="container-fluid" id="songs">
-				 <h1 class="mt-4">Pjesme glazbene grupe</h1>
-				 <div id="createSong">
-				      <br></br>
-				      <br>
-				      <h2 class="mt-4">Nema nijedne pjesme glazbene grupe?</h2>
-				      <h3>Dodaj prvu pjesmu! :)</h3>
-				      <br></br>
-				      <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
-				      <br></br>
-				      <br></br>
-				 </div>
+		<div class="container-fluid" id="songs">
+			 <h1 class="mt-4"><small>Pjesme glazbene grupe</small></h1>
+			 <div id="createSong" th:if="!${songsExists}">
+			      <br>
+			      <br>
+			      <h2 class="mt-4">Nema nijedne pjesme glazbene grupe?</h2>
+			      <br></br>
+			      <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
+			      title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
+			      <br></br>
+			      <br></br>
 			 </div>
+			 
+			 
+			 
+			 
+			 <div id="bandSongs" th:if="${songsExists}">
+			      <br>
+			      <br>
+			      <div class="list-group" th:each="song : ${songs}">
+					  <div class="row">
+							<div class="col-8">
+								<a class="list-group-item list-group-item-action"
+									th:href="@{/song/details(id=${song.id})}">
+									<b th:text="${song.name}"></b>
+									<span th:text="${', (' + song.songKey.name + ')' }"></span>
+								</a>
+							</div>
+							<div class="col-4">
+								<button type="button"  class="btn btn-danger" data-toggle="modal" th:attr="data-target='#deleteSonglModal'+${song.id}">
+								 <i class="fa fa-trash" aria-hidden="true" style="font-size: 1.3em;"></i>
+								</button>
+							</div>
+							<div th:replace="fragments/modal :: deleteSongModal"></div>
+						</div>
+				  </div>
+			
+			      <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
+			      title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
+			      <br></br>
+			      <br></br>
+			 </div>
+		 </div>
+			 
 	                
         </div>
         

@@ -45,7 +45,7 @@ public class BandController {
 			model.addAttribute("songsExists", false);
 
 		// a ako ima pjesme prikazati mu popis svih pjesama
-		return "song/mySongs"; // ili mySongs
+		return "band/bandSongs"; // ili mySongs
 	}
 
 	@GetMapping("/create")

@@ -51,7 +51,8 @@ public class SongMapper {
 		SongForm songForm = new SongForm();
 		songForm.setId(song.getId());
 		songForm.setAuthor(song.getAuthor());
-		songForm.setBandId(song.getBand().getId());
+		if (song.getBand() != null)
+			songForm.setBandId(song.getBand().getId());
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
 		songForm.setCreationDate(simpleDateFormat.format(song.getCreationDate()).toString());

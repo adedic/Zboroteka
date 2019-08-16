@@ -571,8 +571,8 @@
 
     $.fn.markdownEditor.defaults = {
         width: '100%',
-        height: '900px',
-        fontSize: '14px',
+        height: '700px',
+        fontSize: '16px',
         theme: 'tomorrow',
         softTabs: true,
         fullscreen: true,

@@ -86,4 +86,8 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "band", fetch = FetchType.LAZY)
 	private List<Song> userSongs;
 
+	public String getFullName() {
+		return firstName + " " + familyName;
+	}
+
 }

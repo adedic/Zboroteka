@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Glazbena grupa'"></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="container">
+            <br>
+            <div class="container-fluid" id="musicGroup">
+                    <br>
+                    <br>
+               <!-- <h1 class="mt-4">Glazbena grupa - bend</h1> --> 
+                
+                <div id="createGroup" class="w-80" th:if="${!bandExists}">
+                    
+                    <h2 class="mt-4">Nemaš glazbeni sastav?</h2>
+                    <br>
+                    <a th:href="@{/band/create}" class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
+                    title="Kreiraj svoj glazbeni sastav" id="createBandBtn">Kreiraj glazbenu grupu <i class="fas fa-music"></i>
+                    </a>
+                    <br></br>
+                    <br></br>
+                </div>
+
+                <div id="groupInfo" class="w-80" th:if="${bandExists}">
+                    <div class="row">
+                      <div class="col-md-12">
+                     	<h1 class="h1">
+                               <span><small>Glazbeni sastav</small> <b class="text-info" th:text="${band.name}"></b> 
+
+                                  <a href="#" data-toggle="modal" class="text-warning" data-target="#editGroupModal" > 
+                                      <i class="far fa-edit"  style="font-size: 1.5rem; position:relative; bottom:3px;" aria-hidden="true"
+                                      data-toggle="tooltip" data-placement="top" title="Izmjeni informacije o grupi"></i>
+                                  </a>
+                                  </span>
+	                         </h1>
+	                	</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <br>
+                            <br>
+                            <h4><span class="badge badge-info"  th:text="${groupType}"></span></h4>
+                            <br>
+                            <b>Osnovan:</b> <span th:text="${#dates.format(band.creationDate, 'dd.MM.yyyy.')}"></span>
+                            <br>
+                            <b>Voditelj:</b> <span th:text="${creator.getFullName()}"></span>
+                            <br>
+                            <b>Broj pjesama:</b> <span th:text="${band.bandSongs.size()}"></span>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <b>Opis:</b>
+                            <blockquote class="blockquote">
+                                <p class="mb-0" th:text="${band.description}"></p>
+                            </blockquote>
+                            <br>
+                            <br>
+                            <button class="btn btn-lg btn-outline-info" 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu <i class="fas fa-plus"></i></button>
+				      
+                            
+                        </div>
+                        <div class="col-md-4">
+                            <br>
+                            <br>
+                            <div th:if="${band.members.size() == 0}">
+	                            <h5 class="mt-4">Nema članova glazbenog sastava?</h5>
+                            	<br>
+	                    		<button class="btn btn-lg btn-outline-info" data-toggle="tooltip" 
+	                            data-placement="top" 
+	                            title="Pozovi članove" id="addMembersBtn">
+	                            Dodaj članove
+	                            </button>
+                            </div>
+                            
+                            <div th:if="${band.members.size() != 0}">
+	                            <h4>Članovi (<span  th:text="${band.members.size()}"></span>)</h4>
+	                            <br>
+	                            <ul class="list-group" >
+	                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="member : ${band.members}">
+	                                    <span th:text="${member.getFullName()}"></span>
+	                                    <span class="badge badge-info badge-pill">od 22.11.2016.</span>
+	                                </li>
+	                                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+	                                    <a href="#" class="text-info"  data-toggle="tooltip" data-placement="top" title="Dodaj novog člana">Dodaj člana <i class="fa fa-plus" aria-hidden="true"></i></a>
+	                                </li>
+	
+	                            </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Additional scripts -->
+        <div th:replace="fragments/scripts :: markdownScripts"></div>
+         <script th:inline="javascript">
+	    $(document).ready(function() {
+	    	if (localStorage.getItem("bandSaved")) {
+	    	    var msg = localStorage.getItem('bandSaved');
+	
+	    		console.log(msg);
+	    		
+	    	    commonModul.showAlert({
+	    	        elementId: 'showAlertBox',
+	    	        message: msg,
+	    	        alertLevel: 'success'
+	    	    });
+	
+	    	    window.localStorage.clear();
+	    	}
+	    	
+	    	//$("#showSongEditorFormBtn").click();
+	    	//$("#btnPreview").click();
+	    });
+    
+    
+    </script>
+    </div>
+
+</body>
+
+</html>

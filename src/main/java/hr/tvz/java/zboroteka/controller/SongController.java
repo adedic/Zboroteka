@@ -93,19 +93,7 @@ public class SongController {
 		return "song/mySongs";
 	}
 
-	@GetMapping("/bandSongs")
-	public String showBandSongs(Model model) {
-		List<Song> songs = iSongService.findSongsByBand();
-		model.addAttribute("songs", songs);
-		model.addAttribute("songsExists", true);
-
-		if (songs.isEmpty())
-			model.addAttribute("songsExists", false);
-
-		// a ako ima pjesme prikazati mu popis svih pjesama
-
-		return "song/allSongs"; // ili mySongs
-	}
+	
 
 	@GetMapping("/searchResults")
 	public String showSearchResults(@RequestParam(value = "songsIDs", required = false) Integer[] songsIDs,

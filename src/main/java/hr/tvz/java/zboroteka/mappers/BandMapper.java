@@ -19,13 +19,13 @@ public class BandMapper {
 
 		band.setId(bandForm.getId());
 
-		band.setCreationDate(new Date());
+		band.setCreationDate(new Date());//TODO zasad new dATE
 		band.setDescription(bandForm.getDescription());
 		band.setGroupType(bandForm.getGroupType());
 		band.setName(bandForm.getName());
 
 		// TODO ZASAD HARDKODIRANO JER NIJE IMPLENETIRANA PRIJAVA
-		Integer userId = 1;
+		Integer userId = 2;
 		// (Integer) session.getAttribute("userId");
 		band.setCreatorId(userId);
 

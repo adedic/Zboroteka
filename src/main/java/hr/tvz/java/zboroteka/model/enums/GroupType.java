@@ -6,19 +6,19 @@ package hr.tvz.java.zboroteka.model.enums;
  */
 public enum GroupType {
 	
-	BAND(1, "Band"),
-	CHOIR(2, "Choir"),
-	MENS_CHORUS(3, "Mens's chorus"),
-	WOMENS_CHORUS(4, "Women's chorus"),
-	CHURCH_CHOIR(5, "Church choir"),
-	INSTRUMENTAL_GROUP(6, "Instrumental group"),
-	VOCAL_GROUP(7, "Vocal group"),
-	TRIO(8, "Trio"),
-	QUARTET(9, "Quartet"),
-	QUINTET(10, "Quintet"),
-	A_CAPPELLA(11, "A cappella group"),
-	ORCHESTRA(12, "Orchestra"),
-	WORSHIP_MINISTRY(13, "Worship ministry");
+	BAND(0, "Bend"),
+	CHOIR(1, "Zbor"),
+	MENS_CHORUS(2, "Muški zbor"),
+	WOMENS_CHORUS(3, "Ženski zbor"),
+	CHURCH_CHOIR(4, "Crkveni zbor"),
+	INSTRUMENTAL_GROUP(5, "Instrumentalna grupa"),
+	VOCAL_GROUP(6, "Vokalna grupa"),
+	TRIO(7, "Trio"),
+	QUARTET(8, "Kvartet"),
+	QUINTET(9, "Kvintet"),
+	A_CAPPELLA(10, "A cappella grupa"),
+	ORCHESTRA(11, "Orkestar"),
+	WORSHIP_MINISTRY(12, "Slavljenička služna");
 	
 	private Integer value;
 	private String name;

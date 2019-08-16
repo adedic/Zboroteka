@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="'Glazbena grupa'"></title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+</head>
+
+<body>
+    <div layout:fragment="content">
+    
+        <div class="container">
+    	<br><br>        
+			<div class="container-fluid" id="songs">
+				 <h1 class="mt-4">Pjesme glazbene grupe</h1>
+				 <div id="createSong">
+				      <br></br>
+				      <br>
+				      <h2 class="mt-4">Nema nijedne pjesme glazbene grupe?</h2>
+				      <h3>Dodaj prvu pjesmu! :)</h3>
+				      <br></br>
+				      <button class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" title="Kreiraj i spremi pjesmu" id="createSongBtn">Dodaj pjesmu</button>
+				      <br></br>
+				      <br></br>
+				 </div>
+			 </div>
+	                
+        </div>
+        
+    
+	<!-- Additional scripts -->
+	<div th:replace="fragments/scripts :: markdownScripts"></div>
+    </div>
+
+</body>
+
+</html>

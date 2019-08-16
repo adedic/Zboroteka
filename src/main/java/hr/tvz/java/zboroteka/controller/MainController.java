@@ -18,6 +18,7 @@ import hr.tvz.java.zboroteka.service.impl.ISongService;
 
 @Controller("/")
 public class MainController {
+	
 	@Autowired
 	ISongService iSongService;
 

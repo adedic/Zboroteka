@@ -13,7 +13,7 @@
     
         <div class="container">
     	<br><br>
-            <h1>Kreiranje pjesme</h1><br>
+            <h1><small>Kreiranje pjesme</small></h1><br>
             
             <form action="" th:object="${createSongForm}" id="createSongForm" class="needs-validation" novalidate>
 
@@ -22,8 +22,6 @@
                         <h4 class="card-title">Osnovni podaci</h4>
                     </div>
                     <div class="card-body">
-						<input type="text" class="form-control" th:field="*{id}" hidden="hidden" id="id" th:value="${songId}"/>
-                            
                         <div class="form-group col-xs-12 col-sm-8 col-md-8">
                             <label for="songName">Naziv:</label>
                             <input type="text" class="form-control" th:field="*{name}" required="required" data-error="Unesi naziv pjesme" id="songName" placeholder="Naziv pjesme" />

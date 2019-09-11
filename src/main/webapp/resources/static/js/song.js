@@ -81,7 +81,7 @@ $("#saveUpdateSongBtn").click(function(e) {
 			});
 		} else if(data.status == "invalidChords") {
 			 $("#btnEdit").click();
-			// provjera statusa, validacija nepostojecih akorda
+			// provjera statusa, validacija nepostojecih akorda¸¸
 			commonModul.showAlert({
 				elementId : 'showAlertBox',
 				message : "Nespješno " + data.result.msg + " pjesme! Uneseni su akordi koji ne postoje: " + data.result.unrecognizedChords,

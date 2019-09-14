@@ -13,17 +13,28 @@
     
         <div class="container">
     	<br><br>        
-		<div class="container-fluid" id="songs">
-			 <h1 class="mt-4"><small>Pjesme glazbene grupe</small></h1>
-			 <div id="createSong" th:if="!${songsExists}">
-			      <h4 class="mt-4">Nema nijedne pjesme glazbene grupe?</h4>
-			      <br></br>
-			      <a th:href="@{/song/newSong}" class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
-			      title="Kreiraj prvu pjesmu grupe" id="createSongBtn">Dodaj pjesmu  <i class="fas fa-plus"></i></a>
-			      <br></br>
-			      <br></br>
-			 </div>
-			 
+		<div class="row" id="songs">
+			<div class="col-8">
+				<h1><small>Pjesme glazbene grupe</small></h1>
+			</div>
+			<div class="col-4" id="createSong">
+				<a th:href="@{/song/newSong}"
+					class="btn btn-lg btn-outline-info"
+					data-toggle="tooltip" data-placement="top"
+					title="Dodaj novu pjesmu" id="addNewSongBtn"> Dodaj pjesmu <i class="fas fa-plus"></i></a>
+			</div>
+		
+		</div>
+		<div class="row" th:if="${deleteSuccess}">
+			<div class="col-8">
+				<br> <br>
+				<div class="alert alert-success alert-dismissable">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+					Pjesma je uspješno obrisana.
+				</div>
+			</div>
+		</div>
+		<br> <br>
 			 <div id="bandSongs" th:if="${songsExists}">
 			      <br>
 			      <br>
@@ -45,12 +56,9 @@
 						</div>
 				  </div>
 			
-			      <a class="btn btn-lg btn-outline-info" data-toggle="tooltip" data-placement="top" 
-			      title="Kreiraj i spremi pjesmu" id="addNewSongBtn">Dodaj pjesmu</a>
 			      <br></br>
 			      <br></br>
 			 </div>
-		 </div>
 			 
 	                
         </div>

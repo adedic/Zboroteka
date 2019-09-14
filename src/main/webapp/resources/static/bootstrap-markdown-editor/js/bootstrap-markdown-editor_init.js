@@ -98,6 +98,20 @@
             },
             readOnly: false
         });
+        editor.commands.addCommand({
+            name: 'chord',
+            bindKey: {win: 'Ctrl-Q',  mac: 'Command-Q'},
+            exec: function (editor) {
+            	  var selectedText = editor.session.getTextRange(editor.getSelectionRange());
+                  
+                  if (selectedText === '') {
+                      snippetManager.insertSnippet(editor, '[${1:C#m}]');
+                  } else {
+                      snippetManager.insertSnippet(editor, '[' + selectedText + ']');
+                  }
+            },
+            readOnly: false
+        });
     }
 
     function insertBeforeText (editor, string) {
@@ -594,7 +608,7 @@
             onlyText: 'Prikaži samo tekst',
             onlyChords: 'Prikaži samo akorde',
             textAndChords: 'Prikaži tekst i akorde',
-            btnChord: 'Akord',
+            btnChord: 'Akord (CTRL+Q)',
             btnList: 'Lista',
             btnOrderedList: 'Numerirana lista',
             btnLink: 'Link',

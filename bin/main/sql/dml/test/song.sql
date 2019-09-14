@@ -181,3 +181,228 @@ Noćas mladi mjesec...
 Dolje neki klinac...
 
 ', 'Kiše jesenje', '4/4', 9, 7, 'Za druženja', 'Prljavo kazalište ', '', 1, 1);
+
+
+
+INSERT INTO "song" (creation_date, raw_song_text, song_text, name, measure, song_key, genre, usage, author, description, creator_id, band_id, preview_option) 
+VALUES (CURRENT_DATE,
+'#Zastave
+
+Autor: Parni valjak
+
+
+Tonalitet: C
+
+
+```
+        
+        [Am]         [C]
+        Nogom pred nogu - tiho!
+        [G]     [F]
+        Ja po vodi hodam
+        [Am]     [C]           [G]
+        Svojim putem uspravno
+        
+        [Am]         [C]
+        Pljuga na pljugu
+        [G]      [F]
+        Jedna na drugu
+        [Am]     [C]           [G]
+        Slazem - sate, dane, godine
+        
+        BRIDGE:
+                [Dm]       [Am]
+                Pa krenu bitke
+                      [G]
+                Dodju porazi
+                [Dm]       [Am]
+                Kad nije film
+                   [F]           [G]
+                Da pravda pobjedi
+                Sjeti se
+        
+        [Am]         [C]
+        Kako smo mastat znali
+        [G]     [F]
+        I bogu dane krali
+        [Am]     [C]     [G]
+        Ispred "Zvecke" satima
+        
+        [Am]         [C]
+        Kovali planove
+        [G]     [F]
+        Kuzili istine
+        [Am]     [C]     [G]
+        Svak sa svojeg oblaka
+        
+        BRIDGE:
+                [Dm]       [Am]
+                Pa krenu bitke
+                      [G]
+                Dodju porazi
+                [Dm]       [Am]
+                Ti znas da nije lako
+                   [F]           [G]
+                Isti ostati
+        
+        REFREN:
+        
+                     [C]    [G]    [F]         [G]
+                Moje zastave - uvijek su iste boje
+                [C]         [G]          [F]
+                Nad njima ljubav caruje
+                     [C]    [G]    [F]         [G]
+                Moje zastave - nikad na pola koplja
+                [C]         [G]          [F]
+                Ljubav se ne predaje
+        
+        Nogom pred nogu - tiho!
+        Ja na zici plesem
+        Zatvorenih ociju
+        
+        Pljuga na pljugu
+        Jedna na drugu
+        Slazem - sate, dane, godine
+        
+        Sad neki novi klinci dolaze
+        A sve se teze prave rijeci nalaze
+        
+        Moje zastave...
+
+```
+
+', 
+'Nogom pred nogu - tiho!
+
+        Ja po vodi hodam
+
+        Svojim putem uspravno
+
+
+        Pljuga na pljugu
+
+        Jedna na drugu
+
+        Slazem - sate, dane, godine
+
+        BRIDGE:
+
+                Pa krenu bitke
+
+                Dodju porazi
+
+                Kad nije film
+
+                Da pravda pobjedi
+                Sjeti se
+
+
+        Kako smo mastat znali
+
+        I bogu dane krali
+
+        Ispred "Zvecke" satima
+
+
+        Kovali planove
+
+        Kuzili istine
+
+        Svak sa svojeg oblaka
+
+        BRIDGE:
+
+                Pa krenu bitke
+
+                Dodju porazi
+
+                Ti znas da nije lako
+
+                Isti ostati
+
+        REFREN:
+
+
+                Moje zastave - uvijek su iste boje
+
+                Nad njima ljubav caruje
+
+                Moje zastave - nikad na pola koplja
+
+                Ljubav se ne predaje
+
+        Nogom pred nogu - tiho!
+        Ja na zici plesem
+        Zatvorenih ociju
+
+        Pljuga na pljugu
+        Jedna na drugu
+        Slazem - sate, dane, godine
+
+        Sad neki novi klinci dolaze
+        A sve se teze prave rijeci nalaze
+
+        Moje zastave...
+', 'Zastave', '4/4', 1, 7, 'Za druženja', 'Parni valjak', '', 2, 1, 3);
+
+
+INSERT INTO "song" (creation_date, raw_song_text, song_text, name, measure, song_key, genre, usage, author, description, creator_id, band_id, preview_option) 
+VALUES (CURRENT_DATE,
+'#Ti iznad svega
+
+Tonalitet: A
+
+
+```
+
+    kitica:
+        [A] [Cism] ([H]) [E] [H] [A]
+        [A] [H] [A]  2x
+        [H]
+     
+    refren:
+        [E] [Fism] [Cism] [H]
+        [E] [Fism] [Cism] [A]
+        [Cism] [A] [H]
+
+```
+
+',
+'', 'Ti iznad svega', '4/4', 9, 19, 'Za molitvene susrete', 'Božja pobjeda', '', 2, 1, 3);
+
+
+INSERT INTO "song" (creation_date, raw_song_text, song_text, name, measure, song_key, genre, usage, author, description, creator_id, band_id, preview_option) 
+VALUES (CURRENT_DATE,
+'#Gospod nad vojskama
+
+Tonalitet: E
+
+Autor: Božja pobjeda
+
+```
+Kitica:
+    [F#m] [A] [E] [B]
+    [F#m] [A] [E] [B]
+    [F#m] [A] [E] [B]
+    [F#m] [A] [E] [B] [A]  ([B])
+    
+    Refren:
+    [E] [A] [E] [A]
+    [F#m] [B] [A]  ([B])
+    
+    Bridge:
+    [F#m] [D] [A] [C#] [E]
+    [F#m] [D]  [A] [C#] [E]
+    zadnji:
+    [D] [E]
+    
+    Refren:
+    [E] [A] [E] [A]
+    [F#m] [B] [A]  ([B])
+
+```
+
+',
+'', 'Gospod nad vojskama', '4/4', 4, 19, 'Za molitvene susrete', 'Božja pobjeda', '', 2, 1, 2);
+
+
